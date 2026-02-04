@@ -53,7 +53,6 @@
                     ['img.png', 'Community Engagement', 'We collaborate with local agencies and communities to enhance awareness and preparedness.'],
                     ['img.png', 'Sustainability Focus', 'We prioritize sustainable practices in our operations and strive to minimize environmental impacts.']
                 ];
-                //$data = $AboutUs->getMissionData();
                 foreach($data as $row) {
                     echo '<div class="mission-card">';
                     echo ' <div class="mission-icon"><img src="' . $row[0] . '"/></div>';

@@ -1,5 +1,5 @@
 <?php
-define("BASE_URL", "/view/");
+define("BASE_URL", "/FloodGuard/view/");
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
