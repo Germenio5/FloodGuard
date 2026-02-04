@@ -1,5 +1,5 @@
 <?php
-// Only dynamic/repeated data goes in arrays
+
 $floodMetrics = [
     ['label' => 'Total Areas Affected', 'value' => '3'],
     ['label' => 'Residents Alerted', 'value' => '521'],
