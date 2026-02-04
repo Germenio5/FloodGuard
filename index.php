@@ -79,7 +79,6 @@
                 ?>
             </div>
         </section>
-
     </main>
     <?php include 'view/include/footer.php'; ?>
 </body>
