@@ -1,38 +1,83 @@
+<?php
+include '../controller/login-controller.php';
+?>
+
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FloodGuard - User Login</title>
-    <link rel="stylesheet" href="../css/auth.css">
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>FloodGuard - User Login</title>
+        <link rel="stylesheet" href="../css/auth.css">
+    </head>
+
+    <body>
+
     <?php include 'include/header.php'; ?>
-<main>
-    <div class="auth-container">
+
+    <main>
+        <div class="auth-container">
         <div class="auth-box">
-            <h1>Log In</h1>
-            <p class="subtitle">Input your credentials below.</p>
+            <h1><?= $loginTitle ?></h1>
+            <p class="subtitle">
+                <?= $loginSubtitle ?>
+            </p>
             
-            <form action="process-login.php" method="POST" class="auth-form">
-                <input type="hidden" name="role" value="user">
-                
-                <div class="form-group">
-                    <label>Email / Phone Number</label>
-                    <input type="text" name="email" placeholder="Enter your email address or phone number" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" placeholder="Enter your password" required>
-                </div>
-                
-                <button type="submit" class="submit-btn">Log In</button>
-            </form>
-            
-            <p class="bottom-link">Don't have an account? <a href="register-user.php">Register here</a></p>
+        <!-- ERROR MESSAGE -->
+        <?php if($errorMessage != ""): ?>
+
+            <div class="error-box">
+                <?= $errorMessage ?>
+            </div>
+
+        <?php endif; ?>
+
+        <form action="<?= $formAction ?>" 
+            method="POST" 
+            class="auth-form">
+
+            <input type="hidden" 
+                name="role" 
+                value="<?= $userRole ?>">
+
+            <div class="form-group">
+
+                <label>Email / Phone Number</label>
+
+                <input type="text" 
+                    name="email"
+                    placeholder="Enter your email address or phone number" 
+                    required>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Password</label>
+
+                <input type="password" 
+                    name="password"
+                    placeholder="Enter your password" 
+                    required>
+
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Log In
+            </button>
+
+        </form>
+
+        <p class="bottom-link">
+            Don't have an account? 
+            <a href="register-user.php">Register here</a>
+        </p>
+
         </div>
-    </div>
-</main>
+        </div>
+
+    </main>
+
     <?php include 'include/footer.php'; ?>
-</body>
+
+    </body>
 </html>

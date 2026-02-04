@@ -38,7 +38,7 @@ h1 {
 .subtitle {
     color: #377586;
     font-size: 14px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     opacity: 0.85;
 }
 
@@ -101,6 +101,19 @@ h1 {
 
 .form-group input::placeholder {
     color: #aaa;
+}
+
+.success-box {
+    margin: 0;
+    padding: 0;
+    color: #377586;
+    font-weight: 500;
+}
+
+.error-box {
+    margin: 0;
+    padding: 0;
+    color: red;
 }
 
 /* Button */
