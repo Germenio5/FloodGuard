@@ -42,6 +42,7 @@
             </div>
         </section>
         
+        
     <section class="reports-section">
             <h2>Latest Flood Reports</h2>
             <p class="subtitle">Get details about recent flood levels.</p>
@@ -79,6 +80,7 @@
                 ?>
             </div>
         </section>
+
     </main>
     <?php include 'view/include/footer.php'; ?>
 </body>
