@@ -45,7 +45,7 @@ include 'controller/homepage-controller.php';
     <div class="card">
         <h3>Report</h3>
         <p>Report flood incidents in your area to help the community stay informed.</p>
-        <a href="#">Report Now →</a>
+        <a href="view/report-flood.php">Report Now →</a>
     </div>
 </section>
 
