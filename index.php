@@ -39,7 +39,7 @@ include 'controller/homepage-controller.php';
     <div class="card">
         <h3>Flooding</h3>
         <p>Discover the latest flood conditions, area-specific alerts, and safety information.</p>
-        <a href="#">View Flood →</a>
+        <a href="view/flooding.php">View Flood →</a>
     </div>
 
     <div class="card">
