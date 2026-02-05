@@ -24,7 +24,7 @@ define("IMG", "../images/");
         <div class="footer-right">
             <nav class="footer-nav">
                 <a href="../index.php">Home</a>
-                <a href="<?= BASE_URL ?>discussion.php">Discussion</a>
+                <a href="<?= BASE_URL ?>Monitor.php">Monitor</a>
                 <a href="<?= BASE_URL ?>aboutus.php">About Us</a>
                 <a href="<?= BASE_URL ?>flooding.php">Flooding</a>
             </nav>
