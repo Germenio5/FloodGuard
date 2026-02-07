@@ -1,0 +1,326 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+}
+
+main {
+    padding: 30px;
+}
+
+.main-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Top Section */
+.top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.top-section h1 {
+    color: #457d8a;
+    font-size: 32px;
+}
+
+.status-badge {
+    background: white;
+    padding: 15px 25px;
+    border-radius: 8px;
+    border-left: 4px solid #22c55e;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.status-badge .icon {
+    font-size: 32px;
+}
+
+.status-badge strong {
+    color: #22c55e;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.status-badge a {
+    color: #999;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+/* Water Level Card */
+.water-card {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.card-header {
+    margin-bottom: 25px;
+}
+
+.card-header h2 {
+    color: #457d8a;
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.card-header p {
+    color: #999;
+    font-size: 13px;
+}
+
+/* Location Section */
+.location-section h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.location-section > p {
+    color: #999;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.label {
+    color: #999;
+    font-size: 13px;
+    margin: 15px 0 8px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 24px;
+    background: #e5e7eb;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #f97316, #fb923c);
+}
+
+.level-text {
+    text-align: right;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    padding: 20px 0;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    margin: 20px 0;
+}
+
+.info-item {
+    text-align: center;
+}
+
+.info-item p {
+    color: #999;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.info-item h4 {
+    color: #457d8a;
+    font-size: 18px;
+}
+
+.orange {
+    color: #f97316;
+}
+
+/* Alert Box */
+.alert-box {
+    background: #fff7ed;
+    border-left: 4px solid #f97316;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.alert-header span {
+    color: #999;
+    font-size: 14px;
+}
+
+.alert-header strong {
+    color: #f97316;
+    font-size: 18px;
+}
+
+.alert-box ul {
+    list-style: none;
+    margin-bottom: 15px;
+}
+
+.alert-box li {
+    color: #f97316;
+    font-size: 14px;
+    padding-left: 20px;
+    margin-bottom: 6px;
+    position: relative;
+}
+
+.alert-box li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+}
+
+.report-btn {
+    background: #457d8a;
+    color: white;
+    border: none;
+    padding: 10px 28px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.report-btn:hover {
+    background: #3d6b77;
+}
+
+/* Graph Box */
+.graph-box {
+    background: #e5e7eb;
+    height: 300px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.graph-box p {
+    color: #999;
+    font-size: 18px;
+}
+
+/* Action Row */
+.action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.action-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.action-box h3 {
+    color: #457d8a;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.action-box p {
+    color: #999;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.action-box a {
+    color: #457d8a;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Hotline Box */
+.hotline-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    display: flex;
+    gap: 20px;
+}
+
+.big-icon {
+    font-size: 48px;
+}
+
+.hotline-box h3 {
+    color: #457d8a;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.hotline-box p {
+    color: #999;
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.phone {
+    color: #457d8a;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.small {
+    color: #999;
+    font-size: 13px;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .top-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .status-badge {
+        width: 100%;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .action-row {
+        grid-template-columns: 1fr;
+    }
+
+    .hotline-box {
+        flex-direction: column;
+        text-align: center;
+    }
+}

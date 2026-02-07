@@ -2,8 +2,8 @@
 define("IMG", "../images/");
 ?>
 
-<link rel="stylesheet" href="css/footer.css">
 <link rel="stylesheet" href="../css/footer.css">
+<link rel="stylesheet" href="css/footer.css">
 
 <footer class="footer">
     <div class="footer-content">

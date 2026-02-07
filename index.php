@@ -31,15 +31,15 @@ include 'controller/homepage-controller.php';
 <section class="about-section">
     <h2>About FloodGuard</h2>
     <p>FloodGuard offers several features through its web application. These include an interactive flood map that shows affected areas, real-time updates on flood depth and water movement, and alerts to inform users of changing conditions.</p>
-    <a href="#">Learn more about our website</a>
+    <a href="view/aboutus.php">Learn more about our website</a>
 </section>
 
 <!-- Cards Section -->
 <section class="cards-container">
     <div class="card">
-        <h3>Flooding</h3>
+        <h3>Monitor Area</h3>
         <p>Discover the latest flood conditions, area-specific alerts, and safety information.</p>
-        <a href="view/flooding.php">View Flood →</a>
+        <a href="view/flooding.php">View Area →</a>
     </div>
 
     <div class="card">
