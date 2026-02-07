@@ -39,7 +39,7 @@ body {
 .nav-menu {
     display: flex;
     list-style: none;
-    gap: 0px;
+    gap: 2px;
 }
 
 .nav-menu a {
@@ -84,5 +84,12 @@ body {
     .nav-menu a {
         font-size: 15px;
         padding: 8px 12px;
+    }
+}
+
+@media (max-width: 425px) {
+
+    .nav-menu a{
+        font-size: 11px;
     }
 }
