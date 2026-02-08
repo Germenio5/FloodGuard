@@ -7,10 +7,22 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <link rel="stylesheet" href="css/header.css">
 
 <header class="header">
-    <div class="logo">
-        <div class="logo-icon"></div>
-        <span class="logo-text">FLOODGUARD</span>
-    </div>
+
+    <?php if ($current_page == 'index.php'): ?>
+
+        <div class="logo disabled">
+            <div class="logo-icon"></div>
+            <span class="logo-text">FLOODGUARD</span>
+        </div>
+
+    <?php else: ?>
+
+        <a href="../index.php" class="logo">
+            <div class="logo-icon"></div>
+            <span class="logo-text">FLOODGUARD</span>
+        </a>
+
+    <?php endif; ?>
 
     <nav>
         <ul class="nav-menu">
@@ -38,11 +50,9 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <li>
                 <a href="<?= BASE_URL ?>login-user.php"
                    class="<?= $current_page == 'login-user.php' ? 'active' : '' ?>">
-                   Register
+                   Log In
                 </a>
             </li>
         </ul>
     </nav>
 </header>
-
-

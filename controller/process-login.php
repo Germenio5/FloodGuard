@@ -28,7 +28,7 @@ if($email === "user" && $password === "1234") {
     $_SESSION['role']  = "user";
     $_SESSION['email'] = $email;
 
-    header("Location: ../user/home.php"); // USER DASHBOARD
+    header("Location: ../view/user-dashboard.php"); // USER DASHBOARD
     exit();
 
 }

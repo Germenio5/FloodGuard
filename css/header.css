@@ -20,11 +20,17 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .logo-icon {
-    width: 30px;
-    height: 30px;
+    background-image: url('../images/FloodGuard_logo.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 40px;
+    height: 40px;
     background-color: #ffffff4d;
     border-radius: 50%;
 }
@@ -34,6 +40,13 @@ body {
     font-size: 24px;
     font-weight: bold;
     letter-spacing: 1px;
+    padding-bottom: 4px;
+}
+
+.logo.disabled {
+    cursor: default;
+    pointer-events: none;
+    opacity: 1;
 }
 
 .nav-menu {

@@ -56,40 +56,9 @@ include '../controller/news-controller.php';
                 <?= $lastUpdated['date'] ?><br>
                 at <?= $lastUpdated['time'] ?>
             </div>
-
-
-            <a href="#" class="view-history">
-
-                <svg width="16" height="16" viewBox="0 0 16 16"
-                     fill="currentColor">
-
-                    <rect x="2" y="3" width="12" height="11"
-                          rx="1" stroke="currentColor"
-                          fill="none" stroke-width="1.5"/>
-
-                    <line x1="2" y1="6" x2="14" y2="6"
-                          stroke="currentColor"
-                          stroke-width="1.5"/>
-
-                    <line x1="5" y1="1" x2="5" y2="4"
-                          stroke="currentColor"
-                          stroke-width="1.5"/>
-
-                    <line x1="11" y1="1" x2="11" y2="4"
-                          stroke="currentColor"
-                          stroke-width="1.5"/>
-                </svg>
-
-                <span>View History</span>
-
-            </a>
-
         </div>
-
     </div>
 </div>
-
-
 
 <!-- EVENT GRID -->
 <div class="grid-container">
@@ -98,23 +67,54 @@ include '../controller/news-controller.php';
 
 <div class="event-card">
 
-    <h3>
-        <?= htmlspecialchars($event['title']) ?>
-    </h3>
+    <!-- HEADER -->
+    <div class="card-header">
 
-    <div class="event-image"></div>
+        <div class="profile">
+            <div class="avatar">
+            <img src="<?= htmlspecialchars($event['avatar']) ?>">
+            </div>
 
-    <p class="event-description">
-        <?= htmlspecialchars($event['description']) ?>
-    </p>
+            <div class="user-info">
+                <strong><?= htmlspecialchars($event['name']) ?></strong>
+
+                <span class="meta">
+                    <?= htmlspecialchars($event['time']) ?> • 
+                    <?= htmlspecialchars($event['area']) ?>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="menu">•••</div>
+
+    </div>
+
+    <!-- IMAGE -->
+    <div class="event-image">
+        <img src="<?= htmlspecialchars($event['picture']) ?>" alt="event">
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="content">
+
+        <h4><?= htmlspecialchars($event['description']) ?></h4>
+
+        <p class="proximity">
+            <?= htmlspecialchars($event['proximity']) ?>
+        </p>
+
+        <span class="status <?= strtolower($event['status']) ?>">
+            <?= htmlspecialchars($event['status']) ?>
+        </span>
+
+    </div>
 
 </div>
 
 <?php endforeach; ?>
 
 </div>
-
-
 
 </div>
 </main>

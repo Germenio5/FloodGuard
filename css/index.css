@@ -224,7 +224,7 @@ main {
 
 /* Latest Flood Reports Section */
 .reports-section {
-    padding: 60px 40px;
+    padding: 20px 40px 40px 40px;
     text-align: center;
     background-color: white;
 }
@@ -366,7 +366,7 @@ main {
 
     /* Reports Section */
     .reports-section {
-        padding: 40px 20px;
+        padding: 20px 20px;
     }
 
     .reports-section h2 {
