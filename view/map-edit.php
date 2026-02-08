@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FloodGuard Map</title>
-    <link rel="stylesheet" href="../css/viewmap.css">
+    <link rel="stylesheet" href="../css/mapedit.css">
 </head>
 <body>
 <main>
@@ -12,8 +12,10 @@
         
         <!-- Page Header -->
         <div class="page-top">
-            <h1>Map</h1>
-            <p>Current Flood Forecast to get an idea of current flooding</p>
+            <h1>Map Edit</h1>
+            <p>Edit current map to keep users updated
+
+</p>
         </div>
 
         <!-- Map and Legend -->
@@ -97,7 +99,7 @@
         <!-- Buttons -->
         <div class="button-row">
             <a href="waterleveldata.php" class="btn-white">Water Level Data</a>
-            <a href="affectedareas.php" class="btn-teal">View Affected Areas</a>
+            <a href="affectedareas.php" class="btn-teal">Edit Map</a>
         </div>
     </div>
 </main>

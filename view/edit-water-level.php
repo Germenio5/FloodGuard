@@ -4,21 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Water Level Data History</title>
-    <link rel="stylesheet" href="../css/waterleveldata.css">
+    <link rel="stylesheet" href="../css/editwaterlevel.css">
 </head>
 <body>
+<?php include 'include/header.php'; ?>
 <main>
     <div class="main-wrapper">
         
         <!-- Page Header -->
         <div class="page-header">
-            <h1>Water Level Data History</h1>
+            <h1>Edit Water Level Data</h1>
             <p>Water level information provides insight into the current state of rivers, creeks, and other waterways. It helps residents and authorities understand potential flood risks, track changes over time, and make informed decisions to stay safe.</p>
         </div>
 
         <!-- Recent Data Section -->
         <div class="data-section">
-            <h2>Recent Monitoring Data</h2>
+            <h2>Water Level Data</h2>
 
             <!-- Data Table -->
             <div class="table-container">
@@ -75,7 +76,10 @@
                     <button class="page-btn">9</button>
                     <button class="page-btn">Next</button>
                 </div>
+                <div class="button-row">
                 <button class="download-btn">Download Data</button>
+                <button class="edit-btn">Edit Data</button>
+                </div>
             </div>
 
         </div>

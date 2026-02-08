@@ -12,7 +12,7 @@ $bridges = [
     [
         'name' => 'Eroreco Bridge',
         'location' => 'Brgy Mandalagan',
-        'current_level' => 7.5,
+        'current_level' => 11.4,
         'max_level' => 14.2,
         'speed' => 0.3,
         'status' => 'danger'
@@ -20,7 +20,7 @@ $bridges = [
     [
         'name' => 'Eroreco Bridge',
         'location' => 'Brgy Mandalagan',
-        'current_level' => 7.5,
+        'current_level' => 11.4,
         'max_level' => 14.2,
         'speed' => 0.3,
         'status' => 'danger'
@@ -36,7 +36,7 @@ $bridges = [
     [
         'name' => 'Eroreco Bridge',
         'location' => 'Brgy Mandalagan',
-        'current_level' => 7.5,
+        'current_level' => 11.4,
         'max_level' => 14.2,
         'speed' => 0.3,
         'status' => 'danger'
@@ -44,7 +44,7 @@ $bridges = [
     [
         'name' => 'Eroreco Bridge',
         'location' => 'Brgy Mandalagan',
-        'current_level' => 7.5,
+        'current_level' => 11.4,
         'max_level' => 14.2,
         'speed' => 0.3,
         'status' => 'danger'
@@ -80,7 +80,6 @@ function getPercentage($current, $max) {
 </head>
 
 <body>
-    <?php include 'include/header.php'; ?>
     <main class="affected-areas-page">
         <div class="container">
             <!-- Page Header -->
