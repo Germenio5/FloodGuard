@@ -25,19 +25,19 @@ $featureList = [
 
 $missionList = [
     [
-        'image'       => 'img.png',
+        'image'       => '../images/insights.png',
         'title'       => 'Data-Driven Insights',
         'description' => 'We leverage advanced technology to deliver comprehensive data on flood risks.'
     ],
 
     [
-        'image'       => 'img.png',
+        'image'       => '../images/community.png',
         'title'       => 'Community Engagement',
         'description' => 'We collaborate with local agencies and communities to enhance awareness and preparedness.'
     ],
 
     [
-        'image'       => 'img.png',
+        'image'       => '../images/sustainability.png',
         'title'       => 'Sustainability Focus',
         'description' => 'We prioritize sustainable practices in our operations and strive to minimize environmental impacts.'
     ]
