@@ -13,12 +13,9 @@ include '../controller/user-dashboard-controller.php';
 </head>
 
 <body>
-<<<<<<< HEAD
 
 <?php include 'include/sidebar.php'; ?>
 
-=======
->>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 <main>
 <div class="main-wrapper">
         
