@@ -1,5 +1,78 @@
 <?php
+<<<<<<< HEAD
 include '../controller/affected-areas-controller.php';
+=======
+// Sample data for affected areas
+$bridges = [
+    [
+        'name' => 'Eroreco Bridge',
+        'location' => 'Brgy Mandalagan',
+        'current_level' => 7.5,
+        'max_level' => 14.2,
+        'speed' => 0.3,
+        'status' => 'alert' // normal, alert, danger
+    ],
+    [
+        'name' => 'Eroreco Bridge',
+        'location' => 'Brgy Mandalagan',
+        'current_level' => 11.4,
+        'max_level' => 14.2,
+        'speed' => 0.3,
+        'status' => 'danger'
+    ],
+    [
+        'name' => 'Eroreco Bridge',
+        'location' => 'Brgy Mandalagan',
+        'current_level' => 11.4,
+        'max_level' => 14.2,
+        'speed' => 0.3,
+        'status' => 'danger'
+    ],
+    [
+        'name' => 'Eroreco Bridge',
+        'location' => 'Brgy Mandalagan',
+        'current_level' => 7.5,
+        'max_level' => 14.2,
+        'speed' => 0.3,
+        'status' => 'alert'
+    ],
+    [
+        'name' => 'Eroreco Bridge',
+        'location' => 'Brgy Mandalagan',
+        'current_level' => 11.4,
+        'max_level' => 14.2,
+        'speed' => 0.3,
+        'status' => 'danger'
+    ],
+    [
+        'name' => 'Eroreco Bridge',
+        'location' => 'Brgy Mandalagan',
+        'current_level' => 11.4,
+        'max_level' => 14.2,
+        'speed' => 0.3,
+        'status' => 'danger'
+    ]
+];
+
+// Change lng mga color sa babaw template pman ni samantalang idk hiligaynon
+
+function getStatusColor($status) {
+    switch($status) {
+        case 'normal':
+            return '#22c55e';
+        case 'alert':
+            return '#f97316';
+        case 'danger':
+            return '#dc2626';
+        default:
+            return '#22c55e';
+    }
+}
+
+function getPercentage($current, $max) {
+    return ($current / $max) * 100;
+}
+>>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +86,16 @@ include '../controller/affected-areas-controller.php';
 </head>
 
 <body>
+<<<<<<< HEAD
+=======
+    <main class="affected-areas-page">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">Affected Areas</h1>
+                <p class="page-subtitle">Creaks / Bridges</p>
+            </div>
+>>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 
 <?php include 'include/sidebar.php'; ?>
 
