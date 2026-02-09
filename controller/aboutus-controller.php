@@ -4,21 +4,21 @@ $featureList = [
     [
         'title'       => 'MONITOR AREAS',
         'description' => 'View all locations currently impacted by flooding, including flood levels on certain areas, road conditions, and safe routes for residents and commuters.',
-        'link'        => 'view-map.php',
+        'link'        => 'user-view-map.php',
         'button'      => 'Monitor Areas'
     ],
 
     [
         'title'       => 'REPORT FLOOD',
         'description' => 'Submit real-time flood reports from your area, including photos and location, to help keep the community informed and safe.',
-        'link'        => 'report-flood.php',
+        'link'        => 'user-report-flood.php',
         'button'      => 'Report Flood'
     ],
 
     [
         'title'       => 'WATER LEVEL DATA',
         'description' => 'Access up-to-date information on creek and river water levels to monitor risks and prepare for potential flooding.',
-        'link'        => 'waterleveldata.php',
+        'link'        => 'user-water-level-data.php',
         'button'      => 'View Water Level Data'
     ]
 ];

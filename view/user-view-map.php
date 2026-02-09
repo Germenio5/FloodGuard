@@ -53,8 +53,8 @@ include '../controller/map-controller.php';
 
         <!-- Buttons -->
         <div class="button-row">
-            <a href="waterleveldata.php" class="btn-white">Water Level Data</a>
-            <a href="affectedareas.php" class="btn-teal">View Affected Areas</a>
+            <a href="user-water-level-data.php" class="btn-white">Water Level Data</a>
+            <a href="user-affected-areas.php" class="btn-teal">View Affected Areas</a>
         </div>
     </div>
 </main>

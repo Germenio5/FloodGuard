@@ -235,8 +235,13 @@ td {
         overflow-x: auto;
     }
 
+    .table-container th {
+        padding: 12px 15px;
+        font-size: 12px;
+    };
+
     table {
-        min-width: 700px;
+        min-width: 500px;
     }
 
     .table-footer {
@@ -249,7 +254,32 @@ td {
         justify-content: center;
     }
 
+    .button-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
     .download-btn {
-        width: 100%;
+        background: #457d8a;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .edit-btn {
+        background: white;
+        color: #457d8a;
+        border: 2px solid #e5e7eb;
+        padding: 12px 28px;
+        border-radius: 6px;
+        font-size: 15px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 500;
     }
 }

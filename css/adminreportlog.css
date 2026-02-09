@@ -147,4 +147,18 @@ td {
     .upload-btn {
         width: 100%;
     }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    table {
+        min-width: 700px;
+    }
+
+    th,
+    td {
+        padding: 14px 16px;
+        font-size: 13px;
+    }
 }

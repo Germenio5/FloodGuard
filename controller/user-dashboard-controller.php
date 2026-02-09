@@ -26,15 +26,15 @@ $alertTips = [
 
 $actions = [
     [
-        'title' => 'Flooding',
+        'title' => 'Monitor',
         'description' => 'Discover the latest flood conditions, area-specific alerts, and safety information to help you stay aware and prepared.',
-        'link' => '#',
-        'label' => 'View Flood →'
+        'link' => 'user-affected-areas.php',
+        'label' => 'Monitor Areas →'
     ],
     [
         'title' => 'Report',
         'description' => 'Report flood incidents in your area to help provide timely updates, improve response efforts, and keep the community informed and safe.',
-        'link' => '#',
+        'link' => 'user-report-flood.php',
         'label' => 'Report Now →'
     ]
 ];
@@ -44,7 +44,6 @@ $hotline = [
     'tel' => '0344323871',
     'note' => '(24/7 Roxas Emergency Dispatch)'
 ];
-
 
 function formatLevelText($current, $max) {
     return $current . "m / " . $max . "m";

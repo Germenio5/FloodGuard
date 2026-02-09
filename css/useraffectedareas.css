@@ -278,6 +278,10 @@ body {
         font-size: 28px;
     }
 
+    .page-subtitle {
+        font-size: 15px;
+    }
+
     .alert-section {
         grid-template-columns: 1fr;
         gap: 15px;
@@ -298,12 +302,5 @@ body {
 
     .pagination {
         flex-wrap: wrap;
-    }
-}
-
-/* Desktop (larger screens) */
-@media (max-width: 768px) {
-    .bridge-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
 }

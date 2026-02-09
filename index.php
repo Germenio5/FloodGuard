@@ -21,8 +21,8 @@ include 'controller/homepage-controller.php';
         <h1>Are You in Danger?</h1>
         <p>Find out if you're in a flood danger zone and get immediate assistance.</p>
         <div class="hero-buttons">
-            <a href="#" class="btn btn-learn">Learn More</a>
-            <a href="#" class="btn btn-status">Check My Status</a>
+            <a href="view/aboutus.php" class="btn btn-learn">Learn More</a>
+            <a href="view/user-dashboard.php" class="btn btn-status">Check My Status</a>
         </div>
     </div>
 </section>
@@ -39,13 +39,13 @@ include 'controller/homepage-controller.php';
     <div class="card">
         <h3>Monitor Area</h3>
         <p>Discover the latest flood conditions, area-specific alerts, and safety information.</p>
-        <a href="view/flooding.php">View Area →</a>
+        <a href="view/user-view-map.php">View Area →</a>
     </div>
 
     <div class="card">
         <h3>Report</h3>
         <p>Report flood incidents in your area to help the community stay informed.</p>
-        <a href="view/report-flood.php">Report Now →</a>
+        <a href="view/user-report-flood.php">Report Now →</a>
     </div>
 </section>
 
@@ -53,27 +53,9 @@ include 'controller/homepage-controller.php';
 <section class="reports-section">
     <h2>Latest Flood Reports</h2>
     <p class="subtitle">Get details about recent flood levels.</p>
-    <a href="#" class="btn">View Reports</a>
+    <a href="view/news.php" class="btn">View Reports</a>
 
     <br><br><br><br>
-
-    <div class="reports-grid">
-
-        <?php foreach($reports as $report): ?>
-
-        <div class="report-card">
-            <div class="report-image"></div>
-
-            <div class="report-content">
-                <h3><?= $report['title'] ?></h3>
-                <p class="date">Reported on <?= $report['date'] ?></p>
-                <p><?= $report['description'] ?></p>
-            </div>
-        </div>
-
-        <?php endforeach; ?>
-
-    </div>
 </section>
 
 </main>

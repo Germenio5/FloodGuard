@@ -87,11 +87,11 @@ include '../controller/affected-areas-controller.php';
             </p>
 
             <div class="button-group">
-                <a href="waterleveldata.php" class="btn btn-outline">
+                <a href="user-water-level-data.php" class="btn btn-outline">
                     Water Level Data
                 </a>
 
-                <a href="view-map.php" class="btn btn-primary">
+                <a href="user-view-map.php" class="btn btn-primary">
                     More Details
                 </a>
             </div>

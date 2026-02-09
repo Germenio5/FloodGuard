@@ -162,6 +162,7 @@ main {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
+    font-weight: bold;
 }
 
 .alert-header span {

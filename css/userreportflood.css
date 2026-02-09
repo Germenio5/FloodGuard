@@ -14,21 +14,21 @@ body {
 .content-left {
     flex: 4; /* Takes up 40% roughly */
     background-color: #377586;
-    padding: 80px 50px;
+    padding: 20px 50px;
     color: #fff;
 }
 
 .content-left h1 {
-    font-size: 48px;
+    font-size: 24px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .content-left p {
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1.6;
     font-weight: 300;
-    max-width: 500px;
+    max-width: 600px;
 }
 
 /* RIGHT SIDE (Form) */
@@ -129,4 +129,17 @@ textarea {
 .content-right {
     padding: 40px 20px;
 }
+
+.content-left {
+    padding: 20px 20px;
+}
+
+.content-left h1 {
+    font-size: 20px;
+}
+
+.content-left p {
+    font-size: 11px;
+}
+
 }
