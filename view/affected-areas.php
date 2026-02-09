@@ -1,4 +1,7 @@
 <?php
+<<<<<<< HEAD
+include '../controller/affected-areas-controller.php';
+=======
 // Sample data for affected areas
 $bridges = [
     [
@@ -69,17 +72,22 @@ function getStatusColor($status) {
 function getPercentage($current, $max) {
     return ($current / $max) * 100;
 }
+>>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Affected Areas - Water Level Monitoring</title>
+
     <link rel="stylesheet" href="../css/affectedareas.css">
 </head>
 
 <body>
+<<<<<<< HEAD
+=======
     <main class="affected-areas-page">
         <div class="container">
             <!-- Page Header -->
@@ -87,39 +95,44 @@ function getPercentage($current, $max) {
                 <h1 class="page-title">Affected Areas</h1>
                 <p class="page-subtitle">Creaks / Bridges</p>
             </div>
+>>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 
-            <!-- Alert Status Cards -->
-            <section class="alert-section">
-                <div class="alert-card alert-green">
-                    <div class="alert-icon">
-                        <span>⚠</span>
-                    </div>
-                    <div class="alert-content">
-                        <h3 class="alert-level">Normal</h3>
-                        <p class="alert-message">Water levels are stable. No immediate action required.</p>
-                    </div>
-                </div>
+<?php include 'include/sidebar.php'; ?>
 
-                <div class="alert-card alert-orange">
-                    <div class="alert-icon">
-                        <span>⚠</span>
-                    </div>
-                    <div class="alert-content">
-                        <h3 class="alert-level">Alert</h3>
-                        <p class="alert-message">Water levels are rising. Stay vigilant.</p>
-                    </div>
-                </div>
+<main class="affected-areas-page">
+<div class="container">
 
-                <div class="alert-card alert-red">
-                    <div class="alert-icon">
-                        <span>⚠</span>
-                    </div>
-                    <div class="alert-content">
-                        <h3 class="alert-level">Danger</h3>
-                        <p class="alert-message">Flooding is imminent. Take precautionary measures.</p>
-                    </div>
-                </div>
-            </section>
+    <div class="page-header">
+        <h1 class="page-title">Affected Areas</h1>
+        <p class="page-subtitle">Creaks / Bridges</p>
+    </div>
+
+     <!-- Alert Status Cards -->
+    <section class="alert-section">
+        <div class="alert-card alert-green">
+            <div class="alert-icon"><span>⚠</span></div>
+            <div class="alert-content">
+                <h3 class="alert-level">Normal</h3>
+                <p class="alert-message">Water levels are stable. No immediate action required.</p>
+            </div>
+        </div>
+
+        <div class="alert-card alert-orange">
+            <div class="alert-icon"><span>⚠</span></div>
+            <div class="alert-content">
+                <h3 class="alert-level">Alert</h3>
+                <p class="alert-message">Water levels are rising. Stay vigilant.</p>
+            </div>
+        </div>
+
+        <div class="alert-card alert-red">
+            <div class="alert-icon"><span>⚠</span></div>
+            <div class="alert-content">
+                <h3 class="alert-level">Danger</h3>
+                <p class="alert-message">Flooding is imminent. Take precautionary measures.</p>
+            </div>
+        </div>
+    </section>
 
             <!-- Bridge Cards Grid -->
             <div class="bridge-grid">
@@ -140,26 +153,29 @@ function getPercentage($current, $max) {
                     <p class="speed-info">Speed: <?= $bridge['speed'] ?>m/min</p>
                     
                     <div class="button-group">
-                        <a href="monitor-area.php" class="btn btn-outline">Water Level Data</a>
+                        <a href="waterleveldata.php" class="btn btn-outline">Water Level Data</a>
                         <a href="view-map.php" class="btn btn-primary">More Details</a>
                     </div>
                 </div>
                 <?php endforeach; ?>
             </div>
 
-            <!-- Pagination -->
-            <div class="pagination">
-                <button class="page-btn">Previous</button>
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <button class="page-btn">4</button>
-                <button class="page-btn">5</button>
-                <span class="page-dots">......</span>
-                <button class="page-btn">9</button>
-                <button class="page-btn">Next</button>
-            </div>
-        </div>
-    </main>
+
+    <!-- PAGINATION UI -->
+    <div class="pagination"> 
+        <button class="page-btn">Previous</button> 
+        <button class="page-btn active">1</button> 
+        <button class="page-btn">2</button> 
+        <button class="page-btn">3</button> 
+        <button class="page-btn">4</button> 
+        <button class="page-btn">5</button> 
+        <span class="page-dots">......</span> 
+        <button class="page-btn">9</button> 
+        <button class="page-btn">Next</button> 
+    </div>
+
+</div>
+</main>
+
 </body>
 </html>
