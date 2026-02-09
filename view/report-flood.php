@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../css/reportflood.css">
   </head>
   <body>
-<?php include 'include/header.php'; ?>
+<?php include 'include/sidebar.php'; ?>
   <main>
 
     <div class="main-wrapper">
@@ -58,6 +58,5 @@
         </div>
     </div>
 </main>
-    <?php include 'include/footer.php'; ?>
   </body>
 </html>
