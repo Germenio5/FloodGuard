@@ -140,7 +140,7 @@ function getPercentage($current, $max) {
                     <p class="speed-info">Speed: <?= $bridge['speed'] ?>m/min</p>
                     
                     <div class="button-group">
-                        <a href="waterleveldata.php" class="btn btn-outline">Water Level Data</a>
+                        <a href="monitor-area.php" class="btn btn-outline">Water Level Data</a>
                         <a href="view-map.php" class="btn btn-primary">More Details</a>
                     </div>
                 </div>

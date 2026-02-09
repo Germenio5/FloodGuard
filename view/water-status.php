@@ -98,7 +98,7 @@ $waterStatusData = [
                     <p class="speed-info">Speed: <?= htmlspecialchars($bridge['speed']) ?></p>
 
                     <div class="button-group">
-                        <button class="btn btn-outline">Water Level Data</button>
+                        <a href="waterleveldata.php" class="btn btn-outline">Water Level Data</a>
                         <button class="btn btn-primary">Send Alert</button>
                     </div>
                 </div>
