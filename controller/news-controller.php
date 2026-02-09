@@ -24,10 +24,10 @@ $eventList = [
     
      [
         'name'        => 'Tim Chavez',
-        'avatar'      => '../images/avatar1.jpg',
+        'avatar'      => '../images/placeholder-image.png',
         'time'        => '9 hours ago',
         'area'        => 'La Salle Avenue',
-        'picture'     => '../images/sample1.jpg',
+        'picture'     => '../images/placeholder-image.png',
         'description' => 'Slow rising of water, might flood or not',
         'proximity'   => 'Far Away',
         'status'      => 'Safe'
@@ -35,10 +35,10 @@ $eventList = [
 
     [
         'name'        => 'Abdul Rahman',
-        'avatar'      => '../images/avatar3.jpg',
+        'avatar'      => '../images/placeholder-image.png',
         'time'        => '12 hours ago',
         'area'        => 'Mandalagan Bridge',
-        'picture'     => '../images/sample1.jpg',
+        'picture'     => '../images/placeholder-image.png',
         'description' => 'Water rising but still safe',
         'proximity'   => 'Close',
         'status'      => 'Safe'
@@ -46,10 +46,10 @@ $eventList = [
 
     [
         'name'        => 'Juan Dela Cruz',
-        'avatar'      => '../images/avatar2.jpg',
+        'avatar'      => '../images/placeholder-image.png',
         'time'        => '2 hours ago',
         'area'        => 'Banago Road',
-        'picture'     => '../images/sample2.jpg',
+        'picture'     => '../images/placeholder-image.png',
         'description' => 'Water increasing near bridge',
         'proximity'   => 'Near You',
         'status'      => 'Danger'
