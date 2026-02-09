@@ -61,7 +61,7 @@
     align-items: center;
     gap: 15px;
     padding: 12px 20px;
-    color: white;
+    color: #e5e7eb;
     text-decoration: none;
     transition: 0.2s;
 }
@@ -88,24 +88,23 @@ main {
 }
 
 @media (max-width: 768px) {
-
     .sidebar {
-        width: 70px; 
+        width: 70px;
     }
 
     .logo {
-        display: block; 
+        display: block;
     }
 
     .text,
     .menu-title,
     .logo-text {
-        display: none; 
+        display: none;
         opacity: 0;
     }
 
     main {
-        margin-left: 70px; 
+        margin-left: 70px;
     }
 
     .sidebar.mobile-open {
@@ -118,9 +117,5 @@ main {
     .sidebar.mobile-open .logo-text {
         display: inline;
         opacity: 1;
-    }
-
-    .toggle-btn {
-        display: none;
     }
 }

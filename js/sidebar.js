@@ -1,17 +1,14 @@
-const sidebar = document.getElementById("sidebar");
-const toggleBtn = document.getElementById("toggleBtn");
-const main = document.querySelector("main");
+document.addEventListener("DOMContentLoaded", function () {
 
-toggleBtn.addEventListener("click", () => {
+    const sidebar = document.getElementById("sidebar");
+    const logoToggle = document.getElementById("logoToggle");
 
-    // Desktop behavior
-    if (window.innerWidth > 768) {
-        sidebar.classList.toggle("collapsed");
-        main.classList.toggle("collapsed");
-    }
+    logoToggle.addEventListener("click", function () {
 
-    // Mobile behavior
-    else {
-        sidebar.classList.toggle("mobile-open");
-    }
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle("mobile-open");
+        }
+
+    });
+
 });

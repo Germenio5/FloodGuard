@@ -8,12 +8,10 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <aside class="sidebar" id="sidebar">
 
     <div class="sidebar-header">
-        <div class="brand">
+        <div class="brand" id="logoToggle">
             <img src="../images/FloodGuard_logo.png" class="logo" alt="FloodGuard Logo">
             <span class="logo-text">FLOODGUARD</span>
         </div>
-
-        <button class="toggle-btn" id="toggleBtn">☰</button>
     </div>
 
     <ul class="menu">
@@ -64,7 +62,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
         <li>
             <a href="user-water-level-data.php"
-            class="<?= $current_page == 'user-water-level-data.php' ? 'active' : '' ?>">
+               class="<?= $current_page == 'user-water-level-data.php' ? 'active' : '' ?>">
                 <span class="icon">💧</span>
                 <span class="text">Water Level Data</span>
             </a>
@@ -95,8 +93,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li>
-            <a href="../controller/log-out.php"
-               class="<?= $current_page == 'log-out.php' ? 'active' : '' ?>">
+            <a href="../controller/log-out.php">
                 <span class="icon">🚪</span>
                 <span class="text">Log Out</span>
             </a>
