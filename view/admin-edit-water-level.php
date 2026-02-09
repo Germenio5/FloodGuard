@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Water Level Data History</title>
-    <link rel="stylesheet" href="../css/editwaterlevel.css">
+    <link rel="stylesheet" href="../css/admineditwaterlevel.css">
 </head>
 <body>
 <?php include 'include/header.php'; ?>

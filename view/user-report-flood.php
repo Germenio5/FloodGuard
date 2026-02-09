@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FloodGuard Report</title>
-    <link rel="stylesheet" href="../css/reportflood.css">
+    <link rel="stylesheet" href="../css/userreportflood.css">
   </head>
   <body>
-<?php include 'include/sidebar.php'; ?>
+<?php include 'include/user-sidebar.php'; ?>
   <main>
 
     <div class="main-wrapper">

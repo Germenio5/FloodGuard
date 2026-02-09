@@ -12,13 +12,10 @@ include '../controller/user-dashboard-controller.php';
     <link rel="stylesheet" href="../css/user-dashboard.css">
 </head>
 
-<body>
-<<<<<<< HEAD
+<body>  
 
-<?php include 'include/sidebar.php'; ?>
+<?php include 'include/user-sidebar.php'; ?>
 
-=======
->>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 <main>
 <div class="main-wrapper">
         

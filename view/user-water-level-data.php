@@ -8,12 +8,12 @@ include '../controller/water-level-data-controller.php';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Water Level Data History</title>
-    <link rel="stylesheet" href="../css/waterleveldata.css">
+    <link rel="stylesheet" href="../css/userwaterleveldata.css">
 </head>
 
 <body>
 
-<?php include 'include/sidebar.php'; ?>
+<?php include 'include/user-sidebar.php'; ?>
 
 <main>
 <div class="main-wrapper">

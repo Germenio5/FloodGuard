@@ -8,16 +8,13 @@ include '../controller/map-controller.php';
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FloodGuard Map</title>
-    <link rel="stylesheet" href="../css/viewmap.css">
+    <link rel="stylesheet" href="../css/userviewmap.css">
 </head>
 
 <body>
-<<<<<<< HEAD
 
-<?php include 'include/sidebar.php'; ?>
+<?php include 'include/user-sidebar.php'; ?>
 
-=======
->>>>>>> c87642a718ea0cea7d8663560bb0185f722a8ee2
 <main>
 <div class="main-wrapper">
 

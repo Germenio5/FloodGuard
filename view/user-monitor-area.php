@@ -22,10 +22,10 @@ $waterLevelData = [
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Current Water Level - <?= htmlspecialchars($waterLevelData['bridge_name']) ?></title>
-    <link rel="stylesheet" href="../css/monitorarea.css">
+    <link rel="stylesheet" href="../css/usermonitorarea.css">
 </head>
 <body>
-    <?php include 'include/header.php'; ?>
+    <?php include 'include/user-sidebar.php'; ?>
     <main class="water-level-page">
         <div class="container">
             <!-- Header Section -->

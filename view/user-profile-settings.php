@@ -8,11 +8,11 @@ include '../controller/profile-settings-controller.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
-    <link rel="stylesheet" href="../css/profilesettings.css">
+    <link rel="stylesheet" href="../css/userprofilesettings.css">
 </head>
 <body>
 
-<?php include 'include/sidebar.php'; ?>
+<?php include 'include/user-sidebar.php'; ?>
 
 <main class="profile-page">
     <div class="container">

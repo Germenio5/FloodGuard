@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FloodGuard Map</title>
-    <link rel="stylesheet" href="../css/mapedit.css">
+    <link rel="stylesheet" href="../css/adminmapedit.css">
 </head>
 <body>
 <main>
@@ -98,7 +98,7 @@
 
         <!-- Buttons -->
         <div class="button-row">
-            <a href="waterleveldata.php" class="btn-white">Water Level Data</a>
+            <a href="admin-edit-water-level.php" class="btn-white">Water Level Data</a>
             <a href="affectedareas.php" class="btn-teal">Edit Map</a>
         </div>
     </div>

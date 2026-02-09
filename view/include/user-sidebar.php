@@ -2,7 +2,7 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
-<link rel="stylesheet" href="../css/sidebar.css">
+<link rel="stylesheet" href="../css/usersidebar.css">
 <script src="../js/sidebar.js" defer></script>
 
 <aside class="sidebar" id="sidebar">
@@ -55,40 +55,40 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li>
-            <a href="affected-areas.php"
-               class="<?= $current_page == 'affected-areas.php' ? 'active' : '' ?>">
+            <a href="user-affected-areas.php"
+               class="<?= $current_page == 'user-affected-areas.php' ? 'active' : '' ?>">
                 <span class="icon">📍</span>
                 <span class="text">Monitor Areas</span>
             </a>
         </li>
 
         <li>
-            <a href="water-level-data.php"
-            class="<?= $current_page == 'water-level-data.php' ? 'active' : '' ?>">
+            <a href="user-water-level-data.php"
+            class="<?= $current_page == 'user-water-level-data.php' ? 'active' : '' ?>">
                 <span class="icon">💧</span>
                 <span class="text">Water Level Data</span>
             </a>
         </li>
 
         <li>
-            <a href="view-map.php"
-               class="<?= $current_page == 'view-map.php' ? 'active' : '' ?>">
+            <a href="user-view-map.php"
+               class="<?= $current_page == 'user-view-map.php' ? 'active' : '' ?>">
                 <span class="icon">🗺️</span>
                 <span class="text">Map</span>
             </a>
         </li>
 
         <li>
-            <a href="report-flood.php"
-               class="<?= $current_page == 'report-flood.php' ? 'active' : '' ?>">
+            <a href="user-report-flood.php"
+               class="<?= $current_page == 'user-report-flood.php' ? 'active' : '' ?>">
                 <span class="icon">⚠️</span>
                 <span class="text">Report a Flood</span>
             </a>
         </li>
 
         <li>
-            <a href="profile-settings.php"
-               class="<?= $current_page == 'profile-settings.php' ? 'active' : '' ?>">
+            <a href="user-profile-settings.php"
+               class="<?= $current_page == 'user-profile-settings.php' ? 'active' : '' ?>">
                 <span class="icon">👤</span>
                 <span class="text">Profile Settings</span>
             </a>
