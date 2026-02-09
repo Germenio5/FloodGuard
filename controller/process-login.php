@@ -18,7 +18,7 @@ if($email === $adminEmail && $password === $adminPass) {
     $_SESSION['role']  = "admin";
     $_SESSION['email'] = $adminEmail;
 
-    header("Location: ../admin/dashboard.php"); // ADMIN DASHBOARD
+    header("Location: ../view/admin-dashboard.php"); // ADMIN DASHBOARD
     exit();
 }
 
