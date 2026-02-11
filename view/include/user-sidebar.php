@@ -2,7 +2,7 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
-<link rel="stylesheet" href="../css/usersidebar.css">
+<link rel="stylesheet" href="../css/sidebar.css">
 <script src="../js/sidebar.js" defer></script>
 
 <aside class="sidebar" id="sidebar">

@@ -3,7 +3,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 include '../controller/admin-sidebar-controller.php'; 
 ?>
 
-<link rel="stylesheet" href="../css/adminsidebar.css">
+<link rel="stylesheet" href="../css/sidebar.css">
 <script src="../js/sidebar.js" defer></script>
 
 <aside class="sidebar" id="sidebar">
