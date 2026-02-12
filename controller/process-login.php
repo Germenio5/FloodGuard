@@ -23,7 +23,7 @@ if($email === $adminEmail && $password === $adminPass) {
 }
 
 // USER CHECK (No Database Yet)
-if($email === "user" && $password === "1234") {
+if($email === "user@floodguard.com" && $password === "user1234") {
 
     $_SESSION['role']  = "user";
     $_SESSION['email'] = $email;
