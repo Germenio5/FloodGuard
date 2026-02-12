@@ -1,0 +1,553 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+main {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+.hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/images/flood.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 200px 20px;
+    text-align: center;
+    color: white;
+}
+
+.hero-content h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.hero-content p {
+    font-size: 16px;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-learn {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-learn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-status {
+    background-color: #377586;
+    color: white;
+    border: 2px solid #377586;
+}
+
+.btn-status:hover {
+    background-color: #4a9aa5;
+    border-color: #4a9aa5;
+}
+
+/* About Section */
+.about-section {
+    background: linear-gradient(135deg, #60B0C6 0%, #457e8e 100%);
+    padding: 40px;
+    margin: 40px 20px;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px #00000026;
+}
+
+.about-section h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.about-section p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.about-section a {
+    color: white;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.about-section a:hover {
+    opacity: 0.8;
+}
+
+/* Cards Section */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: auto;
+    width: 100%;
+}
+
+.card {
+    background-color: white;
+    border: 3px solid #377586;
+    border-radius: 8px;
+    padding: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px #00000026;
+}
+
+.card h3 {
+    color: #377586;
+    font-size: 28px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.card p {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.card a {
+    color: #377586;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.card a:hover {
+    text-decoration: underline;
+}
+
+/* Mission Section */
+.mission-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.mission-content h2 {
+    color: #377586;
+    font-size: 32px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.mission-content p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.mission-content .btn {
+    display: inline-block;
+    background-color: #377586;
+    color: white;
+    padding: 12px 40px;
+}
+
+.mission-content .btn:hover {
+    background-color: #377586;
+}
+
+.mission-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-box {
+    background-color: #f5f5f5;
+    padding: 25px;
+    border-radius: 8px;
+}
+
+.info-box h4 {
+    color: #5eb9c5;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.info-box p {
+    color: #666666;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* Latest Flood Reports Section */
+.reports-section {
+    padding: 20px 40px 40px 40px;
+    text-align: center;
+    background-color: white;
+}
+
+.reports-section h2 {
+    color: #377586;
+    font-size: 36px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.reports-section .subtitle {
+    color: #377586;
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+
+.reports-section .btn {
+    background-color: #377586;
+    color: white;
+    padding: 12px 40px;
+    margin-bottom: 50px;
+}
+
+.reports-section .btn:hover {
+    background-color: #4495ab;
+}
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.report-card {
+    display: flex;
+    gap: 20px;
+    background-color: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 25px;
+    text-align: left;
+    transition: box-shadow 0.3s;
+}
+
+.report-card:hover {
+    box-shadow: 0 4px 12px #0000001a;
+}
+
+.report-image {
+    width: 100px;
+    height: 100px;
+    background-color: #e8e8e8;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.report-content h3 {
+    color: #377586;
+    font-size: 20px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.report-content .date {
+    color: #999999;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.report-content p {
+    color: #377586;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    /* Hero Section */
+    .hero-section {
+        padding: 150px 20px;
+    }
+
+    .hero-content h1 {
+        font-size: 32px;
+    }
+
+    .hero-content p {
+        font-size: 15px;
+    }
+
+    /* About Section */
+    .about-section {
+        margin: 30px 15px;
+        padding: 30px 20px;
+    }
+
+    .about-section h2 {
+        font-size: 28px;
+    }
+
+    .about-section p {
+        font-size: 15px;
+    }
+
+    /* Cards Container */
+    .cards-container {
+        padding: 30px 20px;
+        gap: 20px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card {
+        padding: 25px;
+    }
+
+    .card h3 {
+        font-size: 24px;
+    }
+
+    /* Mission Section */
+    .mission-section {
+        grid-template-columns: 1fr;
+        padding: 30px 20px;
+        gap: 30px;
+    }
+
+    .mission-content h2 {
+        font-size: 28px;
+    }
+
+    .mission-content p {
+        font-size: 15px;
+    }
+
+    /* Reports Section */
+    .reports-section {
+        padding: 20px 20px;
+    }
+
+    .reports-section h2 {
+        font-size: 32px;
+    }
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .report-card {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 425px) {
+    /* Hero Section */
+    .hero-section {
+        padding: 100px 15px;
+    }
+
+    .hero-content h1 {
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+
+    .hero-content p {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .hero-buttons {
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        font-size: 15px;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    /* About Section */
+    .about-section {
+        margin: 20px 10px;
+        padding: 25px 20px;
+    }
+
+    .about-section h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .about-section p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    /* Cards Container */
+    .cards-container {
+        grid-template-columns: 1fr;
+        padding: 20px 15px;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .card h3 {
+        font-size: 22px;
+        margin-bottom: 12px;
+    }
+
+    .card p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .card a {
+        font-size: 15px;
+    }
+
+    /* Mission Section */
+    .mission-section {
+        grid-template-columns: 1fr;
+        padding: 20px 15px;
+        gap: 25px;
+    }
+
+    .mission-content h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+
+    .mission-content p {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+
+    .mission-content .btn {
+        padding: 12px 30px;
+        font-size: 15px;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .mission-boxes {
+        gap: 15px;
+    }
+
+    .info-box {
+        padding: 20px;
+    }
+
+    .info-box h4 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .info-box p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* Reports Section */
+    .reports-section {
+        padding: 30px 15px;
+    }
+
+    .reports-section h2 {
+        font-size: 26px;
+        margin-bottom: 12px;
+    }
+
+    .reports-section .subtitle {
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .reports-section .btn {
+        padding: 12px 30px;
+        font-size: 15px;
+        margin-bottom: 35px;
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .reports-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .report-card {
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .report-image {
+        width: 100%;
+        height: 180px;
+    }
+
+    .report-content h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+
+    .report-content .date {
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .report-content p {
+        font-size: 14px;
+        line-height: 1.5;
+    }
+}

@@ -1,0 +1,173 @@
+.sidebar,
+.sidebar * {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #3a7d8f;
+    color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 15px;
+    background: #2f6b7a;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.3);
+    transition: all 0.3s ease;
+}
+
+.logo-text {
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition: opacity 0.3s ease 0.25s; /* delayed for stagger effect */
+}
+
+.menu {
+    list-style: none;
+    padding: 10px 0;
+}
+
+.menu-title {
+    font-size: 12px;
+    padding: 10px 20px;
+    opacity: 0.6;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease 0.25s;
+}
+
+.menu li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease 0.25s;
+}
+
+.menu li a:hover {
+    background: rgba(255,255,255,0.15);
+}
+
+.menu li a.active {
+    background: rgba(255,255,255,0.25);
+    border-left: 4px solid white;
+    font-weight: bold;
+    pointer-events: none;
+}
+
+.icon {
+    font-size: 18px;
+    width: 24px;
+    text-align: center;
+    transition: opacity 0.3s ease;
+}
+
+main {
+    margin-left: 250px;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 70px;
+    }
+
+    .logo {
+        display: block;
+        margin: auto;
+    }
+
+    .brand {
+        cursor: pointer !important;
+        pointer-events: auto !important;
+    }
+
+    .icon,
+    .text,
+    .menu-title,
+    .logo-text {
+        opacity: 0;
+        display: inline;
+        transition: opacity 0.2s; /* initially hidden, animate later */
+    }
+
+    .menu li a {
+        justify-content: center;
+        padding: 12px 0;
+    }
+
+    main {
+        margin-left: 70px;
+    }
+
+    .sidebar.mobile-open {
+        width: 250px;
+        z-index: 999;
+    }
+
+    .sidebar.mobile-open .icon {
+        opacity: 1;
+        transition-delay: 0.3s;
+    }
+
+    .sidebar.mobile-open .text,
+    .sidebar.mobile-open .menu-title,
+    .sidebar.mobile-open .logo-text {
+        opacity: 1;
+        transition-delay: 0.2s; /* text appears after sidebar expands */
+    }
+
+    .sidebar.mobile-open .menu-title {
+        display: block !important;
+        padding: 5px 20px !important;
+        margin-bottom: 4px;
+        opacity: 0.6;
+    }
+
+    .sidebar.mobile-open .menu li a {
+        justify-content: flex-start;
+        padding: 12px 20px;
+    }
+
+    .sidebar:not(.mobile-open) .menu li a {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .sidebar:not(.mobile-open) .menu li a:hover {
+        background: none;
+    }
+
+    .sidebar:not(.mobile-open) .menu li a.active {
+        background: none !important;
+        border-left: none !important;
+        font-weight: normal !important;
+        transition: opacity 0s;
+    }
+}
