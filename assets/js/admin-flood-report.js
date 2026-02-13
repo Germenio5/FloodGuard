@@ -2,15 +2,8 @@ function viewReport(report) {
     const modal = document.getElementById('reportModal');
     const modalBody = document.getElementById('modalBody');
     
-    let imageHtml = '';
-    if (report.photo) {
-        imageHtml = `
-            <div class="detail-row">
-                <div class="detail-label">Photo:</div>
-                <img src="../uploads/${report.photo}" alt="Flood photo" class="report-image">
-            </div>
-        `;
-    }
+    // Use placeholder if no photo exists
+    const imageSrc = report.photo ? `../uploads/${report.photo}` : '../assets/images/placeholder.png';
     
     modalBody.innerHTML = `
         <div class="detail-row">
@@ -33,10 +26,13 @@ function viewReport(report) {
             <div class="detail-label">Description:</div>
             <div class="detail-value">${report.description}</div>
         </div>
-        ${imageHtml}
         <div class="detail-row">
             <div class="detail-label">Date Submitted:</div>
             <div class="detail-value">${report.last_updated}</div>
+        </div>
+        <div class="detail-row">
+            <div class="detail-label">Photo:</div>
+            <img src="${imageSrc}" alt="No Image" class="report-image">
         </div>
     `;
     
