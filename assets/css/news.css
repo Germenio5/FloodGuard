@@ -173,14 +173,9 @@ body {
 
 .content h4 {
     font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.proximity {
-    font-size: 12px;
-    color: #777;
     margin-bottom: 10px;
 }
+
 
 .status {
     padding: 4px 10px;
@@ -267,7 +262,4 @@ body {
         font-size: 15px;
     }
 
-    .proximity {
-        font-size: 13px;
-    }
 }

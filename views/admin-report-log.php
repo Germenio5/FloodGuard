@@ -40,7 +40,7 @@ include '../controllers/admin-report-log-controller.php';
 
             <?php if (empty($reports)): ?>
                 <tr>
-                    <td colspan="5" style="text-align: center;">No reports found</td>
+                    <td colspan="6" style="text-align: center;">No reports found</td>
                 </tr>
             <?php else: ?>
 
@@ -59,7 +59,7 @@ include '../controllers/admin-report-log-controller.php';
                         </span>
                     </td>
 
-                    <td><?= htmlspecialchars($r["last_updated"]) ?></td>
+                    <td><?= htmlspecialchars(date('Y-m-d H:i', strtotime($r["last_updated"]))) ?></td>
 
                     <td>
                         <button class="view-details-btn" onclick='viewReport(<?= json_encode($r) ?>)'>

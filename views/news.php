@@ -100,9 +100,6 @@ include '../controllers/news-controller.php';
 
         <h4><?= htmlspecialchars($event['description']) ?></h4>
 
-        <p class="proximity">
-            <?= htmlspecialchars($event['proximity']) ?>
-        </p>
 
         <span class="status <?= strtolower($event['status']) ?>">
             <?= htmlspecialchars($event['status']) ?>

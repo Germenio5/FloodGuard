@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -21,10 +22,16 @@
             <h1>Incident Details</h1>
             <p class="subtitle">Please provide as much as possible about the flood incident</p>
             
-            <form action="#">
+            <form method="post" action="../controllers/process-report.php">
+                <?php if(isset($_GET['success'])): ?>
+                    <p class="success-message">Report submitted successfully.</p>
+                <?php elseif(isset($_GET['error'])): ?>
+                    <p class="error-message">There was a problem submitting your report. Please try again.</p>
+                <?php endif; ?>
+
                 <div class="form-group">
                     <label>Location</label>
-                    <input type="text" placeholder="Enter location of the flood" class="text-input" />
+                    <input type="text" name="location" placeholder="Enter location of the flood" class="text-input" required />
                 </div>
 
                 <div class="form-group">
@@ -33,6 +40,7 @@
                         <button type="button" class="badge" onclick="selectStatus(this)">Safe</button>
                         <button type="button" class="badge" onclick="selectStatus(this)">In Danger</button>
                     </div>
+                    <input type="hidden" name="status" id="statusInput" value="" />
                 </div>
                 
                 <div class="form-group">
@@ -41,7 +49,7 @@
 
                 <div class="form-group">
                     <label>Description</label>
-                    <textarea placeholder="Provide additional details about the flood"></textarea>
+                    <textarea name="description" placeholder="Provide additional details about the flood"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -53,6 +61,16 @@
 
                 <button type="submit" class="submit-btn">Submit Report</button>
             </form>
+            <script>
+                // simple check before submission
+                document.querySelector('form').addEventListener('submit', function(e) {
+                    var statusVal = document.getElementById('statusInput').value.trim();
+                    if (statusVal === '') {
+                        alert('Please select a status (Safe or In Danger)');
+                        e.preventDefault();
+                    }
+                });
+            </script>
         </div>
     </div>
 </main>
@@ -66,6 +84,19 @@ function selectStatus(button) {
     // Add 'selected' class to clicked button
     button.classList.add('selected');
 }
+
+    // update hidden status field when selecting badge
+    function selectStatus(button) {
+        // Remove 'selected' class from all status badges
+        const badges = button.parentElement.querySelectorAll('.badge');
+        badges.forEach(badge => badge.classList.remove('selected'));
+        
+        // Add 'selected' class to clicked button
+        button.classList.add('selected');
+
+        // store value in hidden input
+        document.getElementById('statusInput').value = button.textContent.trim();
+    }
 </script>
 
   </body>
