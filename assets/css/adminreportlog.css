@@ -101,6 +101,39 @@ td {
     color: #065f46;
 }
 
+/* New Status Badges for Flood Reports */
+.status-safe {
+    background: #86efac;
+    color: #065f46;
+}
+
+.status-danger {
+    background: #fca5a5;
+    color: #991b1b;
+}
+
+.status-unknown {
+    background: #e5e7eb;
+    color: #333;
+}
+
+/* View Details Button */
+.view-details-btn {
+    padding: 8px 20px;
+    background: #457d8a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.view-details-btn:hover {
+    background: #3d6b77;
+}
+
 /* Button Section */
 .button-section {
     display: flex;
@@ -120,6 +153,101 @@ td {
 
 .upload-btn:hover {
     background: #3d6b77;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: white;
+    margin: 5% auto;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    animation: slideDown 0.3s;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #457d8a;
+}
+
+.modal-close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #999;
+    line-height: 20px;
+}
+
+.modal-close:hover {
+    color: #457d8a;
+}
+
+.detail-row {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #457d8a;
+    margin-bottom: 5px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.report-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-top: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive */
@@ -148,17 +276,24 @@ td {
         width: 100%;
     }
 
-    .table-container {
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 700px;
-    }
-
     th,
     td {
         padding: 14px 16px;
         font-size: 13px;
+    }
+
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+        padding: 20px;
+    }
+
+    .modal-header {
+        font-size: 20px;
+    }
+
+    .view-details-btn {
+        padding: 6px 15px;
+        font-size: 12px;
     }
 }
