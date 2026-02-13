@@ -7,10 +7,9 @@ $error_message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $location = $conn->real_escape_string($_POST['location']);
-    $proximity = $conn->real_escape_string($_POST['proximity']);
     $status = $conn->real_escape_string($_POST['status']);
     $description = $conn->real_escape_string($_POST['description']);
-    $submission_type = $conn->real_escape_string($_POST['submission_type']); // 'admin' or 'discussion'
+    $post_to_discussion = isset($_POST['post_to_discussion']) ? 1 : 0;
     
     $photo_path = null;
     
@@ -41,18 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
     // Insert into database
     if (empty($error_message)) {
-        $sql = "INSERT INTO flood_reports (location, proximity, status, photo, description, submission_type, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, NOW())";
+        $sql = "INSERT INTO flood_reports (location, status, photo, description, post_to_discussion, created_at) 
+                VALUES (?, ?, ?, ?, ?, NOW())";
         
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssssss", $location, $proximity, $status, $photo_path, $description, $submission_type);
+        $stmt->bind_param("ssssi", $location, $status, $photo_path, $description, $post_to_discussion);
         
         if ($stmt->execute()) {
-            if ($submission_type == 'discussion') {
-                $success_message = "Flood report posted to discussion page successfully!";
-            } else {
-                $success_message = "Flood report submitted to admin successfully!";
-            }
+            $success_message = "Flood report submitted successfully!";
         } else {
             $error_message = "Error: " . $stmt->error;
         }
@@ -90,21 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php endif; ?>
             
             <form action="" method="POST" enctype="multipart/form-data" id="floodReportForm">
-                <input type="hidden" name="submission_type" id="submissionType">
-                
                 <div class="form-group">
                     <label>Location *</label>
                     <input type="text" name="location" placeholder="Enter location of the flood" class="text-input" required />
-                </div>
-
-                <div class="form-group">
-                    <label>Proximity to Water *</label>
-                    <input type="hidden" name="proximity" id="proximityInput" required>
-                    <div class="badge-group">
-                        <button type="button" class="badge proximity-btn" data-value="Very Close">Very Close</button>
-                        <button type="button" class="badge proximity-btn" data-value="Nearby">Nearby</button>
-                        <button type="button" class="badge proximity-btn" data-value="Far Away">Far Away</button>
-                    </div>
                 </div>
 
                 <div class="form-group">
@@ -129,14 +112,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <textarea name="description" placeholder="Provide additional details about the flood" required></textarea>
                 </div>
 
-                <div class="submit-buttons">
-                    <button type="button" class="submit-btn submit-btn-admin" onclick="submitReport('admin')">Submit to Admin Only</button>
-                    <button type="button" class="submit-btn submit-btn-discussion" onclick="submitReport('discussion')">Submit and Post to Discussion</button>
+                <div class="form-group">
+                    <label>Post to Discussion Page <span class="optional-label">(Optional)</span></label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" name="post_to_discussion" id="postToDiscussion" value="1">
+                            <label for="postToDiscussion">Share this report on the discussion page</label>
+                        </div>
+                    </div>
                 </div>
+
+                <button type="submit" class="submit-btn">Submit Report</button>
             </form>
         </div>
     </div>
 </main>
-    <script src="../assets/js/flood-report.js"></script>
+
+<script>
+    // Status buttons
+    document.querySelectorAll('.status-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            document.querySelectorAll('.status-btn').forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('statusInput').value = this.getAttribute('data-value');
+        });
+    });
+
+    // Display selected file name
+    function displayFileName(input) {
+        const fileName = input.files[0] ? input.files[0].name : '';
+        document.getElementById('fileName').textContent = fileName ? 'Selected: ' + fileName : '';
+    }
+
+    // Form validation
+    document.getElementById('floodReportForm').addEventListener('submit', function(e) {
+        if (!document.getElementById('statusInput').value) {
+            e.preventDefault();
+            alert('Please select Status');
+            return false;
+        }
+    });
+</script>
   </body>
 </html>

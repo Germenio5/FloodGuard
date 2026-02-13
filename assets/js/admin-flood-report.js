@@ -22,10 +22,6 @@ function viewReport(report) {
             <div class="detail-value">${report.name}</div>
         </div>
         <div class="detail-row">
-            <div class="detail-label">Proximity to Water:</div>
-            <div class="detail-value">${report.proximity}</div>
-        </div>
-        <div class="detail-row">
             <div class="detail-label">Status:</div>
             <div class="detail-value">
                 <span class="status-badge ${getBadgeClassJS(report.status)}">

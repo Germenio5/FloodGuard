@@ -8,9 +8,9 @@ $sql = "SELECT
             location as area,
             status,
             DATE_FORMAT(created_at, '%Y-%m-%d %H:%i:%s') as last_updated,
-            proximity,
             photo,
-            description
+            description,
+            post_to_discussion
         FROM flood_reports 
         ORDER BY created_at DESC";
 

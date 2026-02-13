@@ -29,7 +29,6 @@ include '../controllers/admin-report-log-controller.php';
                 <tr>
                     <th>ID</th>
                     <th>Location</th>
-                    <th>Proximity</th>
                     <th>Status</th>
                     <th>Date</th>
                     <th>Actions</th>
@@ -40,7 +39,7 @@ include '../controllers/admin-report-log-controller.php';
 
             <?php if (empty($reports)): ?>
                 <tr>
-                    <td colspan="6" style="text-align: center;">No reports found</td>
+                    <td colspan="5" style="text-align: center;">No reports found</td>
                 </tr>
             <?php else: ?>
 
@@ -50,8 +49,6 @@ include '../controllers/admin-report-log-controller.php';
                     <td><?= htmlspecialchars($r["id"]) ?></td>
 
                     <td><?= htmlspecialchars($r["name"]) ?></td>
-
-                    <td><?= htmlspecialchars($r["proximity"]) ?></td>
 
                     <td>
                         <span class="status-badge <?= getBadgeClass($r["status"]) ?>">
@@ -79,7 +76,7 @@ include '../controllers/admin-report-log-controller.php';
 
     <!-- Upload News Button -->
     <div class="button-section">
-        <button class="upload-btn">View News</button>
+        <button class="upload-btn">Upload News</button>
     </div>
 
 </div>
