@@ -28,6 +28,7 @@ include '../controllers/admin-report-log-controller.php';
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Name</th>
                     <th>Location</th>
                     <th>Status</th>
                     <th>Date</th>
@@ -49,6 +50,8 @@ include '../controllers/admin-report-log-controller.php';
                     <td><?= htmlspecialchars($r["id"]) ?></td>
 
                     <td><?= htmlspecialchars($r["name"]) ?></td>
+
+                    <td><?= htmlspecialchars($r["area"]) ?></td>
 
                     <td>
                         <span class="status-badge <?= getBadgeClass($r["status"]) ?>">
