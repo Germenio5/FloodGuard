@@ -106,6 +106,18 @@ include '../controllers/register-controller.php';
                 </small>
             </div>
 
+            <div class="form-group">
+                <label>Confirm Password</label>
+
+                <input type="password" 
+                    name="confirm_password"
+                    placeholder="Re-enter your password" required>
+
+                <small class="error-box">
+                    <?= $errors['confirm_password'] ?>
+                </small>
+            </div>
+
             <button type="submit" class="submit-btn">
                 Register
             </button>

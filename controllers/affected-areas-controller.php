@@ -1,39 +1,54 @@
 <?php
 
-$bridges = [
-    [
-        'name' => 'Mandalagan Bridge',
-        'location' => 'Brgy Mandalagan',
-        'current_level' => 2.5,
-        'max_level' => 14.2,
-        'speed' => 0.3,
-        'status' => 'normal'
-    ],
-    [
-        'name' => 'Mandalagan Bridge',
-        'location' => 'Brgy Mandalagan',
-        'current_level' => 9.5,
-        'max_level' => 14.2,
-        'speed' => 0.3,
-        'status' => 'alert'
-    ],
-    [
-        'name' => 'Mandalagan Bridge',
-        'location' => 'Brgy Mandalagan',
-        'current_level' => 9.5,
-        'max_level' => 14.2,
-        'speed' => 0.3,
-        'status' => 'danger'
-    ],
-    [
-        'name' => 'Mandalagan Bridge',
-        'location' => 'Brgy Mandalagan',
-        'current_level' => 13.5,
-        'max_level' => 14.2,
-        'speed' => 0.3,
-        'status' => 'danger'
-    ]
-];
+require_once __DIR__ . '/../config/config.php';
+
+$bridges = [];
+
+$query = "SELECT name, location, current_level, max_level, speed, status
+          FROM affected_areas
+          ORDER BY updated_at DESC";
+
+if ($result = $conn->query($query)) {
+    while ($row = $result->fetch_assoc()) {
+        $row['current_level'] = (float) $row['current_level'];
+        $row['max_level'] = (float) $row['max_level'];
+        $row['speed'] = (float) $row['speed'];
+        $bridges[] = $row;
+    }
+    $result->free();
+} else {
+    error_log("Database query failed: " . $conn->error);
+}
+
+if (empty($bridges)) {
+    $bridges = [
+        [
+            'name' => 'Mandalagan Bridge',
+            'location' => 'Brgy Mandalagan',
+            'current_level' => 2.5,
+            'max_level' => 14.2,
+            'speed' => 0.3,
+            'status' => 'normal'
+        ],
+        [
+            'name' => 'Mandalagan Bridge',
+            'location' => 'Brgy Mandalagan',
+            'current_level' => 9.5,
+            'max_level' => 14.2,
+            'speed' => 0.3,
+            'status' => 'alert'
+        ],
+        [
+            'name' => 'Mandalagan Bridge',
+            'location' => 'Brgy Mandalagan',
+            'current_level' => 13.5,
+            'max_level' => 14.2,
+            'speed' => 0.3,
+            'status' => 'danger'
+        ]
+    ];
+}
+
 
 function getStatusColor($status) {
     switch($status) {

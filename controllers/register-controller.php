@@ -12,12 +12,13 @@ $old = [
 ];
 
 $errors = [
-    'first_name' => "",
-    'last_name'  => "",
-    'email'      => "",
-    'phone'      => "",
-    'address'    => "",
-    'password'   => ""
+    'first_name'      => "",
+    'last_name'       => "",
+    'email'           => "",
+    'phone'           => "",
+    'address'         => "",
+    'password'        => "",
+    'confirm_password'=> ""
 ];
 
 if(isset($_GET['error'])) {
@@ -50,6 +51,10 @@ if(isset($_GET['error'])) {
 
         case "passweak":
             $errors['password'] = "Must contain uppercase, lowercase and number.";
+            break;
+
+        case "passmatch":
+            $errors['confirm_password'] = "Passwords do not match.";
             break;
 
     }
