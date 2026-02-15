@@ -4,6 +4,8 @@ $loginSubtitle = "Input your credentials below.";
 
 $errorMessage = "";
 
+$oldEmail = $_GET['email'] ?? "";
+
 if(isset($_GET['error'])) {
 
     if($_GET['error'] == "invalid") {

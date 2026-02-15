@@ -25,12 +25,19 @@ if(isset($_GET['error'])) {
 
     switch($_GET['error']) {
 
-        case "first":
-            $errors['first_name'] = "First name must contain letters only.";
+        case "empty":
+            // missing one or more required fields
+            $errors['first_name'] = "Please fill out all fields.";
+            $errors['last_name']  = "Please fill out all fields.";
+            $errors['email']      = "Please fill out all fields.";
+            $errors['phone']      = "Please fill out all fields.";
+            $errors['address']    = "Please fill out all fields.";
             break;
 
-        case "last":
-            $errors['last_name'] = "Last name must contain letters only.";
+        case "name":
+            // invalid characters in either first or last name
+            $errors['first_name'] = "Names must contain letters only.";
+            $errors['last_name']  = "Names must contain letters only.";
             break;
 
         case "email":
@@ -55,6 +62,15 @@ if(isset($_GET['error'])) {
 
         case "passmatch":
             $errors['confirm_password'] = "Passwords do not match.";
+            break;
+
+        case "emailtaken":
+            $errors['email'] = "Email address already registered.";
+            break;
+
+        case "db":
+            // generic database error, show at top? could reuse email field
+            $errors['email'] = "An internal error occurred. Please try again later.";
             break;
 
     }

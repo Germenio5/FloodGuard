@@ -1,42 +1,36 @@
 <?php
 session_start();
 
-$email    = $_POST['email'] ?? "";
+$email    = trim($_POST['email'] ?? "");
 $password = $_POST['password'] ?? "";
 
 if($email == "" || $password == "") {
-    header("Location: login.php?error=empty");
+    header("Location: ../views/login-user.php?error=empty");
     exit();
 }
 
-// ADMIN CHECK (No Database Yet)
-$adminEmail = "admin@floodguard.com";
-$adminPass  = "admin1234";
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/user.php';
 
-if($email === $adminEmail && $password === $adminPass) {
+// attempt authentication (email or phone)
+$user = authenticate_user($conn, $email, $password);
+if ($user) {
+    $_SESSION['role']  = $user['role'];
+    $_SESSION['email'] = $user['email'];
 
-    $_SESSION['role']  = "admin";
-    $_SESSION['email'] = $adminEmail;
-
-    header("Location: ../views/admin-dashboard.php"); // ADMIN DASHBOARD
+    if ($user['role'] === 'admin') {
+        header("Location: ../views/admin-dashboard.php");
+    } else {
+        header("Location: ../views/user-dashboard.php");
+    }
     exit();
-}
-
-// USER CHECK (No Database Yet)
-if($email === "user@floodguard.com" && $password === "user1234") {
-
-    $_SESSION['role']  = "user";
-    $_SESSION['email'] = $email;
-
-    header("Location: ../views/user-dashboard.php"); // USER DASHBOARD
+} else {
+    $qs = http_build_query([
+        'error' => 'invalid',
+        'email' => $email
+    ]);
+    header("Location: ../views/login-user.php?$qs");
     exit();
-
-}
-else {
-
-    header("Location: ../views/login-user.php?error=invalid");
-    exit();
-
 }
 
 ?>

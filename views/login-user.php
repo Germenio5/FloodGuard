@@ -45,6 +45,9 @@ include '../controllers/login-controller.php';
 
                 <input type="text" 
                     name="email"
+                    value="<?= htmlspecialchars(
+                        $oldEmail
+                    ) ?>"
                     placeholder="Enter your email address or phone number" 
                     required>
 
