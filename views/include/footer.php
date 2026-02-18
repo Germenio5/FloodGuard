@@ -1,5 +1,10 @@
 <?php
-define("IMG", "../assets/images/");
+// Define BASE_URL if not already defined (for independent footer usage)
+if (!defined("BASE_URL")) {
+    define("IMG", "../assets/images/");
+} else {
+    define("IMG", "../assets/images/");
+}
 ?>
 
 <link rel="stylesheet" href="../assets/css/footer.css">

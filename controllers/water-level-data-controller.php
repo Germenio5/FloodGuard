@@ -4,6 +4,14 @@
  * Handles pagination and display of water level history
  */
 
+session_start();
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+    header("Location: login-user.php?error=login_required");
+    exit();
+}
+
 // Load database connection
 require_once __DIR__ . '/../config/config.php';
 

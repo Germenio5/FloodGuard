@@ -1,13 +1,36 @@
 <?php
-session_start();
+/**
+ * User Logout Controller
+ * Handles user logout and session cleanup
+ */
 
-session_unset();
-session_destroy();
-
-if (isset($_COOKIE['PHPSESSID'])) {
-    setcookie('PHPSESSID', '', time() - 3600, '/');
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-header('Location: ../index.php');
-exit;
+// Clear all session variables
+$_SESSION = [];
+
+// Unset the session cookie properly
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(
+        session_name(),
+        '',
+        time() - 42000,
+        $params["path"],
+        $params["domain"],
+        $params["secure"],
+        $params["httponly"]
+    );
+}
+
+// Destroy the session
+session_destroy();
+
+// Redirect to login page with logout confirmation
+header("Location: ../views/login-user.php?logout=true");
+exit();
+
 ?>

@@ -16,7 +16,13 @@ $loginTitle    = "Log In";
 $loginSubtitle = "Input your credentials below.";
 
 $errorMessage = "";
+$successMessage = "";
 $oldEmail = $_GET['email'] ?? "";
+
+// Handle logout confirmation
+if (isset($_GET['logout'])) {
+    $successMessage = "You have been logged out successfully.";
+}
 
 if (isset($_GET['error'])) {
     $error = $_GET['error'];

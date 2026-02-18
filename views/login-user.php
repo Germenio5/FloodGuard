@@ -22,13 +22,18 @@ include '../controllers/login-controller.php';
                 <?= $loginSubtitle ?>
             </p>
             
-        <!-- ERROR MESSAGE -->
-        <?php if($errorMessage != ""): ?>
+        <!-- SUCCESS MESSAGE -->
+        <?php if(!empty($successMessage)): ?>
+            <div class="success-box">
+                <?= $successMessage ?>
+            </div>
+        <?php endif; ?>
 
+        <!-- ERROR MESSAGE -->
+        <?php if(!empty($errorMessage)): ?>
             <div class="error-box">
                 <?= $errorMessage ?>
             </div>
-
         <?php endif; ?>
 
         <form action="<?= $formAction ?>" 
