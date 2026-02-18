@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php include '../controllers/flood-report-controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,85 +19,78 @@
         </div>
         
         <div class="content-right">
-            <h1>Incident Details</h1>
-            <p class="subtitle">Please provide as much as possible about the flood incident</p>
-            
-            <form method="post" action="../controllers/process-report.php">
-                <?php if(isset($_GET['success'])): ?>
-                    <p class="success-message">Report submitted successfully.</p>
-                <?php elseif(isset($_GET['error'])): ?>
-                    <p class="error-message">There was a problem submitting your report. Please try again.</p>
-                <?php endif; ?>
-
-                <div class="form-group">
-                    <label>Location</label>
-                    <input type="text" name="location" placeholder="Enter location of the flood" class="text-input" required />
-                </div>
-
-                <div class="form-group">
-                    <label>Status</label>
-                    <div class="badge-group">
-                        <button type="button" class="badge" onclick="selectStatus(this)">Safe</button>
-                        <button type="button" class="badge" onclick="selectStatus(this)">In Danger</button>
+            <?php if (!$showForm && $successMessage): ?>
+                <!-- SUCCESS LAYOUT -->
+                <div class="success-container">
+                    <div class="success-icon">✓</div>
+                    <h2><?php echo htmlspecialchars($successMessage, ENT_QUOTES); ?></h2>
+                    <p>Your report has been recorded and will help emergency responders coordinate a faster response.</p>
+                    <div class="success-button-group">
+                        <a href="user-affected-areas.php" class="success-btn success-btn-primary">View Affected Areas</a>
+                        <a href="user-dashboard.php" class="success-btn success-btn-secondary">Return to Dashboard</a>
                     </div>
-                    <input type="hidden" name="status" id="statusInput" value="" />
                 </div>
+            <?php else: ?>
+                <!-- FORM LAYOUT -->
+                <h1>Incident Details</h1>
+                <p class="subtitle">Please provide as much as possible about the flood incident</p>
                 
-                <div class="form-group">
-                    <button type="button" class="upload-btn">Upload Picture</button>
-                </div>
+                <form method="post" action="../controllers/process-report.php" enctype="multipart/form-data">
+                    <?php if ($errorMessage): ?>
+                        <div class="error-message">
+                            <strong>⚠ Error</strong>
+                            <p><?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?></p>
+                        </div>
+                    <?php endif; ?>
 
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" placeholder="Provide additional details about the flood"></textarea>
-                </div>
+                    <div class="form-group">
+                        <label>Location <span style="color: red;">*</span></label>
+                        <input type="text" name="location" placeholder="Enter location of the flood (e.g., Brgy. Mandalagan, Bacolod City)" class="text-input" value="<?php echo htmlspecialchars($formData['location'], ENT_QUOTES); ?>" required />
+                    </div>
 
-                <div class="form-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" name="post_discussion" value="1" />
-                        <span>Post to discussion page (Optional)</span>
-                    </label>
-                </div>
+                    <div class="form-group">
+                        <label>Status <span style="color: red;">*</span></label>
+                        <div class="badge-group">
+                            <button type="button" class="badge <?php if ($formData['status'] === 'Safe') echo 'selected'; ?>" onclick="selectStatus(this)">Safe</button>
+                            <button type="button" class="badge <?php if ($formData['status'] === 'In Danger') echo 'selected'; ?>" onclick="selectStatus(this)">In Danger</button>
+                            <button type="button" class="badge <?php if ($formData['status'] === 'Danger') echo 'selected'; ?>" onclick="selectStatus(this)">Danger</button>
+                        </div>
+                        <input type="hidden" name="status" id="statusInput" value="<?php echo htmlspecialchars($formData['status'], ENT_QUOTES); ?>" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Photo (Optional)</label>
+                        <div class="file-input-wrapper">
+                            <input type="file" id="photoInput" name="photo" accept="image/jpeg,image/png,image/gif" onchange="previewPhoto(this)">
+                            <button type="button" class="upload-btn" onclick="document.getElementById('photoInput').click()">
+                                📷 Click to upload or drag & drop photo
+                            </button>
+                        </div>
+                        <div class="photo-preview" id="photoPreview">
+                            <img id="previewImage" src="" alt="Preview">
+                            <div class="photo-preview-name" id="fileName"></div>
+                        </div>
+                    </div>
 
-                <button type="submit" class="submit-btn">Submit Report</button>
-            </form>
-            <script>
-                // simple check before submission
-                document.querySelector('form').addEventListener('submit', function(e) {
-                    var statusVal = document.getElementById('statusInput').value.trim();
-                    if (statusVal === '') {
-                        alert('Please select a status (Safe or In Danger)');
-                        e.preventDefault();
-                    }
-                });
-            </script>
+                    <div class="form-group">
+                        <label>Description <span style="color: red;">*</span></label>
+                        <textarea name="description" placeholder="Provide additional details about the flood (water level, area affected, injuries, etc.)"><?php echo htmlspecialchars($formData['description'], ENT_QUOTES); ?></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="post_discussion" value="1" <?php if ($formData['post_discussion']) echo 'checked'; ?> />
+                            <span>Post this report to the community discussion page (Optional)</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Submit Report</button>
+                </form>
+            <?php endif; ?>
         </div>
     </div>
 </main>
 
-<script>
-function selectStatus(button) {
-    // Remove 'selected' class from all status badges
-    const badges = button.parentElement.querySelectorAll('.badge');
-    badges.forEach(badge => badge.classList.remove('selected'));
-    
-    // Add 'selected' class to clicked button
-    button.classList.add('selected');
-}
-
-    // update hidden status field when selecting badge
-    function selectStatus(button) {
-        // Remove 'selected' class from all status badges
-        const badges = button.parentElement.querySelectorAll('.badge');
-        badges.forEach(badge => badge.classList.remove('selected'));
-        
-        // Add 'selected' class to clicked button
-        button.classList.add('selected');
-
-        // store value in hidden input
-        document.getElementById('statusInput').value = button.textContent.trim();
-    }
-</script>
-
+  <script src="../assets/js/flood-report.js"></script>
   </body>
 </html>
