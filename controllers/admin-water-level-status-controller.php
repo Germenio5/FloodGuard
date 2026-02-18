@@ -13,17 +13,15 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] !== 'admin') {
 }
 
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/affected_areas.php';
 
-// Fetch water status data from affected_areas table
+// Fetch affected areas data using model
+$affected_areas_data = get_all_affected_areas($conn);
+
+// Transform data for view
 $waterStatusData = [];
-$query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
-          FROM affected_areas 
-          ORDER BY name ASC";
-
-$result = $conn->query($query);
-
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+if ($affected_areas_data) {
+    foreach ($affected_areas_data as $row) {
         // Calculate percentage
         $maxLevel = (float)$row['max_level'];
         $currentLevel = (float)$row['current_level'];
@@ -33,7 +31,7 @@ if ($result && $result->num_rows > 0) {
         $statusClass = mapStatusClass($row['status']);
         
         $waterStatusData[] = [
-            'id' => $row['id'],
+            'id' => (int)$row['id'],
             'bridge_name' => htmlspecialchars($row['name']),
             'location' => htmlspecialchars($row['location']),
             'current_level' => number_format($currentLevel, 2) . 'm',
@@ -41,37 +39,15 @@ if ($result && $result->num_rows > 0) {
             'speed' => number_format((float)$row['speed'], 2) . 'm/min',
             'status' => $statusClass,
             'percentage' => round($percentage, 1),
-            'raw_status' => $row['status'],
+            'raw_status' => htmlspecialchars($row['status']),
             'updated_at' => $row['updated_at']
         ];
     }
-    $result->free();
 }
 
-// If no data in database, use sample data
+// Fallback to empty array if no data
 if (empty($waterStatusData)) {
-    $waterStatusData = [
-        [
-            'id' => 1,
-            'bridge_name' => 'Eroreco Bridge',
-            'location' => 'Brgy Mandalagan',
-            'current_level' => '7.50m',
-            'max_level' => '14.20m',
-            'speed' => '0.30m/min',
-            'status' => 'normal',
-            'percentage' => 53
-        ],
-        [
-            'id' => 2,
-            'bridge_name' => 'Mandalagan Bridge',
-            'location' => 'Brgy Mandalagan',
-            'current_level' => '10.50m',
-            'max_level' => '14.20m',
-            'speed' => '0.50m/min',
-            'status' => 'warning',
-            'percentage' => 74
-        ]
-    ];
+    $waterStatusData = [];
 }
 
 /**

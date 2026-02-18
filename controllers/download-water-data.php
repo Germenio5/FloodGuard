@@ -12,34 +12,31 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     exit();
 }
 
-// Load database connection
+// Load database connection and water level model
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/water_level.php';
 
-// Fetch all water level history (not paginated for download)
+// Fetch all water level history using model (large result set for download)
+$waterLevels_data = get_water_levels_paginated($conn, null, 5000, 0); // Get up to 5000 records
+
+// Transform data for CSV export
 $waterLevels = [];
-$query = "SELECT area, trend, record_time, height, speed, status
-          FROM water_level_history
-          ORDER BY record_time DESC";
-
-if ($result = $conn->query($query)) {
-    while ($row = $result->fetch_assoc()) {
-        $waterLevels[] = $row;
+if ($waterLevels_data) {
+    foreach ($waterLevels_data as $row) {
+        $waterLevels[] = [
+            'area' => htmlspecialchars($row['area']),
+            'trend' => htmlspecialchars($row['trend'] ?? 'steady'),
+            'record_time' => $row['record_time'],
+            'height' => (float)$row['height'],
+            'speed' => (float)$row['speed'],
+            'status' => htmlspecialchars($row['status'])
+        ];
     }
-    $result->free();
 }
 
-// If no data, use sample data
+// If no data, provide empty fallback
 if (empty($waterLevels)) {
-    $waterLevels = [
-        [
-            "area" => "Eroreco Bridge",
-            "trend" => "steady",
-            "record_time" => "2026-02-19 08:00:00",
-            "height" => "2.3",
-            "speed" => "0.3",
-            "status" => "normal"
-        ]
-    ];
+    $waterLevels = [];
 }
 
 // Generate CSV filename with timestamp

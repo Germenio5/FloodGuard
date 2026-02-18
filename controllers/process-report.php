@@ -13,8 +13,9 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     exit();
 }
 
-// Include database connection
+// Include database connection and models
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/reports.php';
 
 // Get form data from POST request
 $location      = trim($_POST['location'] ?? '');
@@ -120,30 +121,14 @@ $location    = htmlspecialchars($location, ENT_QUOTES, 'UTF-8');
 $status      = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
 $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
 
-// Prepare and execute INSERT statement with prepared statement for security
-$stmt = $conn->prepare("INSERT INTO reports (user_email, location, status, description, image_path, post_news, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())");
-
-if (!$stmt) {
-    error_log("Database prepare error: " . $conn->error);
-    header("Location: ../views/user-report-flood.php?error=db");
-    exit();
-}
-
-// Bind parameters: email (s), location (s), status (s), description (s), image_path (s), post_news (i)
-$stmt->bind_param('sssssi', $userEmail, $location, $status, $description, $imagePath, $postNews);
-
-// Execute the prepared statement
-if ($stmt->execute()) {
-    $stmt->close();
-    
+// Insert report using model
+if (create_report($conn, $userEmail, $location, $status, $description, $imagePath, $postNews)) {
     // Report submitted successfully
     header("Location: ../views/user-report-flood.php?success=report_submitted");
     exit();
 } else {
-    error_log("Database execution error: " . $stmt->error);
-    $stmt->close();
-    
     // Database error during insertion
+    error_log("Failed to create report for user: " . $userEmail);
     header("Location: ../views/user-report-flood.php?error=db");
     exit();
 }

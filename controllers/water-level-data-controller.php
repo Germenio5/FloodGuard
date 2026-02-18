@@ -14,17 +14,15 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 
 // Load database connection
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/water_level.php';
 
 // Pagination settings
 $itemsPerPage = 10;
 $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 if ($currentPage < 1) $currentPage = 1;
 
-// Get total count of water level records
-$countQuery = "SELECT COUNT(*) as total FROM water_level_history";
-$countResult = $conn->query($countQuery);
-$countRow = $countResult->fetch_assoc();
-$totalRecords = (int)$countRow['total'];
+// Get total count and calculate pages
+$totalRecords = get_water_levels_count($conn);
 $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
 
 // Ensure current page doesn't exceed total pages
@@ -35,62 +33,29 @@ if ($currentPage > $totalPages) {
 // Calculate offset
 $offset = ($currentPage - 1) * $itemsPerPage;
 
-// Fetch water level history with pagination
-$waterLevels = [];
-$query = "SELECT id, area, trend, record_time, height, speed, status
-          FROM water_level_history
-          ORDER BY record_time DESC
-          LIMIT $itemsPerPage OFFSET $offset";
+// Fetch water level history using model
+$waterLevels_data = get_water_levels_paginated($conn, null, $itemsPerPage, $offset);
 
-if ($result = $conn->query($query)) {
-    while ($row = $result->fetch_assoc()) {
+// Transform data for view
+$waterLevels = [];
+if ($waterLevels_data) {
+    foreach ($waterLevels_data as $row) {
         // Create a user-friendly date string
         $row['date'] = date('m/d/Y H:i', strtotime($row['record_time']));
         // Convert numeric fields to appropriate types
         $row['height'] = (float) $row['height'];
         $row['speed'] = (float) $row['speed'];
+        $row['area'] = htmlspecialchars($row['area']);
+        $row['status'] = htmlspecialchars($row['status']);
+        $row['trend'] = htmlspecialchars($row['trend'] ?? 'steady');
         $waterLevels[] = $row;
     }
-    $result->free();
-} else {
-    error_log("Water level query failed: " . $conn->error);
 }
 
-// Fallback example if no data available
+// Fallback to empty array if no data
 if (empty($waterLevels)) {
-    $waterLevels = [
-        [
-            "id" => 1,
-            "area" => "Eroreco Bridge",
-            "trend" => "steady",
-            "date" => "02/19/2026 08:00",
-            "height" => "2.3",
-            "speed" => "0.3",
-            "status" => "normal",
-            "record_time" => "2026-02-19 08:00:00"
-        ],
-        [
-            "id" => 2,
-            "area" => "Eroreco Bridge",
-            "trend" => "rising",
-            "date" => "02/19/2026 09:00",
-            "height" => "2.6",
-            "speed" => "0.5",
-            "status" => "alert",
-            "record_time" => "2026-02-19 09:00:00"
-        ],
-        [
-            "id" => 3,
-            "area" => "Eroreco Bridge",
-            "trend" => "rising",
-            "date" => "02/19/2026 10:00",
-            "height" => "3.1",
-            "speed" => "0.7",
-            "status" => "danger",
-            "record_time" => "2026-02-19 10:00:00"
-        ]
-    ];
-    $totalRecords = 1;
+    $waterLevels = [];
+    $totalRecords = 0;
     $totalPages = 1;
 }
 

@@ -13,6 +13,7 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] !== 'admin') {
 }
 
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/user.php';
 
 // Pagination settings
 $itemsPerPage = 10;
@@ -22,16 +23,8 @@ if ($currentPage < 1) $currentPage = 1;
 // Get selected area from filter
 $selectedArea = isset($_POST['area']) ? trim($_POST['area']) : '';
 
-// Build count query based on area selection
-$countQuery = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
-if (!empty($selectedArea)) {
-    $selectedArea_escaped = $conn->real_escape_string($selectedArea);
-    $countQuery .= " AND address LIKE '%$selectedArea_escaped%'";
-}
-
-$countResult = $conn->query($countQuery);
-$countRow = $countResult->fetch_assoc();
-$totalRecords = (int)$countRow['total'];
+// Get total count using model
+$totalRecords = get_users_count($conn, $selectedArea);
 $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
 
 // Ensure current page doesn't exceed total pages
@@ -42,56 +35,33 @@ if ($currentPage > $totalPages) {
 // Calculate offset
 $offset = ($currentPage - 1) * $itemsPerPage;
 
-// Build query based on area selection with pagination
-$query = "SELECT id, first_name, last_name, email, phone, address FROM users WHERE role = 'user'";
-if (!empty($selectedArea)) {
-    $selectedArea = $conn->real_escape_string($selectedArea);
-    $query .= " AND address LIKE '%$selectedArea%'";
-}
-$query .= " ORDER BY first_name ASC LIMIT $itemsPerPage OFFSET $offset";
+// Fetch residents using model
+$users_data = get_users_paginated($conn, $itemsPerPage, $offset, $selectedArea);
 
-// Fetch residents from database
+// Transform data for view
 $residents = [];
-$result = $conn->query($query);
-
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
+if ($users_data) {
+    foreach ($users_data as $row) {
         $residents[] = [
-            'id' => $row['id'],
+            'id' => (int)$row['id'],
             'name' => htmlspecialchars($row['first_name'] . ' ' . $row['last_name']),
             'address' => htmlspecialchars($row['address']),
             'phone' => htmlspecialchars($row['phone']),
             'email' => htmlspecialchars($row['email']),
-            'status' => 'Safe' // Default status (can be extended with status column)
+            'status' => 'Safe' // Default status
         ];
     }
-    $result->free();
 }
 
-// Get all unique areas for dropdown
-$areaQuery = "SELECT DISTINCT address FROM users WHERE role = 'user' ORDER BY address ASC";
-$areaResult = $conn->query($areaQuery);
-$areas = [];
-
-if ($areaResult && $areaResult->num_rows > 0) {
-    while ($row = $areaResult->fetch_assoc()) {
-        if (!empty($row['address'])) {
-            $areas[] = htmlspecialchars($row['address']);
-        }
-    }
-    $areaResult->free();
-}
+// Get all unique areas for dropdown using model
+$areas_data = get_unique_user_addresses($conn);
+$areas = array_map(function($addr) { return htmlspecialchars($addr); }, $areas_data);
 
 // Calculate statistics
 $totalResidents = count($residents);
+$registeredCount = get_users_count($conn);
 
-// Get total registered users
-$countQuery = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
-$countResult = $conn->query($countQuery);
-$countRow = $countResult->fetch_assoc();
-$registeredCount = (int)$countRow['total'];
-
-// For now, we'll use a basic distribution (can be enhanced with actual status column)
+// For now, use basic distribution (can be enhanced with actual status column)
 $stats = [
     "safe" => max(0, floor($registeredCount * 0.6)),
     "danger" => max(0, floor($registeredCount * 0.2)),

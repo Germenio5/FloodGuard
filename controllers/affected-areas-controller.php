@@ -9,55 +9,38 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 }
 
 require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/affected_areas.php';
 
+// Fetch affected areas from database using model
+$bridges_data = get_all_affected_areas($conn);
+
+// Transform data for view
 $bridges = [];
-
-$query = "SELECT name, location, current_level, max_level, speed, status
-          FROM affected_areas
-          ORDER BY updated_at DESC";
-
-if ($result = $conn->query($query)) {
-    while ($row = $result->fetch_assoc()) {
-        $row['current_level'] = (float) $row['current_level'];
-        $row['max_level'] = (float) $row['max_level'];
-        $row['speed'] = (float) $row['speed'];
-        $bridges[] = $row;
+if ($bridges_data) {
+    foreach ($bridges_data as $area) {
+        $bridges[] = [
+            'name' => htmlspecialchars($area['name']),
+            'location' => htmlspecialchars($area['location']),
+            'current_level' => (float)$area['current_level'],
+            'max_level' => (float)$area['max_level'],
+            'speed' => (float)$area['speed'],
+            'status' => htmlspecialchars($area['status'])
+        ];
     }
-    $result->free();
-} else {
-    error_log("Database query failed: " . $conn->error);
 }
 
+// Fallback to empty array if no data
 if (empty($bridges)) {
-    $bridges = [
-        [
-            'name' => 'Mandalagan Bridge',
-            'location' => 'Brgy Mandalagan',
-            'current_level' => 2.5,
-            'max_level' => 14.2,
-            'speed' => 0.3,
-            'status' => 'normal'
-        ],
-        [
-            'name' => 'Mandalagan Bridge',
-            'location' => 'Brgy Mandalagan',
-            'current_level' => 9.5,
-            'max_level' => 14.2,
-            'speed' => 0.3,
-            'status' => 'alert'
-        ],
-        [
-            'name' => 'Mandalagan Bridge',
-            'location' => 'Brgy Mandalagan',
-            'current_level' => 13.5,
-            'max_level' => 14.2,
-            'speed' => 0.3,
-            'status' => 'danger'
-        ]
-    ];
+    $bridges = [];
 }
 
 
+/**
+ * Get color code for water status
+ * 
+ * @param string $status Water level status
+ * @return string Hex color code
+ */
 function getStatusColor($status) {
     switch($status) {
         case 'normal':
@@ -71,6 +54,13 @@ function getStatusColor($status) {
     }
 }
 
+/**
+ * Calculate water level percentage
+ * 
+ * @param float $current Current water level
+ * @param float $max Maximum water level
+ * @return float Percentage value
+ */
 function getPercentage($current, $max) {
     return ($current / $max) * 100;
 }

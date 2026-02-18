@@ -181,4 +181,85 @@ function change_user_password($conn, $user_id, $old_password, $new_password) {
     }
 }
 
+/**
+ * Get all regular users with pagination
+ * 
+ * @param mysqli $conn Database connection
+ * @param int $limit Items per page
+ * @param int $offset Pagination offset
+ * @param string $search_area Optional area filter
+ * @return array Array of user records
+ */
+function get_users_paginated($conn, $limit = 10, $offset = 0, $search_area = '') {
+    $users = [];
+    $limit = intval($limit);
+    $offset = intval($offset);
+    
+    $query = "SELECT id, first_name, last_name, email, phone, address FROM users WHERE role = 'user'";
+    
+    if (!empty($search_area)) {
+        $search_area = $conn->real_escape_string(trim($search_area));
+        $query .= " AND address LIKE '%$search_area%'";
+    }
+    
+    $query .= " ORDER BY first_name ASC LIMIT $limit OFFSET $offset";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
+        }
+        $result->free();
+    }
+    
+    return $users;
+}
+
+/**
+ * Get total count of regular users
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $search_area Optional area filter
+ * @return int Total number of users
+ */
+function get_users_count($conn, $search_area = '') {
+    $query = "SELECT COUNT(*) as total FROM users WHERE role = 'user'";
+    
+    if (!empty($search_area)) {
+        $search_area = $conn->real_escape_string(trim($search_area));
+        $query .= " AND address LIKE '%$search_area%'";
+    }
+    
+    $result = $conn->query($query);
+    
+    if ($result) {
+        $row = $result->fetch_assoc();
+        return (int)$row['total'];
+    }
+    return 0;
+}
+
+/**
+ * Get unique user addresses for dropdown filtering
+ * 
+ * @param mysqli $conn Database connection
+ * @return array Array of unique addresses
+ */
+function get_unique_user_addresses($conn) {
+    $addresses = [];
+    $query = "SELECT DISTINCT address FROM users WHERE role = 'user' AND address IS NOT NULL AND address != '' ORDER BY address ASC";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $addresses[] = $row['address'];
+        }
+        $result->free();
+    }
+    
+    return $addresses;
+}
+
 ?>

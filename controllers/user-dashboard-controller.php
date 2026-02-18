@@ -13,6 +13,7 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/user.php';
+require_once __DIR__ . '/../models/affected_areas.php';
 
 $userId = $_SESSION['user_id'];
 $userEmail = $_SESSION['user_email'] ?? '';
@@ -35,20 +36,16 @@ $user = [
     'status' => 'You Are Safe' // Default status - can be updated based on affected areas
 ];
 
-// Get latest water level data for monitoring
-// Query affected areas to get current monitoring data
-$waterLevelQuery = "SELECT * FROM affected_areas ORDER BY updated_at DESC LIMIT 1";
-$waterLevelResult = $conn->query($waterLevelQuery);
+// Get latest water level data for monitoring using model
+$latestArea = get_latest_affected_area($conn);
 
-if ($waterLevelResult && $waterLevelResult->num_rows > 0) {
-    $waterLevelData = $waterLevelResult->fetch_assoc();
-    
-    $current = (float)$waterLevelData['current_level'];
-    $max = (float)$waterLevelData['max_level'];
+if ($latestArea) {
+    $current = (float)$latestArea['current_level'];
+    $max = (float)$latestArea['max_level'];
     $percentage = $max > 0 ? ($current / $max) * 100 : 0;
     
     // Determine status based on water level
-    $levelStatus = $waterLevelData['status'] ?? 'normal';
+    $levelStatus = $latestArea['status'] ?? 'normal';
     if ($levelStatus === 'danger') {
         $user['status'] = 'Area is in DANGER';
     } elseif ($levelStatus === 'alert') {
@@ -56,18 +53,18 @@ if ($waterLevelResult && $waterLevelResult->num_rows > 0) {
     }
     
     $waterLevel = [
-        'area_id' => $waterLevelData['id'],
-        'bridge' => $waterLevelData['name'],
-        'location' => $waterLevelData['location'],
+        'area_id' => (int)$latestArea['id'],
+        'bridge' => htmlspecialchars($latestArea['name']),
+        'location' => htmlspecialchars($latestArea['location']),
         'current' => $current,
         'max' => $max,
         'percentage' => $percentage,
-        'trend' => ucfirst('steady'), // Default trend
-        'speed' => $waterLevelData['speed'] . ' meters/hour',
+        'trend' => 'steady', // Default trend
+        'speed' => number_format((float)$latestArea['speed'], 2) . ' meters/hour',
         'last_update' => 'Just now',
-        'date' => date('M d, Y', strtotime($waterLevelData['updated_at'])),
+        'date' => date('M d, Y', strtotime($latestArea['updated_at'])),
         'status' => ucfirst($levelStatus),
-        'updated_at' => $waterLevelData['updated_at']
+        'updated_at' => $latestArea['updated_at']
     ];
 } else {
     // Fallback if no data available
