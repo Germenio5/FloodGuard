@@ -1,29 +1,118 @@
 <?php
+session_start();
 
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+    header("Location: ../views/login-user.php");
+    exit();
+}
+
+if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+    header("Location: ../views/admin-dashboard.php");
+    exit();
+}
+
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/user.php';
+
+$userId = $_SESSION['user_id'];
+$userEmail = $_SESSION['user_email'] ?? '';
+$userFromDb = get_user_by_id($conn, $userId);
+
+if (!$userFromDb) {
+    session_destroy();
+    header("Location: ../views/login-user.php?error=session");
+    exit();
+}
+
+// Set user data from database
 $user = [
-    'name' => 'User',
-    'status' => 'You Are Safe'
+    'id' => $userFromDb['id'],
+    'name' => $userFromDb['first_name'] . ' ' . $userFromDb['last_name'],
+    'first_name' => $userFromDb['first_name'],
+    'email' => $userFromDb['email'],
+    'phone' => $userFromDb['phone'],
+    'address' => $userFromDb['address'],
+    'status' => 'You Are Safe' // Default status - can be updated based on affected areas
 ];
 
-$waterLevel = [
-    'bridge' => 'Mandalagan Bridge',
-    'location' => 'Brgy. Mandalagan',
-    'current' => 7.5,
-    'max' => 14.2,
-    'percentage' => (7.5 / 14.2) * 100,
-    'trend' => 'Rising',
-    'speed' => '0.9 meters / hour',
-    'last_update' => '6 minutes ago',
-    'date' => 'Apr 26, 2025',
-    'status' => 'Alert'
-];
+// Get latest water level data for monitoring
+// Query affected areas to get current monitoring data
+$waterLevelQuery = "SELECT * FROM affected_areas ORDER BY updated_at DESC LIMIT 1";
+$waterLevelResult = $conn->query($waterLevelQuery);
 
-$alertTips = [
-    'Stay alert and monitor updates regularly',
-    'Prepare for possible evacuation if levels rise further',
-    'Keep emergency supplies ready'
-];
+if ($waterLevelResult && $waterLevelResult->num_rows > 0) {
+    $waterLevelData = $waterLevelResult->fetch_assoc();
+    
+    $current = (float)$waterLevelData['current_level'];
+    $max = (float)$waterLevelData['max_level'];
+    $percentage = $max > 0 ? ($current / $max) * 100 : 0;
+    
+    // Determine status based on water level
+    $levelStatus = $waterLevelData['status'] ?? 'normal';
+    if ($levelStatus === 'danger') {
+        $user['status'] = 'Area is in DANGER';
+    } elseif ($levelStatus === 'alert') {
+        $user['status'] = 'Area is in ALERT';
+    }
+    
+    $waterLevel = [
+        'area_id' => $waterLevelData['id'],
+        'bridge' => $waterLevelData['name'],
+        'location' => $waterLevelData['location'],
+        'current' => $current,
+        'max' => $max,
+        'percentage' => $percentage,
+        'trend' => ucfirst('steady'), // Default trend
+        'speed' => $waterLevelData['speed'] . ' meters/hour',
+        'last_update' => 'Just now',
+        'date' => date('M d, Y', strtotime($waterLevelData['updated_at'])),
+        'status' => ucfirst($levelStatus),
+        'updated_at' => $waterLevelData['updated_at']
+    ];
+} else {
+    // Fallback if no data available
+    $waterLevel = [
+        'area_id' => 0,
+        'bridge' => 'No monitoring area',
+        'location' => 'N/A',
+        'current' => 0,
+        'max' => 0,
+        'percentage' => 0,
+        'trend' => 'Unknown',
+        'speed' => '0 meters/hour',
+        'last_update' => 'N/A',
+        'date' => date('M d, Y'),
+        'status' => 'Normal',
+        'updated_at' => null
+    ];
+}
 
+// Alert tips based on water level status
+$alertTips = [];
+if ($waterLevel['status'] === 'Danger') {
+    $alertTips = [
+        'IMMEDIATE ACTION REQUIRED: Prepare for evacuation',
+        'Keep emergency supplies and important documents ready',
+        'Follow local emergency broadcasts and updates',
+        'Have transportation plan ready'
+    ];
+} elseif ($waterLevel['status'] === 'Alert') {
+    $alertTips = [
+        'Stay alert and monitor updates regularly',
+        'Prepare for possible evacuation if levels rise further',
+        'Keep emergency supplies ready',
+        'Avoid going near flood-prone areas'
+    ];
+} else {
+    $alertTips = [
+        'Continue monitoring flood updates',
+        'Prepare emergency kit for your household',
+        'Know your evacuation route',
+        'Stay informed through official channels'
+    ];
+}
+
+// Action links
 $actions = [
     [
         'title' => 'Monitor',
@@ -39,17 +128,33 @@ $actions = [
     ]
 ];
 
+// Emergency hotline
 $hotline = [
     'phone' => '(034) 432-3871 to 73',
     'tel' => '0344323871',
     'note' => '(24/7 Roxas Emergency Dispatch)'
 ];
 
+/**
+ * Helper function to format water level display
+ * 
+ * @param float $current Current water level
+ * @param float $max Maximum water level
+ * @return string Formatted level text
+ */
 function formatLevelText($current, $max) {
-    return $current . "m / " . $max . "m";
+    return round($current, 2) . "m / " . round($max, 2) . "m";
 }
 
+/**
+ * Helper function to calculate progress bar width
+ * 
+ * @param float $percent Percentage value
+ * @return string CSS width style
+ */
 function getProgressWidth($percent) {
-    return "width: " . $percent . "%";
+    $percent = min(100, max(0, $percent)); // Clamp between 0-100
+    return "width: " . round($percent, 1) . "%";
 }
+
 ?>

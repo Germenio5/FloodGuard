@@ -1,5 +1,4 @@
 <?php
-session_start();
 define("BASE_URL", "/FloodGuard/views/");
 $current_page = basename($_SERVER['PHP_SELF']);
 $isLoggedIn = isset($_SESSION['email']);
