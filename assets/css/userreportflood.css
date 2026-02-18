@@ -198,13 +198,13 @@ textarea {
 }
 
 .success-btn-primary {
-    background-color: #377586;
+    background-color: #2a8ca7;
     color: white;
     font-weight: 600;
 }
 
 .success-btn-primary:hover {
-    background-color: #2a5a6f;
+    background-color: #309fbe;
     transform: translateY(-2px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
@@ -212,12 +212,12 @@ textarea {
 .success-btn-secondary {
     background-color: transparent;
     color: white;
-    border: 2px solid #377586;
+    border: 2px solid #ffffff;
     font-weight: 600;
 }
 
 .success-btn-secondary:hover {
-    background-color: #377586;
+    background-color: #309fbe;
     color: white;
     transform: translateY(-2px);
 }

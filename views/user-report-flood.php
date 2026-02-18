@@ -74,7 +74,7 @@
 
                     <div class="form-group">
                         <label>Description <span style="color: red;">*</span></label>
-                        <textarea name="description" placeholder="Provide additional details about the flood (water level, area affected, injuries, etc.)"><?php echo htmlspecialchars($formData['description'], ENT_QUOTES); ?></textarea>
+                        <textarea name="description" placeholder="Provide additional details about the flood (water level, area affected, injuries, etc.)" required><?php echo htmlspecialchars($formData['description'], ENT_QUOTES); ?></textarea>
                     </div>
 
                     <div class="form-group">

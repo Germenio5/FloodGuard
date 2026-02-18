@@ -27,7 +27,7 @@ $imagePath     = null;
 $userEmail     = $_SESSION['user_email'] ?? null;
 
 // Validate required fields
-if ($location === '' || $status === '') {
+if ($location === '' || $status === '' || $description === '') {
     $qs = http_build_query([
         'error' => 'required',
         'location' => $location,
@@ -39,7 +39,7 @@ if ($location === '' || $status === '') {
 }
 
 // Validate status field - must be one of the allowed values
-$validStatuses = ['Safe', 'In Danger', 'Alert', 'Danger'];
+$validStatuses = ['Safe', 'In Danger', 'Danger'];
 if (!in_array($status, $validStatuses)) {
     $qs = http_build_query([
         'error' => 'invalid_status',

@@ -44,10 +44,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     if (form) {
         form.addEventListener('submit', function(e) {
+            // Validate Location
+            const locationVal = document.querySelector('input[name="location"]').value.trim();
+            if (locationVal === '') {
+                alert('Please enter a location');
+                e.preventDefault();
+                return;
+            }
+            
+            // Validate Status
             const statusVal = document.getElementById('statusInput').value.trim();
             if (statusVal === '') {
-                alert('Please select a status (Safe, In Danger, Alert, or Danger)');
+                alert('Please select a status (Safe, In Danger, or Danger)');
                 e.preventDefault();
+                return;
+            }
+            
+            // Validate Description
+            const descriptionVal = document.querySelector('textarea[name="description"]').value.trim();
+            if (descriptionVal === '') {
+                alert('Please provide a description of the incident');
+                e.preventDefault();
+                return;
             }
         });
     }
