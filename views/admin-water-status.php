@@ -26,25 +26,31 @@ include '../controllers/admin-water-level-status-controller.php';
     <!-- Bridge Cards Grid -->
     <div class="bridge-grid">
 
+        <?php if (empty($waterStatusData)): ?>
+            <div class="no-data-message">
+                <p>No affected areas data available.</p>
+            </div>
+        <?php else: ?>
+
         <?php foreach($waterStatusData as $bridge): ?>
 
         <div class="bridge-card">
 
             <h2 class="bridge-name">
-                <?= htmlspecialchars($bridge['bridge_name']) ?>
+                <?= $bridge['bridge_name'] ?>
             </h2>
 
             <p class="bridge-location">
-                <?= htmlspecialchars($bridge['location']) ?>
+                <?= $bridge['location'] ?>
             </p>
 
             <div class="level-info">
                 <span class="level-label">Current Level:</span>
 
                 <span class="level-value">
-                    <?= htmlspecialchars($bridge['current_level']) ?>
+                    <?= $bridge['current_level'] ?>
                     /
-                    <?= htmlspecialchars($bridge['max_level']) ?>
+                    <?= $bridge['max_level'] ?>
                 </span>
             </div>
 
@@ -54,8 +60,12 @@ include '../controllers/admin-water-level-status-controller.php';
                 </div>
             </div>
 
+            <p class="progress-percentage">
+                <?= $bridge['percentage'] ?>%
+            </p>
+
             <p class="speed-info">
-                Speed: <?= htmlspecialchars($bridge['speed']) ?>
+                Speed: <?= $bridge['speed'] ?>
             </p>
 
             <div class="button-group">
@@ -71,6 +81,8 @@ include '../controllers/admin-water-level-status-controller.php';
         </div>
 
         <?php endforeach; ?>
+
+        <?php endif; ?>
 
     </div>
 
