@@ -19,6 +19,70 @@ body {
     margin: 0 auto;
 }
 
+/* ===== MESSAGE CONTAINERS ===== */
+.message-container {
+    margin-bottom: 25px;
+    border-radius: 8px;
+    overflow: hidden;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.success-message {
+    background: #d1fae5;
+    border-left: 4px solid #10b981;
+}
+
+.error-message {
+    background: #fee2e2;
+    border-left: 4px solid #ef4444;
+}
+
+.message-content {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 12px;
+}
+
+.message-icon {
+    font-size: 20px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.success-message .message-icon {
+    color: #10b981;
+}
+
+.error-message .message-icon {
+    color: #ef4444;
+}
+
+.message-content p {
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+}
+
+.success-message .message-content p {
+    color: #065f46;
+}
+
+.error-message .message-content p {
+    color: #7f1d1d;
+}
+
 /* ===== PROFILE LAYOUT ===== */
 .profile-layout {
     display: grid;
@@ -113,6 +177,11 @@ body {
     color: #377586;
     font-weight: 500;
     margin-bottom: 8px;
+}
+
+.required {
+    color: #ef4444;
+    font-weight: 600;
 }
 
 .form-input {

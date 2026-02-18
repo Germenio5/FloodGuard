@@ -98,7 +98,7 @@ function authenticate_user($conn, $email, $password) {
  */
 function get_user_by_id($conn, $user_id) {
     $user_id = intval($user_id);
-    $query = "SELECT id, first_name, last_name, email, phone, address, role, created_at FROM users WHERE id = $user_id LIMIT 1";
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, created_at FROM users WHERE id = $user_id LIMIT 1";
     $result = $conn->query($query);
     
     if ($result && $result->num_rows > 0) {
@@ -117,7 +117,7 @@ function get_user_by_id($conn, $user_id) {
  */
 function update_user($conn, $user_id, $data) {
     $user_id = intval($user_id);
-    $allowed_fields = ['first_name', 'last_name', 'phone', 'address'];
+    $allowed_fields = ['first_name', 'last_name', 'phone', 'address', 'email', 'profile_photo'];
     
     $set_clause = [];
     foreach ($data as $key => $value) {
