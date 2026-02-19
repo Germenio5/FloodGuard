@@ -21,8 +21,11 @@ $itemsPerPage = 10;
 $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 if ($currentPage < 1) $currentPage = 1;
 
+// Get selected bridge filter
+$selectedBridge = isset($_GET['bridge']) ? trim($_GET['bridge']) : '';
+
 // Get total count and calculate pages
-$totalRecords = get_water_levels_count($conn);
+$totalRecords = $selectedBridge ? get_water_levels_count($conn, $selectedBridge) : get_water_levels_count($conn);
 $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
 
 // Ensure current page doesn't exceed total pages
@@ -34,11 +37,18 @@ if ($currentPage > $totalPages) {
 $offset = ($currentPage - 1) * $itemsPerPage;
 
 // Fetch water level history using model
-$waterLevels_data = get_water_levels_paginated($conn, null, $itemsPerPage, $offset);
+$waterLevels_data = $selectedBridge 
+    ? get_water_levels_by_area($conn, $selectedBridge, 1000) // Get all for filtering
+    : get_water_levels_paginated($conn, null, $itemsPerPage, $offset);
 
 // Transform data for view
 $waterLevels = [];
 if ($waterLevels_data) {
+    // For filtered results, slice to current page
+    if ($selectedBridge && is_array($waterLevels_data)) {
+        $waterLevels_data = array_slice($waterLevels_data, $offset, $itemsPerPage);
+    }
+    
     foreach ($waterLevels_data as $row) {
         // Create a user-friendly date string
         $row['date'] = date('m/d/Y H:i', strtotime($row['record_time']));
@@ -50,6 +60,19 @@ if ($waterLevels_data) {
         $row['trend'] = htmlspecialchars($row['trend'] ?? 'steady');
         $waterLevels[] = $row;
     }
+}
+
+// Get unique areas/bridges for filter dropdown
+$allAreas = [];
+$allAreasData = get_water_levels_paginated($conn, null, 1000, 0);
+if ($allAreasData) {
+    foreach ($allAreasData as $row) {
+        $area = $row['area'];
+        if (!in_array($area, $allAreas)) {
+            $allAreas[] = $area;
+        }
+    }
+    sort($allAreas);
 }
 
 // Fallback to empty array if no data
@@ -119,12 +142,12 @@ function getTrendBadge($trend) {
 
 function getStatusBadge($status) {
     switch ($status) {
-        case "normal":
-            return '<span class="status status-normal">● Normal</span>';
-        case "alert":
-            return '<span class="status status-alert">● Alert</span>';
+        case "warning":
+            return '<span class="status status-warning">● Warning</span>';
         case "danger":
             return '<span class="status status-danger">● Danger</span>';
+        case "critical":
+            return '<span class="status status-critical">● Critical</span>';
         default:
             return '<span class="status">Unknown</span>';
     }

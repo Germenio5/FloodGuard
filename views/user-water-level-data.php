@@ -32,7 +32,22 @@ include '../controllers/water-level-data-controller.php';
 
     <!-- Recent Data Section -->
     <div class="data-section">
-        <h2>Recent Monitoring Data</h2>
+        <div class="section-header">
+            <h2>Recent Monitoring Data</h2>
+            
+            <!-- Bridge Filter -->
+            <div class="filter-box">
+                <label for="bridgeFilter">Filter by Bridge:</label>
+                <select id="bridgeFilter" name="bridge" onchange="filterByBridge(this.value)">
+                    <option value="">All Bridges</option>
+                    <?php foreach ($allAreas as $area): ?>
+                        <option value="<?= htmlspecialchars($area) ?>" <?= ($selectedBridge === $area) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($area) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
 
         <!-- Data Table -->
         <div class="table-container">
@@ -88,7 +103,7 @@ include '../controllers/water-level-data-controller.php';
                     <?php elseif ($btn['active']): ?>
                         <button class="page-btn active"><?php echo $btn['label']; ?></button>
                     <?php else: ?>
-                        <a href="?page=<?php echo $btn['page']; ?>" class="page-btn"><?php echo $btn['label']; ?></a>
+                        <a href="?page=<?php echo $btn['page']; ?><?php echo $selectedBridge ? '&bridge=' . urlencode($selectedBridge) : ''; ?>" class="page-btn"><?php echo $btn['label']; ?></a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
@@ -101,6 +116,16 @@ include '../controllers/water-level-data-controller.php';
     </div>
 </div>
 </main>
+
+<script>
+function filterByBridge(bridgeValue) {
+    if (bridgeValue) {
+        window.location.href = '?bridge=' + encodeURIComponent(bridgeValue);
+    } else {
+        window.location.href = '?';
+    }
+}
+</script>
 
 </body>
 </html>
