@@ -35,13 +35,27 @@ $bridges_data = get_affected_areas_paginated($conn, $itemsPerPage, $offset);
 $bridges = [];
 if ($bridges_data) {
     foreach ($bridges_data as $area) {
+        $current = (float)$area['current_level'];
+        $max = (float)$area['max_level'];
+        $percentage = ($max > 0) ? min(100, ($current / $max) * 100) : 0;
+        
+        // Determine status class based on percentage thresholds
+        if ($percentage < 30) {
+            $statusClass = 'warning';
+        } elseif ($percentage < 75) {
+            $statusClass = 'danger';
+        } else {
+            $statusClass = 'critical';
+        }
+        
         $bridges[] = [
             'name' => htmlspecialchars($area['name']),
             'location' => htmlspecialchars($area['location']),
-            'current_level' => (float)$area['current_level'],
-            'max_level' => (float)$area['max_level'],
+            'current_level' => $current,
+            'max_level' => $max,
             'speed' => (float)$area['speed'],
-            'status' => htmlspecialchars($area['status'])
+            'status' => $statusClass,
+            'percentage' => round($percentage, 1)
         ];
     }
 }
@@ -100,21 +114,50 @@ $paginationButtons = generatePaginationButtons($currentPage, $totalPages);
 
 
 /**
- * Get color code for water status
+ * Map database status values to CSS class names
  * 
- * @param string $status Water level status
- * @return string Hex color code
+ * @param string $status Status from database (normal, alert, danger)
+ * @return string CSS class name (warning, danger, critical)
  */
-function getStatusColor($status) {
-    switch($status) {
-        case 'normal':
-            return '#22c55e';
-        case 'alert':
-            return '#f97316';
+function mapStatusClass($status) {
+    $status = strtolower(trim($status));
+    switch ($status) {
         case 'danger':
-            return '#dc2626';
+            return 'critical';
+        case 'alert':
+            return 'danger';
+        case 'normal':
         default:
-            return '#22c55e';
+            return 'warning';
+    }
+}
+
+/**
+ * Get progress fill class for styling
+ * 
+ * @param string $status Status class name
+ * @return string CSS class
+ */
+function getProgressClass($status) {
+    return "progress-" . $status;
+}
+
+/**
+ * Get status label for display
+ * 
+ * @param string $status Status class name
+ * @return string Display label
+ */
+function getStatusLabel($status) {
+    switch ($status) {
+        case 'warning':
+            return 'Warning';
+        case 'danger':
+            return 'Danger';
+        case 'critical':
+            return 'Critical';
+        default:
+            return 'Warning';
     }
 }
 
@@ -126,7 +169,7 @@ function getStatusColor($status) {
  * @return float Percentage value
  */
 function getPercentage($current, $max) {
-    return ($current / $max) * 100;
+    return ($max > 0) ? ($current / $max) * 100 : 0;
 }
 
 ?>

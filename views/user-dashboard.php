@@ -107,7 +107,7 @@ include '../controllers/user-dashboard-controller.php';
 
     <!-- GRAPH -->
     <div class="graph-box">
-        <p>GRAPH PLACEHOLDER</p>
+        <canvas id="waterLevelChart" style="max-height: 300px;"></canvas>
     </div>
 
 
@@ -174,7 +174,47 @@ include '../controllers/user-dashboard-controller.php';
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 <script src="../assets/js/status-modal.js"></script>
+<script>
+    // Water Level Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        const chartData = <?= $chartDataJson ?>;
+        const ctx = document.getElementById('waterLevelChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.labels,
+                datasets: [{
+                    label: 'Water Level (m)',
+                    data: chartData.heights,
+                    borderColor: '#457d8a',
+                    backgroundColor: 'rgba(69, 125, 138, 0.05)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#457d8a',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: true, position: 'top' },
+                    title: { display: false }
+                },
+                scales: {
+                    y: { beginAtZero: false, title: { display: true, text: 'Level (m)' } },
+                    x: { title: { display: true, text: 'Time' } }
+                }
+            }
+        });
+    });
+</script>
 
 </body>
 </html>

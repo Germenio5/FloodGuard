@@ -13,7 +13,7 @@
  */
 function get_all_affected_areas($conn) {
     $areas = [];
-    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
               ORDER BY name ASC";
     
@@ -42,7 +42,7 @@ function get_affected_areas_paginated($conn, $limit = 10, $offset = 0) {
     $limit = intval($limit);
     $offset = intval($offset);
     
-    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
               ORDER BY name ASC LIMIT $limit OFFSET $offset";
     
@@ -67,7 +67,7 @@ function get_affected_areas_paginated($conn, $limit = 10, $offset = 0) {
  */
 function get_affected_area_by_id($conn, $area_id) {
     $area_id = intval($area_id);
-    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
               WHERE id = $area_id LIMIT 1";
     
@@ -141,9 +141,10 @@ function get_affected_areas_by_status($conn, $status) {
     $areas = [];
     $status = $conn->real_escape_string(strtolower(trim($status)));
     
-    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+    // Status is now calculated dynamically based on percentage, not stored in DB
+    // This function returns all areas (status filtering done in controller)
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
-              WHERE status = '$status'
               ORDER BY name ASC";
     
     $result = $conn->query($query);
@@ -165,7 +166,7 @@ function get_affected_areas_by_status($conn, $status) {
  * @return array|bool Latest affected area record or false if not found
  */
 function get_latest_affected_area($conn) {
-    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
               ORDER BY updated_at DESC LIMIT 1";
     
@@ -187,7 +188,7 @@ function get_latest_affected_area($conn) {
 function get_affected_area_by_name($conn, $name) {
     $name = $conn->real_escape_string(trim($name));
     
-    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
               WHERE name = '$name' LIMIT 1";
     

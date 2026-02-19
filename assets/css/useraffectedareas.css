@@ -47,48 +47,76 @@ body {
 .alert-card {
     background: white;
     border-radius: 8px;
-    padding: 25px;
+    padding: 20px;
     display: flex;
     gap: 15px;
     align-items: flex-start;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    border-top: 4px solid;
+    border-left: 5px solid;
 }
 
 .alert-green {
-    border-top-color: #22c55e;
+    border-left-color: #fbbf24;
+}
+
+.alert-warning {
+    border-left-color: #fbbf24;
 }
 
 .alert-orange {
-    border-top-color: #f97316;
+    border-left-color: #fb923c;
+}
+
+.alert-danger {
+    border-left-color: #f97316;
 }
 
 .alert-red {
-    border-top-color: #dc2626;
+    border-left-color: #dc2626;
+}
+
+.alert-critical {
+    border-left-color: #dc2626;
 }
 
 .alert-icon {
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    font-size: 24px;
+    border-radius: 6px;
+    font-size: 20px;
     flex-shrink: 0;
+    font-weight: 600;
 }
 
 .alert-green .alert-icon {
-    background-color: #dcfce7;
-    color: #16a34a;
+    background-color: #fef3c7;
+    color: #fbbf24;
+}
+
+.alert-warning .alert-icon {
+    background-color: #fef3c7;
+    color: #fbbf24;
 }
 
 .alert-orange .alert-icon {
     background-color: #ffedd5;
-    color: #ea580c;
+    color: #f97316;
+}
+
+.alert-danger .alert-icon {
+    background-color: #ffedd5;
+    color: #f97316;
 }
 
 .alert-red .alert-icon {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.alert-critical .alert-icon {
     background-color: #fee2e2;
     color: #dc2626;
 }
@@ -98,21 +126,41 @@ body {
 }
 
 .alert-level {
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: #1f2937;
 }
 
 .alert-green .alert-level {
-    color: #16a34a;
+    color: #78350f;
+}
+
+.alert-warning .alert-level {
+    color: #78350f;
 }
 
 .alert-orange .alert-level {
-    color: #ea580c;
+    color: #92400e;
+}
+
+.alert-danger .alert-level {
+    color: #92400e;
 }
 
 .alert-red .alert-level {
-    color: #dc2626;
+    color: #7f1d1d;
+}
+
+.alert-critical .alert-level {
+    color: #7f1d1d;
+}
+
+.alert-message {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.5;
+    font-weight: 500;
 }
 
 .alert-message {
@@ -181,6 +229,33 @@ body {
     height: 100%;
     border-radius: 10px;
     transition: width 0.3s ease;
+}
+
+.progress-warning {
+    background-color: #eab308;
+}
+
+.progress-danger {
+    background-color: #f97316;
+}
+
+.progress-critical {
+    background-color: #dc2626;
+}
+
+.status-label {
+    font-size: 14px;
+    color: #374151;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.progress-percentage {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 15px;
+    text-align: right;
+    font-weight: 500;
 }
 
 .speed-info {

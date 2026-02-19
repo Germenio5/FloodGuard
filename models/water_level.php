@@ -141,6 +141,36 @@ function get_water_levels_count($conn, $area = null) {
 }
 
 /**
+ * Get water level data for the last 24 hours for a specific area
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $area Area name
+ * @return array Array of water level records (time-ordered, oldest to newest)
+ */
+function get_water_level_last_24h($conn, $area) {
+    $levels = [];
+    $area = $conn->real_escape_string(trim($area));
+    
+    $query = "SELECT id, area, height, speed, status, record_time, trend 
+              FROM water_level_history 
+              WHERE area = '$area' 
+              AND record_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+              ORDER BY record_time ASC
+              LIMIT 100";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $levels[] = $row;
+        }
+        $result->free();
+    }
+    
+    return $levels;
+}
+
+/**
  * Create new water level record
  * 
  * @param mysqli $conn Database connection

@@ -220,18 +220,19 @@ main {
 
 /* Graph Box */
 .graph-box {
-    background: #e5e7eb;
-    height: 300px;
+    background: white;
+    padding: 20px;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(16,24,40,0.04);
+    position: relative;
 }
 
-.graph-box p {
-    color: #999;
-    font-size: 18px;
+.graph-box canvas {
+    max-height: 300px !important;
+    display: block;
+    width: 100% !important;
+    height: auto !important;
 }
 
 /* Action Row */
@@ -339,9 +340,29 @@ main {
         width: 100%;
     }
 
+    .status-badge > div {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .status-badge .edit-status-btn {
+        width: 100%;
+        padding: 10px 16px;
+    }
+
     .info-grid {
         grid-template-columns: 1fr;
         gap: 15px;
+    }
+
+    .graph-box {
+        padding: 15px;
+        margin-bottom: 20px;
+    }
+
+    .graph-box canvas {
+        max-height: 250px !important;
     }
 
     .action-row {

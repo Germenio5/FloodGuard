@@ -25,27 +25,27 @@ include '../controllers/affected-areas-controller.php';
 
      <!-- Alert Status Cards -->
     <section class="alert-section">
-        <div class="alert-card alert-green">
+        <div class="alert-card alert-warning">
             <div class="alert-icon"><span>⚠</span></div>
             <div class="alert-content">
-                <h3 class="alert-level">Normal</h3>
-                <p class="alert-message">Water levels are stable. No immediate action required.</p>
+                <h3 class="alert-level">Warning</h3>
+                <p class="alert-message">Water levels are within normal range. Remain aware and continue monitoring.</p>
             </div>
         </div>
 
-        <div class="alert-card alert-orange">
-            <div class="alert-icon"><span>⚠</span></div>
-            <div class="alert-content">
-                <h3 class="alert-level">Alert</h3>
-                <p class="alert-message">Water levels are rising. Stay vigilant.</p>
-            </div>
-        </div>
-
-        <div class="alert-card alert-red">
+        <div class="alert-card alert-danger">
             <div class="alert-icon"><span>⚠</span></div>
             <div class="alert-content">
                 <h3 class="alert-level">Danger</h3>
-                <p class="alert-message">Flooding is imminent. Take precautionary measures.</p>
+                <p class="alert-message">Water levels are rising rapidly. Be prepared to evacuate at any moment.</p>
+            </div>
+        </div>
+
+        <div class="alert-card alert-critical">
+            <div class="alert-icon"><span>⚠</span></div>
+            <div class="alert-content">
+                <h3 class="alert-level">Critical</h3>
+                <p class="alert-message">Flooding is imminent. Evacuate immediately to higher ground or shelters.</p>
             </div>
         </div>
     </section>
@@ -69,21 +69,23 @@ include '../controllers/affected-areas-controller.php';
                 <span>Current Level:</span>
 
                 <span>
-                    <?= $bridge['current_level'] ?>m /
-                    <?= $bridge['max_level'] ?>m
+                    <?= number_format($bridge['current_level'], 2) ?>m /
+                    <?= number_format($bridge['max_level'], 2) ?>m
                 </span>
             </div>
 
             <div class="progress-bar">
-                <div class="progress-fill"
-                    style="
-                    width: <?= getPercentage($bridge['current_level'], $bridge['max_level']) ?>%;
-                    background-color: <?= getStatusColor($bridge['status']) ?>;">
+                <div class="progress-fill <?= getProgressClass($bridge['status']) ?>"
+                    style="width: <?= $bridge['percentage'] ?>%;">
                 </div>
             </div>
 
+            <p class="status-label">
+                Status: <?= getStatusLabel($bridge['status']) ?> (<?= $bridge['percentage'] ?>%)
+            </p>
+
             <p class="speed-info">
-                Speed: <?= $bridge['speed'] ?> m/min
+                Speed: <?= number_format($bridge['speed'], 2) ?> m/h
             </p>
 
             <div class="button-group">

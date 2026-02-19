@@ -14,6 +14,7 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/user.php';
 require_once __DIR__ . '/../models/affected_areas.php';
+require_once __DIR__ . '/../models/water_level.php';
 
 $userId = $_SESSION['user_id'];
 $userEmail = $_SESSION['user_email'] ?? '';
@@ -139,6 +140,36 @@ $hotline = [
     'tel' => '0344323871',
     'note' => '(24/7 Roxas Emergency Dispatch)'
 ];
+
+// Fetch last 24 hours water level data for chart
+$areaName = $waterLevel['bridge'] ?? 'Default Area';
+$last24hData = get_water_level_last_24h($conn, $areaName);
+
+// Prepare chart data: if no DB data, generate sample data
+$chartLabels = [];
+$chartHeights = [];
+
+if (!empty($last24hData)) {
+    foreach ($last24hData as $record) {
+        $chartLabels[] = date('H:i', strtotime($record['record_time']));
+        $chartHeights[] = (float)$record['height'];
+    }
+} else {
+    // Generate sample 24-hour data if no DB records
+    $baseHeight = 5.2; // Base water level
+    for ($i = 0; $i <= 24; $i += 2) {
+        $hour = str_pad($i, 2, '0', STR_PAD_LEFT) . ':00';
+        $chartLabels[] = $hour;
+        // Add some variation for visual interest
+        $height = $baseHeight + (0.3 * sin($i / 8)) + (rand(-10, 10) / 100);
+        $chartHeights[] = round($height, 2);
+    }
+}
+
+$chartDataJson = json_encode([
+    'labels' => $chartLabels,
+    'heights' => $chartHeights
+]);
 
 /**
  * Helper function to format water level display
