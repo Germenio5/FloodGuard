@@ -34,7 +34,7 @@ main {
     font-size: 15px;
 }
 
-/* Map Container */
+/* Map Container — map left, legend right */
 .map-container {
     display: grid;
     grid-template-columns: 1fr 350px;
@@ -48,18 +48,23 @@ main {
     border-radius: 8px;
     overflow: hidden;
     height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
+/* Leaflet map fills the map-area */
+#map {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+/* Legacy image placeholder (kept for compatibility) */
 .map-placeholder {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-/* Legend Area */
+/* Legend Sidebar */
 .legend-area {
     background: white;
     border-radius: 8px;
@@ -82,16 +87,17 @@ main {
     display: flex;
     gap: 12px;
     margin-bottom: 18px;
+    align-items: flex-start;
 }
 
 .legend-item .icon {
     font-size: 24px;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f9fafb;
+    background: #f0f7f9;
     border-radius: 6px;
     flex-shrink: 0;
 }
@@ -100,6 +106,7 @@ main {
     color: #457d8a;
     font-size: 14px;
     margin-bottom: 4px;
+    font-weight: 600;
 }
 
 .legend-item p {
@@ -109,25 +116,11 @@ main {
 }
 
 /* Icon Colors */
-.blue {
-    color: #5da4ba;
-}
-
-.orange {
-    color: #f97316;
-}
-
-.gray {
-    color: #6b7280;
-}
-
-.red {
-    color: #dc2626;
-}
-
-.green {
-    color: #10b981;
-}
+.blue   { color: #5da4ba; }
+.orange { color: #f97316; }
+.gray   { color: #6b7280; }
+.red    { color: #dc2626; }
+.green  { color: #10b981; }
 
 /* Buttons */
 .button-row {
@@ -145,6 +138,7 @@ main {
     cursor: pointer;
     text-decoration: none;
     font-weight: 500;
+    transition: border-color .2s;
 }
 
 .btn-white:hover {
@@ -161,56 +155,146 @@ main {
     cursor: pointer;
     text-decoration: none;
     font-weight: 500;
+    transition: background .2s;
 }
 
 .btn-teal:hover {
     background: #3d6b77;
 }
 
+/* ── Leaflet custom markers ───────────────────────────────────────────────── */
+.cm {
+    width: 36px;
+    height: 36px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,.3);
+    border: 2px solid rgba(255,255,255,.8);
+}
+
+.cm span {
+    transform: rotate(45deg);
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ── Leaflet popup ────────────────────────────────────────────────────────── */
+.leaflet-popup-content-wrapper {
+    border-radius: 10px !important;
+    padding: 0 !important;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0,0,0,.15) !important;
+}
+
+.leaflet-popup-content {
+    margin: 0 !important;
+    min-width: 200px;
+}
+
+.user-popup { padding: 14px 16px; }
+
+.user-popup .popup-badge {
+    display: inline-block;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+}
+
+.user-popup h4 {
+    color: #1f2937;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.user-popup p {
+    color: #6b7280;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+.user-popup small {
+    color: #9ca3af;
+    font-size: 11px;
+}
+
+/* ── Leaflet map legend (bottom-right) ────────────────────────────────────── */
+.map-legend {
+    background: white;
+    border-radius: 8px;
+    padding: 10px 13px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.12);
+    min-width: 170px;
+    border: 1px solid #e5e7eb;
+    font-size: 12px;
+}
+
+.map-legend h4 {
+    font-size: 12px;
+    font-weight: 700;
+    color: #457d8a;
+    margin-bottom: 7px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 5px;
+    color: #374151;
+}
+
+.legend-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
     .map-container {
         grid-template-columns: 1fr;
     }
 
-        .map-area {
-        height: 250px;
+    .map-area {
+        height: 300px;
+    }
+
+    #map {
+        height: 300px;
     }
 
     .legend-area {
         height: auto;
-        max-height: 300px;
+        max-height: 320px;
     }
+}
 
+@media (max-width: 768px) {
     .legend-item .icon {
-        font-size: 16px;
-        width: 26px;
-        height: 26px;   
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f9fafb;
-        border-radius: 6px;
-        flex-shrink: 0;
+        font-size: 18px;
+        width: 28px;
+        height: 28px;
     }
 
-    .legend-item h4 {
-        color: #457d8a;
-        font-size: 12px;
-        margin-bottom: 4px;
-    }
+    .legend-item h4 { font-size: 12px; }
+    .legend-item p  { font-size: 10px; }
 
-    .legend-item p {
-        color: #999;
-        font-size: 10px;
-    }
-
-    .button-row {
-        flex-direction: column;
-    }
+    .button-row { flex-direction: column; }
 
     .btn-white,
-    .btn-teal {
-        width: 100%;
-    }
+    .btn-teal { width: 100%; text-align: center; }
 }

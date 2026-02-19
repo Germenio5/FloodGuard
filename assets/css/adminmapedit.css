@@ -18,9 +18,9 @@ main {
     margin: 0 auto;
 }
 
-/* Page Top */
+/* ── Page Top ─────────────────────────────────────────────────────────────── */
 .page-top {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .page-top h1 {
@@ -34,7 +34,100 @@ main {
     font-size: 15px;
 }
 
-/* Map Container */
+/* ── Admin Toolbar ────────────────────────────────────────────────────────── */
+.map-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: white;
+    border-radius: 8px;
+    padding: 12px 18px;
+    margin-bottom: 14px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.toolbar-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-right: 4px;
+    white-space: nowrap;
+}
+
+.tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 13px;
+    border-radius: 6px;
+    border: 2px solid transparent;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    background: #f3f4f6;
+    color: #374151;
+    transition: all 0.18s;
+    white-space: nowrap;
+}
+
+.tool-btn:hover {
+    background: #e5e7eb;
+}
+
+.tool-btn.active {
+    border-color: #457d8a;
+    background: #e0f2f7;
+    color: #457d8a;
+}
+
+.toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.mode-indicator {
+    font-size: 13px;
+    font-weight: 600;
+    color: #457d8a;
+    background: #e0f2f7;
+    padding: 5px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.btn-cancel {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 14px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+    white-space: nowrap;
+}
+
+.btn-cancel:hover {
+    background: #fecaca;
+}
+
+/* ── Map Container ────────────────────────────────────────────────────────── */
 .map-container {
     display: grid;
     grid-template-columns: 1fr 350px;
@@ -42,24 +135,22 @@ main {
     margin-bottom: 25px;
 }
 
-/* Map Area */
+/* ── Map Area ─────────────────────────────────────────────────────────────── */
 .map-area {
     background: #e5e7eb;
     border-radius: 8px;
     overflow: hidden;
     height: 600px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-height: 0;
 }
 
-.map-placeholder {
+#map {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    border-radius: 8px;
 }
 
-/* Legend Area */
+/* ── Legend Sidebar ───────────────────────────────────────────────────────── */
 .legend-area {
     background: white;
     border-radius: 8px;
@@ -77,21 +168,22 @@ main {
     border-radius: 3px;
 }
 
-/* Legend Item */
+/* ── Legend Item ──────────────────────────────────────────────────────────── */
 .legend-item {
     display: flex;
     gap: 12px;
     margin-bottom: 18px;
+    align-items: flex-start;
 }
 
 .legend-item .icon {
     font-size: 24px;
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f9fafb;
+    background: #f0f7f9;
     border-radius: 6px;
     flex-shrink: 0;
 }
@@ -99,6 +191,7 @@ main {
 .legend-item h4 {
     color: #457d8a;
     font-size: 14px;
+    font-weight: 600;
     margin-bottom: 4px;
 }
 
@@ -108,7 +201,7 @@ main {
     line-height: 1.5;
 }
 
-/* Icon Colors */
+/* ── Icon Colors ──────────────────────────────────────────────────────────── */
 .blue {
     color: #5da4ba;
 }
@@ -129,10 +222,11 @@ main {
     color: #10b981;
 }
 
-/* Buttons */
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
 .button-row {
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
 }
 
 .btn-white {
@@ -145,7 +239,7 @@ main {
     cursor: pointer;
     text-decoration: none;
     font-weight: 500;
-  
+    transition: border-color 0.2s;
 }
 
 .btn-white:hover {
@@ -162,56 +256,295 @@ main {
     cursor: pointer;
     text-decoration: none;
     font-weight: 500;
+    transition: background 0.2s;
 }
 
 .btn-teal:hover {
     background: #3d6b77;
 }
 
-/* Responsive */
+/* ── Custom Map Markers ───────────────────────────────────────────────────── */
+.cm {
+    width: 36px;
+    height: 36px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.cm span {
+    transform: rotate(45deg);
+    font-size: 16px;
+    line-height: 1;
+}
+
+/* ── Modal Overlay ────────────────────────────────────────────────────────── */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.modal-box {
+    background: white;
+    border-radius: 12px;
+    padding: 28px 30px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.modal-box h3 {
+    font-size: 20px;
+    color: #457d8a;
+    margin-bottom: 18px;
+}
+
+.modal-box label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #555;
+    margin-top: 12px;
+    margin-bottom: 5px;
+}
+
+.modal-box input[type="text"],
+.modal-box textarea,
+.modal-box select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #1f2937;
+    outline: none;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.18s;
+}
+
+.modal-box input[type="text"]:focus,
+.modal-box textarea:focus,
+.modal-box select:focus {
+    border-color: #457d8a;
+}
+
+.modal-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 22px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 9px 16px;
+    background: #fee2e2;
+    color: #dc2626;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.btn-delete:hover {
+    background: #fecaca;
+}
+
+.btn-modal-cancel {
+    padding: 9px 20px;
+    background: #f3f4f6;
+    color: #374151;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.btn-modal-cancel:hover {
+    background: #e5e7eb;
+}
+
+.btn-modal-save {
+    padding: 9px 22px;
+    background: #457d8a;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.btn-modal-save:hover {
+    background: #3d6b77;
+}
+
+/* ── Responsive (768px) ───────────────────────────────────────────────────── */
 @media (max-width: 768px) {
+
+    main {
+        padding: 15px;
+    }
+
+    /* Page Header */
+    .page-top h1 {
+        font-size: 24px;
+    }
+
+    .page-top p {
+        font-size: 13px;
+    }
+
+    /* Toolbar — two rows: marker buttons on top, status row below */
+    .map-toolbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+    }
+
+    .toolbar-left {
+        width: 100%;
+        gap: 6px;
+    }
+
+    .toolbar-label {
+        width: 100%;
+        font-size: 12px;
+        margin-bottom: 2px;
+    }
+
+    /* Buttons shrink text but keep emoji icon */
+    .tool-btn {
+        font-size: 11px;
+        padding: 6px 10px;
+        gap: 4px;
+    }
+
+    .toolbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .mode-indicator {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+
+    .btn-cancel {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    /* Map Container — stack vertically */
     .map-container {
         grid-template-columns: 1fr;
     }
 
     .map-area {
-        height: 250px;
+        height: 280px;
     }
 
+    #map {
+        height: 280px;
+    }
+
+    /* Legend */
     .legend-area {
         height: auto;
-        max-height: 300px;
+        max-height: 260px;
+        padding: 16px;
     }
 
+    .legend-item {
+        margin-bottom: 14px;
+    }
+
+    /* Icons stay visible — slightly smaller */
     .legend-item .icon {
-        font-size: 16px;
-        width: 26px;
-        height: 26px;   
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #f9fafb;
-        border-radius: 6px;
-        flex-shrink: 0;
+        font-size: 20px;
+        width: 32px;
+        height: 32px;
     }
 
     .legend-item h4 {
-        color: #457d8a;
-        font-size: 12px;
-        margin-bottom: 4px;
+        font-size: 13px;
     }
 
     .legend-item p {
-        color: #999;
-        font-size: 10px;
+        font-size: 11px;
     }
 
+    /* Buttons */
     .button-row {
         flex-direction: column;
+        gap: 10px;
     }
 
-    .btn-white,
+    .btn-white {
+        width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
+
     .btn-teal {
         width: 100%;
+        text-align: center;
+        padding: 12px;
+    }
+
+    /* Modal */
+    .modal-box {
+        padding: 20px 16px;
+        border-radius: 10px;
+    }
+
+    .modal-box h3 {
+        font-size: 17px;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .modal-actions > div {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .btn-modal-cancel {
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-modal-save {
+        flex: 1;
+        text-align: center;
+    }
+
+    .btn-delete {
+        width: 100%;
+        justify-content: center;
     }
 }
