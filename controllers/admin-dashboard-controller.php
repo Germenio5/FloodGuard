@@ -48,7 +48,7 @@ if ($users_data) {
             'address' => htmlspecialchars($row['address']),
             'phone' => htmlspecialchars($row['phone']),
             'email' => htmlspecialchars($row['email']),
-            'status' => 'Safe' // Default status
+            'status' => !empty($row['status']) ? htmlspecialchars($row['status']) : 'Safe'
         ];
     }
 }

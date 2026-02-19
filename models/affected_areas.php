@@ -200,4 +200,56 @@ function get_affected_area_by_name($conn, $name) {
     return false;
 }
 
+/**
+ * Get unique locations/barangays
+ * 
+ * @param mysqli $conn Database connection
+ * @return array Array of unique locations
+ */
+function get_unique_barangays($conn) {
+    $barangays = [];
+    $query = "SELECT DISTINCT location FROM affected_areas 
+              WHERE location IS NOT NULL AND location != '' 
+              ORDER BY location ASC";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $barangays[] = $row['location'];
+        }
+        $result->free();
+    }
+    
+    return $barangays;
+}
+
+/**
+ * Get affected areas filtered by barangay/location
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $location Barangay/location name
+ * @return array Array of affected areas
+ */
+function get_affected_areas_by_location($conn, $location) {
+    $areas = [];
+    $location = $conn->real_escape_string(trim($location));
+    
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
+              FROM affected_areas 
+              WHERE location = '$location'
+              ORDER BY name ASC";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $areas[] = $row;
+        }
+        $result->free();
+    }
+    
+    return $areas;
+}
+
 ?>

@@ -164,4 +164,56 @@ function get_reports_by_status($conn, $status) {
     return $reports;
 }
 
+/**
+ * Get unique locations/barangays from reports
+ * 
+ * @param mysqli $conn Database connection
+ * @return array Array of unique locations
+ */
+function get_unique_report_locations($conn) {
+    $locations = [];
+    $query = "SELECT DISTINCT location FROM reports 
+              WHERE location IS NOT NULL AND location != '' 
+              ORDER BY location ASC";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $locations[] = $row['location'];
+        }
+        $result->free();
+    }
+    
+    return $locations;
+}
+
+/**
+ * Get reports filtered by location
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $location Location/barangay name
+ * @return array Array of reports
+ */
+function get_reports_by_location($conn, $location) {
+    $reports = [];
+    $location = $conn->real_escape_string(trim($location));
+    
+    $query = "SELECT id, user_email, location, status, description, image_path, post_news, created_at 
+              FROM reports 
+              WHERE location = '$location'
+              ORDER BY created_at DESC";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $reports[] = $row;
+        }
+        $result->free();
+    }
+    
+    return $reports;
+}
+
 ?>

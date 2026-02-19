@@ -27,7 +27,6 @@ if (!$userFromDb) {
 }
 
 // Set user data from database
-// Determine initial status: prefer user's saved DB status if present, otherwise derive from area
 $dbStatus = isset($userFromDb['status']) && !empty($userFromDb['status']) ? $userFromDb['status'] : null;
 
 $user = [
@@ -37,7 +36,7 @@ $user = [
     'email' => $userFromDb['email'],
     'phone' => $userFromDb['phone'],
     'address' => $userFromDb['address'],
-    'status' => $dbStatus // if null, will set below based on area
+    'status' => $dbStatus ?? 'Safe' // Default to Safe if no status saved
 ];
 
 // Get latest water level data for monitoring using model
@@ -48,17 +47,14 @@ if ($latestArea) {
     $max = (float)$latestArea['max_level'];
     $percentage = $max > 0 ? ($current / $max) * 100 : 0;
     
-    // Determine status based on water level
-    $levelStatus = $latestArea['status'] ?? 'normal';
-    // If user has no saved status, derive it from the area level status
-    if (empty($user['status'])) {
-        if ($levelStatus === 'danger') {
-            $user['status'] = 'In Danger';
-        } elseif ($levelStatus === 'alert') {
-            $user['status'] = 'Alert';
-        } else {
-            $user['status'] = 'Safe';
-        }
+    // Determine status based on water level percentage (same as affected-areas)
+    // warning: < 30%, danger: 30-74%, critical: >= 75%
+    if ($percentage < 30) {
+        $levelStatus = 'warning';
+    } elseif ($percentage < 75) {
+        $levelStatus = 'danger';
+    } else {
+        $levelStatus = 'critical';
     }
     
     $waterLevel = [
@@ -95,26 +91,33 @@ if ($latestArea) {
 
 // Alert tips based on water level status
 $alertTips = [];
-if ($waterLevel['status'] === 'Danger') {
+if (strtolower($waterLevel['status']) === 'critical') {
     $alertTips = [
-        'IMMEDIATE ACTION REQUIRED: Prepare for evacuation',
+        'IMMEDIATE ACTION REQUIRED: Critical flood conditions detected',
+        'Evacuate immediately if advised by local authorities',
         'Keep emergency supplies and important documents ready',
-        'Follow local emergency broadcasts and updates',
-        'Have transportation plan ready'
+        'Follow local emergency broadcasts and updates'
     ];
-} elseif ($waterLevel['status'] === 'Alert') {
+} elseif (strtolower($waterLevel['status']) === 'danger') {
     $alertTips = [
-        'Stay alert and monitor updates regularly',
-        'Prepare for possible evacuation if levels rise further',
-        'Keep emergency supplies ready',
-        'Avoid going near flood-prone areas'
+        'HIGH ALERT: Dangerous water levels - prepare for evacuation',
+        'Pack essential items and documents in an accessible location',
+        'Monitor emergency channels continuously for updates',
+        'Avoid flood-prone areas - do not attempt to cross flooded roads'
+    ];
+} elseif (strtolower($waterLevel['status']) === 'warning') {
+    $alertTips = [
+        'Stay alert and monitor flood levels regularly',
+        'Prepare emergency supplies and evacuation route',
+        'Keep important documents and valuables in safe place',
+        'Avoid low-lying areas and stay informed through official channels'
     ];
 } else {
     $alertTips = [
-        'Continue monitoring flood updates',
-        'Prepare emergency kit for your household',
+        'Monitor water level status and stay informed',
+        'Keep emergency supplies ready at all times',
         'Know your evacuation route',
-        'Stay informed through official channels'
+        'Stay in contact with local authorities'
     ];
 }
 
@@ -145,7 +148,7 @@ $hotline = [
 $areaName = $waterLevel['bridge'] ?? 'Default Area';
 $last24hData = get_water_level_last_24h($conn, $areaName);
 
-// Prepare chart data: if no DB data, generate sample data
+// Prepare chart data from water level history table
 $chartLabels = [];
 $chartHeights = [];
 
@@ -153,16 +156,6 @@ if (!empty($last24hData)) {
     foreach ($last24hData as $record) {
         $chartLabels[] = date('H:i', strtotime($record['record_time']));
         $chartHeights[] = (float)$record['height'];
-    }
-} else {
-    // Generate sample 24-hour data if no DB records
-    $baseHeight = 5.2; // Base water level
-    for ($i = 0; $i <= 24; $i += 2) {
-        $hour = str_pad($i, 2, '0', STR_PAD_LEFT) . ':00';
-        $chartLabels[] = $hour;
-        // Add some variation for visual interest
-        $height = $baseHeight + (0.3 * sin($i / 8)) + (rand(-10, 10) / 100);
-        $chartHeights[] = round($height, 2);
     }
 }
 

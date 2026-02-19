@@ -3,8 +3,13 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 
-// Fetch all reports from database using model
-$reports_data = get_all_reports($conn);
+// Get selected location filter
+$selectedLocation = isset($_GET['location']) ? trim($_GET['location']) : '';
+
+// Fetch reports from database using model with filter
+$reports_data = $selectedLocation 
+    ? get_reports_by_location($conn, $selectedLocation)
+    : get_all_reports($conn);
 
 // Transform data for view
 $reports = [];
@@ -22,6 +27,10 @@ if ($reports_data) {
         ];
     }
 }
+
+// Get all unique locations for filter dropdown
+$locations = get_unique_report_locations($conn);
+sort($locations);
 
 /**
  * Get CSS badge class based on status

@@ -117,7 +117,18 @@ main {
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #f97316, #fb923c);
+}
+
+.progress-fill.progress-warning {
+    background: linear-gradient(90deg, #FFC107, #FFD54F);
+}
+
+.progress-fill.progress-danger {
+    background: linear-gradient(90deg, #FF9800, #FFB74D);
+}
+
+.progress-fill.progress-critical {
+    background: linear-gradient(90deg, #F44336, #EF5350);
 }
 
 .level-text {

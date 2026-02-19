@@ -51,7 +51,7 @@ include '../controllers/user-dashboard-controller.php';
             <p class="label">Current Level:</p>
                 
             <div class="progress-bar">
-                <div class="progress-fill"
+                <div class="progress-fill progress-<?= strtolower($waterLevel['status']) ?>"
                      style="<?= getProgressWidth($waterLevel['percentage']) ?>">
                 </div>
             </div>

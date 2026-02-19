@@ -23,6 +23,30 @@ include '../controllers/admin-water-level-status-controller.php';
         <h1 class="page-title">Water Status By Area</h1>
     </div>
 
+    <!-- Filter Box -->
+    <div class="filter-box">
+        <form method="GET" class="filter-form">
+            <label for="locationFilter">Filter by Barangay:</label>
+            <select id="locationFilter" name="location" onchange="this.form.submit()">
+                <option value="">All Barangays</option>
+                <?php foreach ($barangays as $barangay): ?>
+                    <option value="<?= htmlspecialchars($barangay) ?>" <?= $selectedLocation === $barangay ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($barangay) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="statusFilter">Status:</label>
+            <select id="statusFilter" name="status" onchange="this.form.submit()">
+                <?php foreach ($statusOptions as $key => $label): ?>
+                    <option value="<?= htmlspecialchars($key) ?>" <?= ($selectedStatus === $key) ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($label) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </form>
+    </div>
+
     <!-- Bridge Cards Grid -->
     <div class="bridge-grid">
 
@@ -60,9 +84,14 @@ include '../controllers/admin-water-level-status-controller.php';
                 </div>
             </div>
 
-            <p class="progress-percentage">
-                <?= $bridge['percentage'] ?>%
-            </p>
+            <div class="progress-info-row">
+                <div class="status-display">
+                    <?= getStatusBadge($bridge['status']) ?>
+                </div>
+                <p class="progress-percentage">
+                    <?= $bridge['percentage'] ?>%
+                </p>
+            </div>
 
             <p class="speed-info">
                 Speed: <?= $bridge['speed'] ?>

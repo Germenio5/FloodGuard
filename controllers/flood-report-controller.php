@@ -13,13 +13,21 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     exit();
 }
 
+// Load database and user model to get user's address
+require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../models/user.php';
+
+// Get user's address from database
+$userFromDb = get_user_by_id($conn, $_SESSION['user_id']);
+$userAddress = $userFromDb && !empty($userFromDb['address']) ? htmlspecialchars($userFromDb['address']) : '';
+
 // Page metadata
 $pageTitle = "Report Flood";
 $pageSubtitle = "Help emergency responders by reporting flood incidents";
 
 // Initialize form data and error variables
 $formData = [
-    'location' => $_GET['location'] ?? '',
+    'location' => $_GET['location'] ?? ($userAddress ? "Brgy. " . $userAddress : ''),
     'status' => $_GET['status'] ?? '',
     'description' => $_GET['description'] ?? '',
     'post_discussion' => isset($_GET['post_discussion']) ? 1 : 0

@@ -195,7 +195,7 @@ function get_users_paginated($conn, $limit = 10, $offset = 0, $search_area = '')
     $limit = intval($limit);
     $offset = intval($offset);
     
-    $query = "SELECT id, first_name, last_name, email, phone, address FROM users WHERE role = 'user'";
+    $query = "SELECT id, first_name, last_name, email, phone, address, status FROM users WHERE role = 'user'";
     
     if (!empty($search_area)) {
         $search_area = $conn->real_escape_string(trim($search_area));
