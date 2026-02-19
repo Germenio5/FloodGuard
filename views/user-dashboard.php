@@ -23,10 +23,14 @@ include '../controllers/user-dashboard-controller.php';
     <div class="top-section">
         <h1>Hello <?= htmlspecialchars($user['name']) ?>!</h1>
 
-        <div class="status-badge">
+        <?php $badgeClass = (stripos($user['status'], 'danger') !== false || stripos($user['status'], 'danger') !== false) ? 'status-badge danger' : 'status-badge safe'; ?>
+        <div id="statusBadge" class="<?= $badgeClass ?>">
             <div>
-                <strong><?= htmlspecialchars($user['status']) ?></strong>
-                <a href="#">Edit Status</a>
+                <div class="status-left">
+                    <span class="label-text"><strong>Current Status:</strong></span>
+                    <strong id="currentStatusText"><?= htmlspecialchars($user['status']) ?></strong>
+                </div>
+                <button id="editStatusBtn" class="report-btn edit-status-btn" type="button" aria-haspopup="dialog">Edit Status</button>
             </div>
         </div>
     </div>
@@ -95,7 +99,7 @@ include '../controllers/user-dashboard-controller.php';
             <?php endforeach; ?>
             </ul>
 
-            <button class="report-btn">Report Now</button>
+            <a href="user-report-flood.php" class="report-btn">Report Now</a>
         </div>
 
     </div>
@@ -150,6 +154,27 @@ include '../controllers/user-dashboard-controller.php';
 
 </div>
 </main>
+
+<!-- Status Edit Modal -->
+<div id="statusModal" class="status-modal" aria-hidden="true">
+    <div class="status-modal-overlay"></div>
+    <div class="status-modal-panel" role="dialog" aria-modal="true" aria-labelledby="statusModalTitle">
+        <h3 id="statusModalTitle">Update Your Status</h3>
+        <p class="muted">Select your current safety status.</p>
+
+        <div class="status-options" data-current="<?= (stripos($user['status'], 'danger') !== false) ? 'In Danger' : 'Safe' ?>">
+            <button type="button" class="status-option" data-status="Safe">Safe</button>
+            <button type="button" class="status-option" data-status="In Danger">In Danger</button>
+        </div>
+
+        <div class="status-actions">
+            <button id="saveStatusBtn" class="btn primary">Save</button>
+            <button id="closeStatusBtn" class="btn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="../assets/js/status-modal.js"></script>
 
 </body>
 </html>

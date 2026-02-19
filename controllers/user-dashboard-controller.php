@@ -26,6 +26,9 @@ if (!$userFromDb) {
 }
 
 // Set user data from database
+// Determine initial status: prefer user's saved DB status if present, otherwise derive from area
+$dbStatus = isset($userFromDb['status']) && !empty($userFromDb['status']) ? $userFromDb['status'] : null;
+
 $user = [
     'id' => $userFromDb['id'],
     'name' => $userFromDb['first_name'] . ' ' . $userFromDb['last_name'],
@@ -33,7 +36,7 @@ $user = [
     'email' => $userFromDb['email'],
     'phone' => $userFromDb['phone'],
     'address' => $userFromDb['address'],
-    'status' => 'You Are Safe' // Default status - can be updated based on affected areas
+    'status' => $dbStatus // if null, will set below based on area
 ];
 
 // Get latest water level data for monitoring using model
@@ -46,10 +49,15 @@ if ($latestArea) {
     
     // Determine status based on water level
     $levelStatus = $latestArea['status'] ?? 'normal';
-    if ($levelStatus === 'danger') {
-        $user['status'] = 'Area is in DANGER';
-    } elseif ($levelStatus === 'alert') {
-        $user['status'] = 'Area is in ALERT';
+    // If user has no saved status, derive it from the area level status
+    if (empty($user['status'])) {
+        if ($levelStatus === 'danger') {
+            $user['status'] = 'In Danger';
+        } elseif ($levelStatus === 'alert') {
+            $user['status'] = 'Alert';
+        } else {
+            $user['status'] = 'Safe';
+        }
     }
     
     $waterLevel = [
