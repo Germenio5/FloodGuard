@@ -28,14 +28,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `affected_areas` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `location` varchar(150) NOT NULL,
   `current_level` decimal(5,2) NOT NULL DEFAULT 0.00,
   `max_level` decimal(5,2) NOT NULL DEFAULT 0.00,
   `speed` decimal(5,2) NOT NULL DEFAULT 0.00,
   `status` enum('normal','alert','danger') NOT NULL DEFAULT 'normal',
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -45,14 +46,15 @@ CREATE TABLE `affected_areas` (
 --
 
 CREATE TABLE `reports` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `user_email` varchar(255) DEFAULT NULL,
   `location` varchar(255) NOT NULL,
   `status` enum('Safe','In Danger','Alert','Danger') NOT NULL,
   `description` text DEFAULT NULL,
   `image_path` varchar(255) DEFAULT NULL,
   `post_news` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -62,7 +64,7 @@ CREATE TABLE `reports` (
 --
 
 CREATE TABLE `users` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name` varchar(100) NOT NULL,
   `last_name` varchar(100) NOT NULL,
   `email` varchar(255) NOT NULL,
@@ -71,7 +73,9 @@ CREATE TABLE `users` (
   `password_hash` varchar(255) NOT NULL,
   `profile_photo` varchar(255) DEFAULT NULL,
   `role` enum('user','admin') NOT NULL DEFAULT 'user',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -90,13 +94,16 @@ INSERT INTO `users` (`id`, `first_name`, `last_name`, `email`, `phone`, `address
 --
 
 CREATE TABLE `water_level_history` (
-  `id` int(10) UNSIGNED NOT NULL,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `area` varchar(100) NOT NULL,
   `trend` enum('steady','rising','falling') NOT NULL DEFAULT 'steady',
   `record_time` datetime NOT NULL,
   `height` decimal(5,2) NOT NULL DEFAULT 0.00,
   `speed` decimal(5,2) NOT NULL DEFAULT 0.00,
-  `status` enum('normal','alert','danger') NOT NULL DEFAULT 'normal'
+  `status` enum('normal','alert','danger') NOT NULL DEFAULT 'normal',
+  PRIMARY KEY (`id`),
+  KEY `area` (`area`),
+  KEY `record_time` (`record_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -119,7 +126,6 @@ ALTER TABLE `reports`
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `email` (`email`);
 
 --
@@ -133,30 +139,6 @@ ALTER TABLE `water_level_history`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `affected_areas`
---
-ALTER TABLE `affected_areas`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `reports`
---
-ALTER TABLE `reports`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `users`
---
-ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT for table `water_level_history`
---
-ALTER TABLE `water_level_history`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -30,6 +30,35 @@ function get_all_affected_areas($conn) {
 }
 
 /**
+ * Get affected areas with pagination
+ * 
+ * @param mysqli $conn Database connection
+ * @param int $limit Items per page
+ * @param int $offset Pagination offset
+ * @return array Array of affected areas
+ */
+function get_affected_areas_paginated($conn, $limit = 10, $offset = 0) {
+    $areas = [];
+    $limit = intval($limit);
+    $offset = intval($offset);
+    
+    $query = "SELECT id, name, location, current_level, max_level, speed, status, updated_at 
+              FROM affected_areas 
+              ORDER BY name ASC LIMIT $limit OFFSET $offset";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $areas[] = $row;
+        }
+        $result->free();
+    }
+    
+    return $areas;
+}
+
+/**
  * Get affected area by ID
  * 
  * @param mysqli $conn Database connection

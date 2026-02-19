@@ -4,11 +4,12 @@ $last     = trim($_POST['last_name'] ?? "");
 $email    = trim($_POST['email'] ?? "");
 $phone    = trim($_POST['phone'] ?? "");
 $addr     = trim($_POST['address'] ?? "");
+$specific_addr = trim($_POST['specific_address'] ?? "");
 $pass     = trim($_POST['password'] ?? "");
 $confirm  = trim($_POST['confirm_password'] ?? "");
 
 if($first=="" || $last=="" || $email=="" ||
-   $phone=="" || $addr=="" || $pass=="" || $confirm=="") {
+   $phone=="" || $addr=="" || $specific_addr=="" || $pass=="" || $confirm=="") {
 
     $qs = http_build_query([
         'error'      => 'empty',
@@ -16,7 +17,8 @@ if($first=="" || $last=="" || $email=="" ||
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -31,7 +33,8 @@ if(!preg_match("/^[a-zA-Z ]+$/", $first) ||
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -45,7 +48,8 @@ if(!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -59,7 +63,8 @@ if(!preg_match("/^(09|\+639)[0-9]{9}$/", $phone)) {
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -72,7 +77,8 @@ if($pass !== $confirm) {
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -86,7 +92,8 @@ if(strlen($pass) < 8) {
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -102,7 +109,8 @@ if(!preg_match("/[A-Z]/", $pass) ||
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
@@ -112,6 +120,10 @@ $first = htmlspecialchars($first);
 $last  = htmlspecialchars($last);
 $email = htmlspecialchars($email);
 $addr  = htmlspecialchars($addr);
+$specific_addr = htmlspecialchars($specific_addr);
+
+// Combine barangay and specific address
+$full_address = $addr . ', ' . $specific_addr;
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/user.php';
@@ -128,14 +140,15 @@ if (user_exists($conn, $email)) {
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
     exit();
 }
 
 // try to insert new user
-$created = create_user($conn, $first, $last, $email, $phone, $addr, $pass);
+$created = create_user($conn, $first, $last, $email, $phone, $full_address, $pass);
 if ($created) {
     header("Location: ../views/register-user.php?success=created");
 } else {
@@ -145,7 +158,8 @@ if ($created) {
         'last_name'  => $last,
         'email'      => $email,
         'phone'      => $phone,
-        'address'    => $addr
+        'address'    => $addr,
+        'specific_address' => $specific_addr
     ]);
     header("Location: ../views/register-user.php?$qs");
 }

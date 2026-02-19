@@ -29,30 +29,32 @@ include '../controllers/register-controller.php';
                 method="POST" 
                 class="auth-form">
 
-            <div class="form-group">
-                <label>First Name</label>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name</label>
 
-                <input type="text" 
-                    name="first_name"
-                    value="<?= $old['first_name'] ?>"
-                    placeholder="Enter your first name" required>
+                    <input type="text" 
+                        name="first_name"
+                        value="<?= $old['first_name'] ?>"
+                        placeholder="Enter your first name" required>
 
-                <small class="error-box">
-                    <?= $errors['first_name'] ?>
-                </small>
-            </div>
+                    <small class="error-box">
+                        <?= $errors['first_name'] ?>
+                    </small>
+                </div>
 
-            <div class="form-group">
-                <label>Last Name</label>
+                <div class="form-group">
+                    <label>Last Name</label>
 
-                <input type="text" 
-                    name="last_name"
-                    value="<?= $old['last_name'] ?>"
-                    placeholder="Enter your last name" required>
+                    <input type="text" 
+                        name="last_name"
+                        value="<?= $old['last_name'] ?>"
+                        placeholder="Enter your last name" required>
 
-                <small class="error-box">
-                    <?= $errors['last_name'] ?>
-                </small>
+                    <small class="error-box">
+                        <?= $errors['last_name'] ?>
+                    </small>
+                </div>
             </div>
 
             <div class="form-group">
@@ -81,41 +83,62 @@ include '../controllers/register-controller.php';
                 </small>
             </div>
 
-            <div class="form-group">
-                <label>Address</label>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Barangay</label>
 
-                <input type="text" 
-                    name="address"
-                    value="<?= $old['address'] ?>"
-                    placeholder="Enter your address" required>
+                    <select name="address" required>
+                        <option value="">-- Select Barangay --</option>
+                        <?php foreach($barangays as $barangay): ?>
+                            <option value="<?= $barangay ?>" <?= ($old['address'] == $barangay) ? 'selected' : '' ?>>
+                                <?= $barangay ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
 
-                <small class="error-box">
-                    <?= $errors['address'] ?>
-                </small>
+                    <small class="error-box">
+                        <?= $errors['address'] ?>
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+
+                    <input type="text" 
+                        name="specific_address"
+                        value="<?= $old['specific_address'] ?>"
+                        placeholder="Enter your specific address" required>
+
+                    <small class="error-box">
+                        <?= $errors['specific_address'] ?>
+                    </small>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label>Password</label>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Password</label>
 
-                <input type="password" 
-                    name="password"
-                    placeholder="Create a password" required>
+                    <input type="password" 
+                        name="password"
+                        placeholder="Create a password" required>
 
-                <small class="error-box">
-                    <?= $errors['password'] ?>
-                </small>
-            </div>
+                    <small class="error-box">
+                        <?= $errors['password'] ?>
+                    </small>
+                </div>
 
-            <div class="form-group">
-                <label>Confirm Password</label>
+                <div class="form-group">
+                    <label>Confirm Password</label>
 
-                <input type="password" 
-                    name="confirm_password"
-                    placeholder="Re-enter your password" required>
+                    <input type="password" 
+                        name="confirm_password"
+                        placeholder="Re-enter your password" required>
 
-                <small class="error-box">
-                    <?= $errors['confirm_password'] ?>
-                </small>
+                    <small class="error-box">
+                        <?= $errors['confirm_password'] ?>
+                    </small>
+                </div>
             </div>
 
             <button type="submit" class="submit-btn">

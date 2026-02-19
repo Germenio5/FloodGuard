@@ -103,17 +103,22 @@ include '../controllers/affected-areas-controller.php';
     </div>
 
 
+    <!-- Pagination Info -->
+    <div class="pagination-info">
+        <p>Showing page <strong><?php echo $currentPage; ?></strong> of <strong><?php echo $totalPages; ?></strong> | Total areas: <strong><?php echo $totalRecords; ?></strong></p>
+    </div>
+
     <!-- PAGINATION UI -->
-    <div class="pagination"> 
-        <button class="page-btn">Previous</button> 
-        <button class="page-btn active">1</button> 
-        <button class="page-btn">2</button> 
-        <button class="page-btn">3</button> 
-        <button class="page-btn">4</button> 
-        <button class="page-btn">5</button> 
-        <span class="page-dots">......</span> 
-        <button class="page-btn">9</button> 
-        <button class="page-btn">Next</button> 
+    <div class="pagination">
+        <?php foreach ($paginationButtons as $btn): ?>
+            <?php if ($btn['disabled']): ?>
+                <button class="page-btn disabled" disabled><?php echo $btn['label']; ?></button>
+            <?php elseif ($btn['active']): ?>
+                <button class="page-btn active"><?php echo $btn['label']; ?></button>
+            <?php else: ?>
+                <a href="?page=<?php echo $btn['page']; ?>" class="page-btn"><?php echo $btn['label']; ?></a>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </div>
 
 </div>
