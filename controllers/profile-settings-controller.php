@@ -100,10 +100,10 @@ if (isset($_GET['error'])) {
             $errorMessage = "Database error. Please try again later.";
             break;
         case 'file_too_large':
-            $errorMessage = "Profile photo is too large. Maximum size is 2MB.";
+            $errorMessage = "Profile photo is too large. Maximum size is 15MB.";
             break;
         case 'invalid_file_type':
-            $errorMessage = "Invalid photo format. Please upload JPG, PNG, or GIF.";
+            $errorMessage = "Invalid photo format. Please upload JPG or PNG.";
             break;
         case 'no_changes':
             $errorMessage = "No changes were made to your profile.";

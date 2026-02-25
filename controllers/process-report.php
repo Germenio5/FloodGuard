@@ -57,9 +57,9 @@ if (!in_array($status, $validStatuses)) {
 $imageData = null;
 if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     // File upload configuration
-    $maxFileSize = 5 * 1024 * 1024; // 5MB
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    $maxFileSize = 15 * 1024 * 1024; // 15MB
+    $allowedTypes = ['image/jpeg', 'image/png'];
+    $allowedExtensions = ['jpg', 'jpeg', 'png'];
 
     $file = $_FILES['photo'];
     $fileTmpPath = $file['tmp_name'];

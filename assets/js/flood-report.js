@@ -16,9 +16,17 @@ function previewPhoto(input) {
     if (input.files && input.files[0]) {
         const file = input.files[0];
         
-        // Check file size (5MB max)
-        if (file.size > 5 * 1024 * 1024) {
-            alert('File size must be less than 5MB');
+        // Validate file type (only JPEG and PNG)
+        const allowedTypes = ['image/jpeg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+            alert('Please select a JPEG or PNG image file');
+            input.value = '';
+            return;
+        }
+        
+        // Check file size (15MB max)
+        if (file.size > 15 * 1024 * 1024) {
+            alert('File size must be less than 15MB');
             input.value = '';
             return;
         }

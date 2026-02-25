@@ -34,18 +34,18 @@ photoInput.addEventListener('change', function() {
     const file = this.files[0];
     
     if (file) {
-        // File size validation (2MB max)
-        const maxSize = 2 * 1024 * 1024;
+        // File size validation (15MB max)
+        const maxSize = 15 * 1024 * 1024;
         if (file.size > maxSize) {
-            alert('File is too large. Maximum size is 2MB.');
+            alert('File is too large. Maximum size is 15MB.');
             this.value = '';
             return;
         }
         
         // File type validation
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        const allowedTypes = ['image/jpeg', 'image/png'];
         if (!allowedTypes.includes(file.type)) {
-            alert('Invalid file format. Please upload JPG, PNG, or GIF.');
+            alert('Invalid file format. Please upload JPG or PNG.');
             this.value = '';
             return;
         }

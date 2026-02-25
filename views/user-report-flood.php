@@ -60,9 +60,9 @@
                     <div class="form-group">
                         <label>Photo (Optional)</label>
                         <div class="file-input-wrapper">
-                            <input type="file" id="photoInput" name="photo" accept="image/jpeg,image/png,image/gif" onchange="previewPhoto(this)">
+                            <input type="file" id="photoInput" name="photo" accept="image/jpeg,image/png" onchange="previewPhoto(this)">
                             <button type="button" class="upload-btn" onclick="document.getElementById('photoInput').click()">
-                                📷 Click to upload or drag & drop photo
+                                📷 Click to upload or drag & drop photo (JPEG, PNG; max 15MB)
                             </button>
                         </div>
                         <div class="photo-preview" id="photoPreview">

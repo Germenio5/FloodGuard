@@ -53,7 +53,7 @@ include '../controllers/profile-settings-controller.php';
                     <h2 class="profile-name"><?= htmlspecialchars($userData['first_name'] . ' ' . $userData['last_name']) ?></h2>
                     <p class="profile-subtitle">Update your profile information</p>
                     <button type="button" class="change-photo-btn" id="changePhotoBtn">Change Photo</button>
-                    <input type="file" id="photoInput" accept="image/jpeg,image/png,image/gif" style="display: none;">
+                    <input type="file" id="photoInput" accept="image/jpeg,image/png" style="display: none;">
                 </div>
             </div>
 
@@ -143,7 +143,7 @@ include '../controllers/profile-settings-controller.php';
                     </div>
 
                     <!-- Hidden photo input for form -->
-                    <input type="file" id="photoUpload" name="profile_photo" accept="image/jpeg,image/png,image/gif" style="display: none;">
+                    <input type="file" id="photoUpload" name="profile_photo" accept="image/jpeg,image/png" style="display: none;">
 
                     <!-- Store original values for reset functionality -->
                     <input type="hidden" id="originalFirstName" value="<?= htmlspecialchars($userData['first_name']) ?>">
