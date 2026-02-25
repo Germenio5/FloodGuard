@@ -21,7 +21,7 @@ include '../controllers/admin-report-log-controller.php';
     <!-- Page Title -->
     <h1>Reports Made</h1>
 
-    <!-- Filter Box -->
+    <!-- Filter Box (Barangay + Bridge) -->
     <div class="filter-box">
         <form method="GET" class="filter-form">
             <label for="barangayFilter">Filter by Barangay:</label>
@@ -30,6 +30,16 @@ include '../controllers/admin-report-log-controller.php';
                 <?php foreach ($barangays as $barangay): ?>
                     <option value="<?= htmlspecialchars($barangay) ?>" <?= $selectedBarangay === $barangay ? 'selected' : '' ?>>
                         <?= 'Brgy. ' . htmlspecialchars($barangay) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <label for="bridgeFilter" style="margin-left: 20px;">Filter by Bridge/Location:</label>
+            <select id="bridgeFilter" name="bridge" onchange="this.form.submit()">
+                <option value="">All Bridges</option>
+                <?php foreach ($bridges as $bridgeOption): ?>
+                    <option value="<?= htmlspecialchars($bridgeOption) ?>" <?= isset($selectedBridge) && $selectedBridge === $bridgeOption ? 'selected' : '' ?>>
+                        <?= htmlspecialchars($bridgeOption) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

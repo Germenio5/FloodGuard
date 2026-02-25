@@ -4,8 +4,9 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 require_once __DIR__ . '/../models/affected_areas.php';
 
-// Get selected barangay filter
+// Get selected filters
 $selectedBarangay = isset($_GET['barangay']) ? trim($_GET['barangay']) : '';
+$selectedBridge = isset($_GET['bridge']) ? trim($_GET['bridge']) : '';
 
 // Pagination setup
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
@@ -29,11 +30,21 @@ if ($all_reports) {
         if (!in_array($barangay, $barangays)) {
             $barangays[] = $barangay;
         }
-        
-        // Filter by selected barangay if specified
-        if (!$selectedBarangay || stripos($location, $barangay) !== false && $barangay === $selectedBarangay) {
-            $filtered_reports_all[] = $report;
-        } elseif (!$selectedBarangay) {
+
+        // Determine if this report should be included based on filters
+        $include = true;
+        if ($selectedBarangay) {
+            if (stripos($location, $selectedBarangay) === false && strcasecmp($barangay, $selectedBarangay) !== 0) {
+                $include = false;
+            }
+        }
+        if ($selectedBridge) {
+            if (stripos($location, $selectedBridge) === false) {
+                $include = false;
+            }
+        }
+
+        if ($include) {
             $filtered_reports_all[] = $report;
         }
     }
@@ -48,21 +59,34 @@ $total_pages = $total_reports > 0 ? ceil($total_reports / $limit) : 1;
 // Get paginated data
 $reports_data = array_slice($filtered_reports_all, $offset, $limit);
 
-// Fetch all affected areas (bridges) for the news modal dropdown
+// Fetch all affected areas (bridges) for the news modal dropdown and report filter
 $affected_areas_list = get_all_affected_areas($conn);
 $bridges_for_news = [];
+$bridgeFilterOptions = [];
 if ($affected_areas_list) {
     foreach ($affected_areas_list as $area) {
         $bridges_for_news[] = $area['name'];
+        $bridgeFilterOptions[] = $area['name'];
     }
 }
+// ensure filter options are unique & sorted
+$bridgeFilterOptions = array_unique($bridgeFilterOptions);
+sort($bridgeFilterOptions);
 
 // Generate minimal pagination buttons
-function generatePaginationButtons($page, $total_pages, $selectedBarangay) {
+function generatePaginationButtons($page, $total_pages, $selectedBarangay, $selectedBridge) {
     $buttons = [];
     $baseUrl = $_SERVER['PHP_SELF'];
-    $query = $selectedBarangay ? ('?barangay=' . urlencode($selectedBarangay)) : '?';
-    $query .= ($selectedBarangay ? '&' : '') . 'page=';
+
+    // build query prefix
+    $params = [];
+    if ($selectedBarangay) {
+        $params[] = 'barangay=' . urlencode($selectedBarangay);
+    }
+    if ($selectedBridge) {
+        $params[] = 'bridge=' . urlencode($selectedBridge);
+    }
+    $query = $params ? ('?' . implode('&', $params) . '&page=') : '?page=';
 
     // Previous
     if ($page > 1) {
@@ -101,7 +125,9 @@ if ($reports_data) {
 }
 
 // For view
-$pagination_buttons = generatePaginationButtons($page, $total_pages, $selectedBarangay);
+$pagination_buttons = generatePaginationButtons($page, $total_pages, $selectedBarangay, $selectedBridge);
+// expose bridge options for view dropdown
+$bridges = $bridgeFilterOptions;
 
 /**
  * Get CSS badge class based on status
