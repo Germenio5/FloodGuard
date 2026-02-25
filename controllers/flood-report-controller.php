@@ -63,11 +63,11 @@ if (isset($_GET['error'])) {
             break;
         
         case 'file_too_large':
-            $errorMessage = "Photo file is too large. Maximum size is 5MB.";
+            $errorMessage = "Photo file is too large. Maximum size is 15MB.";
             break;
         
         case 'invalid_file_type':
-            $errorMessage = "Invalid photo format. Please upload JPG, PNG, or GIF.";
+            $errorMessage = "Invalid photo format. Please upload JPG or PNG.";
             break;
         
         case 'file_upload_failed':
@@ -100,9 +100,9 @@ $userEmail = $_SESSION['user_email'] ?? '';
 
 // File upload configuration
 $photoUploadDir = __DIR__ . '/../assets/images/reports/';
-$maxFileSize = 5 * 1024 * 1024; // 5MB
-$allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-$allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+$maxFileSize = 15 * 1024 * 1024; // 15MB
+$allowedTypes = ['image/jpeg', 'image/png'];
+$allowedExtensions = ['jpg', 'jpeg', 'png'];
 
 // Create upload directory if it doesn't exist
 if (!is_dir($photoUploadDir)) {

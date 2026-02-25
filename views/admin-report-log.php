@@ -102,7 +102,7 @@ include '../controllers/admin-report-log-controller.php';
 
     <!-- Upload News Button -->
     <div class="button-section">
-        <button class="upload-btn">Upload News</button>
+        <button class="upload-btn" onclick="openNewsModal()">Upload News</button>
     </div>
 
 </div>
@@ -116,6 +116,90 @@ include '../controllers/admin-report-log-controller.php';
         <div id="modalBody"></div>
     </div>
 </div>
+
+<!-- Modal for uploading news -->
+<div id="newsModal" class="modal">
+    <div class="modal-content news-modal-content">
+        <span class="modal-close" onclick="closeNewsModal()">&times;</span>
+        
+        <div class="news-modal-header">
+            <div class="news-modal-icon">⚠️</div>
+            <div class="news-modal-title-section">
+                <h2>Create Flood Alert</h2>
+                <p>Post a new alert to notify users about flooding situation</p>
+            </div>
+        </div>
+
+        <form id="newsForm" enctype="multipart/form-data" class="news-form">
+            
+            <!-- Bridge/Location Selection -->
+            <div class="form-group">
+                <label for="bridgeSelect">
+                    <span class="required">*</span> Affected Location
+                </label>
+                <div class="select-wrapper">
+                    <select id="bridgeSelect" name="area" required>
+                        <option value="">Select a Bridge or Area</option>
+                        <?php foreach ($bridges_for_news as $bridge): ?>
+                            <option value="<?= htmlspecialchars($bridge) ?>">
+                                📍 <?= htmlspecialchars($bridge) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="select-arrow">▼</div>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="newsDescription">
+                    <span class="required">*</span> Description
+                </label>
+                <textarea id="newsDescription" name="description" 
+                    placeholder="Describe the current flood situation, water level, evacuation info..." 
+                    required rows="5" maxlength="500"></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span>/500
+                </div>
+            </div>
+
+            <!-- Photo Upload -->
+            <div class="form-group">
+                <label for="newsPhoto">
+                    <span class="required">*</span> Upload Photo
+                </label>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="newsPhoto" name="picture" accept="image/jpeg,image/png" required>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <div class="upload-icon">📸</div>
+                        <div class="upload-text">
+                            <p class="upload-main">Drag and drop your image here</p>
+                            <p class="upload-sub">or click to select a file</p>
+                        </div>
+                        <div class="upload-hint">Supported: JPG, PNG (Max 15MB)</div>
+                    </div>
+                    <div id="filePreview" class="file-preview"></div>
+                </div>
+            </div>
+
+            <!-- Hidden Fields -->
+            <input type="hidden" id="newsName" name="name" value="FloodGuard">
+            <input type="hidden" id="newsLogo" name="avatar" value="../assets/images/FloodGuard_logo.png">
+            <input type="hidden" id="newsStatus" name="status" value="Alert">
+
+            <!-- Form Actions -->
+            <div class="modal-actions">
+                <button type="button" class="btn-secondary" onclick="closeNewsModal()">
+                    ✕ Cancel
+                </button>
+                <button type="submit" class="btn-primary">
+                    ✓ Post Alert
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 <script src="../assets/js/admin-flood-report.js"></script>
+<script src="../assets/js/admin-upload-news.js"></script>
 </body>
 </html>

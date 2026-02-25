@@ -398,3 +398,138 @@ body {
     }
 
 }
+
+/* Pagination info styled like user-water-level-data page */
+.pagination-info {
+    text-align: left;
+    margin-bottom: 20px;
+    padding: 12px 0;
+    font-size: 13px;
+    color: #666;
+    border-bottom: 1px solid #e5e7eb;
+    word-break: break-word;
+}
+
+.pagination-info p {
+    margin: 0;
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    align-items: center;
+    line-height: 1.6;
+}
+
+.pagination-info strong {
+    color: #457d8a;
+    font-weight: 600;
+}
+
+/* old button styles retained for legacy but not used on news page */
+.pagination-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    background: white;
+    color: #457d8a;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    min-width: 40px;
+}
+
+.pagination-btn:hover:not(.disabled):not(.active) {
+    border-color: #457d8a;
+    background: #f0f9ff;
+}
+
+.pagination-btn.active {
+    background: #457d8a;
+    color: white;
+    border-color: #457d8a;
+}
+
+.pagination-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* new pagination styling matching user-water-level-data page */
+.table-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.pagination {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.page-btn {
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #333;
+}
+
+.page-btn:hover {
+    background: #f3f4f6;
+}
+
+.page-btn.active {
+    background: #457d8a;
+    color: white;
+    border-color: #457d8a;
+}
+
+.page-btn.disabled {
+    background: #f3f4f6;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: #e5e7eb;
+}
+
+.page-btn:disabled {
+    background: #f3f4f6;
+    color: #999;
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-color: #e5e7eb;
+}
+
+.pagination a.page-btn {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.pagination a.page-btn:hover {
+    background: #e8f1f3;
+    border-color: #457d8a;
+}
+
+.pagination span {
+    color: #999;
+    padding: 0 5px;
+}

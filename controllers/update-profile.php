@@ -56,10 +56,7 @@ if (!empty($phone) && !preg_match('/^(\+?\d{1,3}[\s.-]?)?\d{9,10}$/', $phone)) {
 // Handle photo upload if file is provided
 if (!empty($_FILES['profile_photo']['name'])) {
     $file = $_FILES['profile_photo'];
-    $maxSize = 2 * 1024 * 1024; // 2MB
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    
-    // File size validation
+    $maxSize = 15 * 1024 * 1024; // 15MB
     if ($file['size'] > $maxSize) {
         $errors[] = 'file_too_large';
     }

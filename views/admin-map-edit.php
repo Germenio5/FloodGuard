@@ -27,12 +27,12 @@ include '../controllers/admin-map-edit-controller.php';
     <div class="map-toolbar">
         <div class="toolbar-left">
             <span class="toolbar-label">Add Marker:</span>
-            <button class="tool-btn" data-type="danger">🌊 Danger Zone</button>
-            <button class="tool-btn" data-type="alert">⚠️ Alert Area</button>
+            <button class="tool-btn" data-type="bridges">🌉 Bridges</button>
             <button class="tool-btn" data-type="normal">✅ Normal</button>
-            <button class="tool-btn" data-type="evacuation">🏠 Evacuation</button>
-            <button class="tool-btn" data-type="road_closure">🚫 Road Closure</button>
-            <button class="tool-btn" data-type="rainfall">☔ Rainfall</button>
+            <button class="tool-btn" data-type="warning">⚠️ Warning</button>
+            <button class="tool-btn" data-type="danger">❗ Danger</button>
+            <button class="tool-btn" data-type="critical">🚨 Critical</button>
+            <button class="tool-btn" data-type="flooded">🌊 Flooded Area</button>
         </div>
         <div class="toolbar-right">
             <span id="mode-indicator" class="mode-indicator">Mode: View</span>
@@ -51,28 +51,28 @@ include '../controllers/admin-map-edit-controller.php';
         <!-- Legend Sidebar -->
         <div class="legend-area">
             <div class="legend-item">
-                <span class="icon blue">🌊</span>
-                <div><h4>Flooded Areas</h4><p>Areas currently affected by flooding (color coded)</p></div>
+                <span class="icon gray">🌉</span>
+                <div><h4>Bridges</h4><p>Marked bridge locations on the map</p></div>
+            </div>
+            <div class="legend-item">
+                <span class="icon green">✅</span>
+                <div><h4>Normal</h4><p>Areas with no reported issues</p></div>
             </div>
             <div class="legend-item">
                 <span class="icon orange">⚠️</span>
-                <div><h4>High Risk Zones</h4><p>Likely to flood or already experiencing deep water</p></div>
+                <div><h4>Warning</h4><p>Regions under caution for possible flooding</p></div>
             </div>
             <div class="legend-item">
-                <span class="icon gray">☔</span>
-                <div><h4>Heavy Rainfall</h4><p>Areas with ongoing or expected heavy rain</p></div>
+                <span class="icon red">❗</span>
+                <div><h4>Danger</h4><p>Hazardous areas with confirmed flooding</p></div>
             </div>
             <div class="legend-item">
-                <span class="icon blue">📈</span>
-                <div><h4>Water Level Rising</h4><p>Rivers or streets with increasing water levels</p></div>
+                <span class="icon red">🚨</span>
+                <div><h4>Critical</h4><p>Severe situations requiring immediate attention</p></div>
             </div>
             <div class="legend-item">
-                <span class="icon red">🏠</span>
-                <div><h4>Evacuation Centers</h4><p>Safe locations for temporary shelter</p></div>
-            </div>
-            <div class="legend-item">
-                <span class="icon red">🚫</span>
-                <div><h4>Road Closures</h4><p>Roads not passable due to flooding</p></div>
+                <span class="icon blue">🌊</span>
+                <div><h4>Flooded Areas</h4><p>Locations currently submerged by water</p></div>
             </div>
             <div class="legend-item">
                 <span class="icon green">📍</span>
@@ -111,12 +111,12 @@ include '../controllers/admin-map-edit-controller.php';
 
         <label>Type</label>
         <select id="marker-type-select">
-            <option value="danger">🌊 Danger Zone</option>
-            <option value="alert">⚠️ Alert Area</option>
+            <option value="bridges">🌉 Bridges</option>
             <option value="normal">✅ Normal</option>
-            <option value="evacuation">🏠 Evacuation Center</option>
-            <option value="road_closure">🚫 Road Closure</option>
-            <option value="rainfall">☔ Heavy Rainfall</option>
+            <option value="warning">⚠️ Warning</option>
+            <option value="danger">❗ Danger</option>
+            <option value="critical">🚨 Critical</option>
+            <option value="flooded">🌊 Flooded Areas</option>
         </select>
 
         <div class="modal-actions">

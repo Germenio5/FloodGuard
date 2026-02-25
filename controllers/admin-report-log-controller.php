@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
+require_once __DIR__ . '/../models/affected_areas.php';
 
 // Get selected barangay filter
 $selectedBarangay = isset($_GET['barangay']) ? trim($_GET['barangay']) : '';
@@ -46,6 +47,15 @@ $total_pages = $total_reports > 0 ? ceil($total_reports / $limit) : 1;
 
 // Get paginated data
 $reports_data = array_slice($filtered_reports_all, $offset, $limit);
+
+// Fetch all affected areas (bridges) for the news modal dropdown
+$affected_areas_list = get_all_affected_areas($conn);
+$bridges_for_news = [];
+if ($affected_areas_list) {
+    foreach ($affected_areas_list as $area) {
+        $bridges_for_news[] = $area['name'];
+    }
+}
 
 // Generate minimal pagination buttons
 function generatePaginationButtons($page, $total_pages, $selectedBarangay) {
