@@ -13,7 +13,7 @@
  * @param float $lng Longitude
  * @param string $title Marker title
  * @param string $description Marker description
- * @param string $type Marker type (danger, alert, normal, evacuation, road_closure, rainfall)
+ * @param string $type Marker type (bridges, normal, warning, danger, critical, flooded)
  * @return int|bool Marker ID if successful, false otherwise
  */
 function create_marker($conn, $lat, $lng, $title, $description, $type) {
@@ -43,7 +43,7 @@ function create_marker($conn, $lat, $lng, $title, $description, $type) {
  * @param float $lng Longitude
  * @param string $title Marker title
  * @param string $description Marker description
- * @param string $type Marker type
+ * @param string $type Marker type (bridges, normal, warning, danger, critical, flooded)
  * @return bool True if successful, false otherwise
  */
 function update_marker($conn, $id, $lat, $lng, $title, $description, $type) {
