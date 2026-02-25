@@ -67,7 +67,7 @@ CREATE TABLE `reports` (
   `location` varchar(255) NOT NULL,
   `status` enum('Safe','In Danger','Alert','Danger') NOT NULL,
   `description` text DEFAULT NULL,
-  `image_path` varchar(255) DEFAULT NULL,
+  `image` mediumblob DEFAULT NULL,
   `post_news` tinyint(1) NOT NULL DEFAULT 0,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -76,7 +76,7 @@ CREATE TABLE `reports` (
 -- Dumping data for table `reports`
 --
 
-INSERT INTO `reports` (`id`, `user_email`, `location`, `status`, `description`, `image_path`, `post_news`, `created_at`) VALUES
+INSERT INTO `reports` (`id`, `user_email`, `location`, `status`, `description`, `image`, `post_news`, `created_at`) VALUES
 (5, 'germenio123@gmail.com', 'Brgy. Banago, Prk. Kawayan, St. Patricio Street', 'Safe', 'The water is rising rapidly here', NULL, 0, '2026-02-20 00:00:28');
 
 -- --------------------------------------------------------

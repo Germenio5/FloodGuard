@@ -85,43 +85,23 @@ if (empty($waterLevels)) {
 // Generate pagination buttons
 function generatePaginationButtons($currentPage, $totalPages) {
     $buttons = [];
-    
     // Previous button
     if ($currentPage > 1) {
         $buttons[] = ['page' => $currentPage - 1, 'label' => 'Previous', 'active' => false, 'disabled' => false];
     } else {
         $buttons[] = ['page' => 1, 'label' => 'Previous', 'active' => false, 'disabled' => true];
     }
-    
-    // Page buttons (show up to 5 pages and dots)
-    $startPage = max(1, $currentPage - 2);
-    $endPage = min($totalPages, $currentPage + 2);
-    
-    if ($startPage > 1) {
-        $buttons[] = ['page' => 1, 'label' => '1', 'active' => false, 'disabled' => false];
-        if ($startPage > 2) {
-            $buttons[] = ['page' => null, 'label' => '...', 'active' => false, 'disabled' => true];
-        }
-    }
-    
-    for ($i = $startPage; $i <= $endPage; $i++) {
-        $buttons[] = ['page' => $i, 'label' => $i, 'active' => ($i == $currentPage), 'disabled' => false];
-    }
-    
-    if ($endPage < $totalPages) {
-        if ($endPage < $totalPages - 1) {
-            $buttons[] = ['page' => null, 'label' => '...', 'active' => false, 'disabled' => true];
-        }
-        $buttons[] = ['page' => $totalPages, 'label' => $totalPages, 'active' => false, 'disabled' => false];
-    }
-    
+
+    // Only show the current page button
+    $buttons[] = ['page' => $currentPage, 'label' => $currentPage, 'active' => true, 'disabled' => false];
+
     // Next button
     if ($currentPage < $totalPages) {
         $buttons[] = ['page' => $currentPage + 1, 'label' => 'Next', 'active' => false, 'disabled' => false];
     } else {
         $buttons[] = ['page' => $totalPages, 'label' => 'Next', 'active' => false, 'disabled' => true];
     }
-    
+
     return $buttons;
 }
 

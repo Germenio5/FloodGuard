@@ -86,15 +86,29 @@ include '../controllers/profile-settings-controller.php';
                         >
                     </div>
 
-                    <!-- Address -->
+                    <!-- Barangay -->
                     <div class="form-group">
-                        <label for="address" class="form-label">Address <span class="required">*</span></label>
+                        <label for="barangay" class="form-label">Barangay <span class="required">*</span></label>
+                        <select id="barangay" name="barangay" class="form-input" required>
+                            <option value="">-- Select Barangay --</option>
+                            <?php foreach($barangays as $barangay): ?>
+                                <option value="<?= $barangay ?>" <?= (isset($userData['barangay']) && $userData['barangay'] == $barangay) ? 'selected' : (strpos($userData['address'], $barangay) !== false ? 'selected' : '') ?>>
+                                    <?= 'Brgy. ' . $barangay ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <!-- Specific Address -->
+                    <div class="form-group">
+                        <label for="specific_address" class="form-label">Specific Address <span class="required">*</span></label>
                         <input 
                             type="text" 
-                            id="address" 
-                            name="address" 
+                            id="specific_address" 
+                            name="specific_address" 
                             class="form-input" 
-                            value="<?= htmlspecialchars($userData['address']) ?>"
+                            value="<?= isset($userData['specific_address']) ? htmlspecialchars(preg_replace('/^Brgy\.\s*[^,]+,?\s*/i', '', $userData['specific_address'])) : (isset($userData['address']) ? htmlspecialchars(preg_replace('/^Brgy\.\s*[^,]+,?\s*/i', '', $userData['address'])) : '') ?>"
+                            placeholder="Enter your specific address"
                             required
                         >
                     </div>

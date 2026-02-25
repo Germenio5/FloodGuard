@@ -15,7 +15,7 @@
  */
 function get_all_reports($conn, $limit = null, $offset = 0) {
     $reports = [];
-    $query = "SELECT id, user_email, location, status, description, image_path, post_news, created_at 
+    $query = "SELECT id, user_email, location, status, description, image, post_news, created_at 
               FROM reports 
               ORDER BY created_at DESC";
     
@@ -46,7 +46,7 @@ function get_all_reports($conn, $limit = null, $offset = 0) {
  */
 function get_report_by_id($conn, $report_id) {
     $report_id = intval($report_id);
-    $query = "SELECT id, user_email, location, status, description, image_path, post_news, created_at 
+    $query = "SELECT id, user_email, location, status, description, image, post_news, created_at 
               FROM reports 
               WHERE id = $report_id LIMIT 1";
     
@@ -66,29 +66,41 @@ function get_report_by_id($conn, $report_id) {
  * @param string $location Report location
  * @param string $status Flood status
  * @param string $description Report description
- * @param string $image_path Path to report image
+ * @param string|resource|null $image Binary image data or null
  * @param int $post_news Whether to post to news (0 or 1)
  * @return bool True if successful, false otherwise
  */
-function create_report($conn, $user_email, $location, $status, $description, $image_path = null, $post_news = 0) {
+function create_report($conn, $user_email, $location, $status, $description, $image = null, $post_news = 0) {
     $user_email = $conn->real_escape_string(trim($user_email));
     $location = $conn->real_escape_string(trim($location));
     $status = $conn->real_escape_string(trim($status));
     $description = $conn->real_escape_string(trim($description));
-    $image_path = $image_path ? $conn->real_escape_string(trim($image_path)) : null;
     $post_news = intval($post_news);
-    
-    $image_clause = $image_path ? "'$image_path'" : "NULL";
-    
-    $query = "INSERT INTO reports (user_email, location, status, description, image_path, post_news, created_at) 
-              VALUES ('$user_email', '$location', '$status', '$description', $image_clause, $post_news, NOW())";
-    
-    if ($conn->query($query) === TRUE) {
-        return true;
-    } else {
-        error_log("Database error in create_report: " . $conn->error);
+
+    // Prepare statement to insert blob data
+    $stmt = $conn->prepare(
+        "INSERT INTO reports (user_email, location, status, description, image, post_news, created_at) VALUES (?, ?, ?, ?, ?, ?, NOW())"
+    );
+    if (!$stmt) {
+        error_log("Prepare failed in create_report: " . $conn->error);
         return false;
     }
+
+    // bind parameters; 'b' for blob placeholder
+    $null = NULL;
+    $stmt->bind_param('ssssbi', $user_email, $location, $status, $description, $null, $post_news);
+
+    if ($image !== null) {
+        // send long blob data
+        $stmt->send_long_data(4, $image);
+    }
+
+    $success = $stmt->execute();
+    if (!$success) {
+        error_log("Execute failed in create_report: " . $stmt->error);
+    }
+    $stmt->close();
+    return $success;
 }
 
 /**
@@ -119,7 +131,7 @@ function get_reports_by_user($conn, $email) {
     $reports = [];
     $email = $conn->real_escape_string(strtolower(trim($email)));
     
-    $query = "SELECT id, user_email, location, status, description, image_path, post_news, created_at 
+    $query = "SELECT id, user_email, location, status, description, image, post_news, created_at 
               FROM reports 
               WHERE LOWER(user_email) = '$email'
               ORDER BY created_at DESC";
@@ -147,7 +159,7 @@ function get_reports_by_status($conn, $status) {
     $reports = [];
     $status = $conn->real_escape_string(trim($status));
     
-    $query = "SELECT id, user_email, location, status, description, image_path, post_news, created_at 
+    $query = "SELECT id, user_email, location, status, description, image, post_news, created_at 
               FROM reports 
               WHERE status = '$status'
               ORDER BY created_at DESC";
@@ -195,25 +207,43 @@ function get_unique_report_locations($conn) {
  * @param string $location Location/barangay name
  * @return array Array of reports
  */
-function get_reports_by_location($conn, $location) {
+function get_reports_by_location($conn, $location, $limit = null, $offset = 0) {
     $reports = [];
     $location = $conn->real_escape_string(trim($location));
-    
-    $query = "SELECT id, user_email, location, status, description, image_path, post_news, created_at 
+    $query = "SELECT id, user_email, location, status, description, image, post_news, created_at 
               FROM reports 
               WHERE location = '$location'
               ORDER BY created_at DESC";
-    
+    if ($limit !== null) {
+        $limit = intval($limit);
+        $offset = intval($offset);
+        $query .= " LIMIT $limit OFFSET $offset";
+    }
     $result = $conn->query($query);
-    
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
             $reports[] = $row;
         }
         $result->free();
     }
-    
     return $reports;
+}
+
+/**
+ * Get total count of reports for a location
+ * @param mysqli $conn Database connection
+ * @param string $location Location/barangay name
+ * @return int Total number of reports for location
+ */
+function get_reports_count_by_location($conn, $location) {
+    $location = $conn->real_escape_string(trim($location));
+    $query = "SELECT COUNT(*) as total FROM reports WHERE location = '$location'";
+    $result = $conn->query($query);
+    if ($result) {
+        $row = $result->fetch_assoc();
+        return (int)$row['total'];
+    }
+    return 0;
 }
 
 ?>

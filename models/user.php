@@ -24,6 +24,23 @@ function user_exists($conn, $email) {
 }
 
 /**
+ * Fetch user record by email address (case insensitive)
+ *
+ * @param mysqli $conn
+ * @param string $email
+ * @return array|bool User row or false if not found
+ */
+function get_user_by_email($conn, $email) {
+    $email = $conn->real_escape_string(strtolower(trim($email)));
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, created_at, status FROM users WHERE LOWER(email) = '$email' LIMIT 1";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+    return false;
+}
+
+/**
  * Create a new user account
  * 
  * @param mysqli $conn Database connection

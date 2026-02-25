@@ -45,7 +45,7 @@
 
                     <div class="form-group">
                         <label>Location <span style="color: red;">*</span></label>
-                        <input type="text" name="location" placeholder="Enter location of the flood (e.g., Brgy. Mandalagan, Bacolod City)" class="text-input" value="<?php echo htmlspecialchars($formData['location'], ENT_QUOTES); ?>" required />
+                        <input type="text" name="location" placeholder="Enter location of the flood (e.g., Mandalagan, Bacolod City)" class="text-input" value="<?php echo preg_replace('/^Brgy\.\s*/i', '', htmlspecialchars($formData['location'], ENT_QUOTES)); ?>" required />
                     </div>
 
                     <div class="form-group">
@@ -53,7 +53,6 @@
                         <div class="badge-group">
                             <button type="button" class="badge <?php if ($formData['status'] === 'Safe') echo 'selected'; ?>" onclick="selectStatus(this)">Safe</button>
                             <button type="button" class="badge <?php if ($formData['status'] === 'In Danger') echo 'selected'; ?>" onclick="selectStatus(this)">In Danger</button>
-                            <button type="button" class="badge <?php if ($formData['status'] === 'Danger') echo 'selected'; ?>" onclick="selectStatus(this)">Danger</button>
                         </div>
                         <input type="hidden" name="status" id="statusInput" value="<?php echo htmlspecialchars($formData['status'], ENT_QUOTES); ?>" />
                     </div>

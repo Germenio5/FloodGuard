@@ -40,7 +40,7 @@ $createReports = "CREATE TABLE IF NOT EXISTS `reports` (
     `location` VARCHAR(255) NOT NULL,
     `status` ENUM('Safe','In Danger','Alert','Danger') NOT NULL,
     `description` TEXT NULL,
-    `image_path` VARCHAR(255) NULL,
+    `image` MEDIUMBLOB NULL,
     `post_news` TINYINT(1) NOT NULL DEFAULT 0,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

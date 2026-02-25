@@ -11,25 +11,27 @@ if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/affected_areas.php';
 
+
+// Filter by barangay
+$selectedBarangay = isset($_GET['barangay']) ? trim($_GET['barangay']) : '';
+
 // Pagination settings
 $itemsPerPage = 6;
 $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 if ($currentPage < 1) $currentPage = 1;
 
-// Get total count and calculate pages
-$totalRecords = get_affected_areas_count($conn);
-$totalPages = max(1, ceil($totalRecords / $itemsPerPage));
-
-// Ensure current page doesn't exceed total pages
-if ($currentPage > $totalPages) {
-    $currentPage = $totalPages;
+if ($selectedBarangay) {
+    $allAreas = get_affected_areas_by_location($conn, $selectedBarangay);
+    $totalRecords = count($allAreas);
+    $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
+    $offset = ($currentPage - 1) * $itemsPerPage;
+    $bridges_data = array_slice($allAreas, $offset, $itemsPerPage);
+} else {
+    $totalRecords = get_affected_areas_count($conn);
+    $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
+    $offset = ($currentPage - 1) * $itemsPerPage;
+    $bridges_data = get_affected_areas_paginated($conn, $itemsPerPage, $offset);
 }
-
-// Calculate offset
-$offset = ($currentPage - 1) * $itemsPerPage;
-
-// Fetch affected areas from database using model
-$bridges_data = get_affected_areas_paginated($conn, $itemsPerPage, $offset);
 
 // Transform data for view
 $bridges = [];
@@ -67,50 +69,33 @@ if (empty($bridges)) {
     $totalPages = 1;
 }
 
-// Generate pagination buttons
-function generatePaginationButtons($currentPage, $totalPages) {
+$barangays = get_unique_barangays($conn);
+
+// Generate admin-report-log style pagination buttons
+function generatePaginationButtons($currentPage, $totalPages, $selectedBarangay) {
     $buttons = [];
-    
-    // Previous button
+    $baseUrl = $_SERVER['PHP_SELF'];
+    $query = $selectedBarangay ? ('?barangay=' . urlencode($selectedBarangay)) : '?';
+    $query .= ($selectedBarangay ? '&' : '') . 'page=';
+
+    // Previous
     if ($currentPage > 1) {
         $buttons[] = ['page' => $currentPage - 1, 'label' => 'Previous', 'active' => false, 'disabled' => false];
     } else {
         $buttons[] = ['page' => 1, 'label' => 'Previous', 'active' => false, 'disabled' => true];
     }
-    
-    // Page buttons (show up to 5 pages and dots)
-    $startPage = max(1, $currentPage - 2);
-    $endPage = min($totalPages, $currentPage + 2);
-    
-    if ($startPage > 1) {
-        $buttons[] = ['page' => 1, 'label' => '1', 'active' => false, 'disabled' => false];
-        if ($startPage > 2) {
-            $buttons[] = ['page' => null, 'label' => '...', 'active' => false, 'disabled' => true];
-        }
-    }
-    
-    for ($i = $startPage; $i <= $endPage; $i++) {
-        $buttons[] = ['page' => $i, 'label' => $i, 'active' => ($i == $currentPage), 'disabled' => false];
-    }
-    
-    if ($endPage < $totalPages) {
-        if ($endPage < $totalPages - 1) {
-            $buttons[] = ['page' => null, 'label' => '...', 'active' => false, 'disabled' => true];
-        }
-        $buttons[] = ['page' => $totalPages, 'label' => $totalPages, 'active' => false, 'disabled' => false];
-    }
-    
-    // Next button
+    // Current
+    $buttons[] = ['page' => $currentPage, 'label' => $currentPage, 'active' => true, 'disabled' => false];
+    // Next
     if ($currentPage < $totalPages) {
         $buttons[] = ['page' => $currentPage + 1, 'label' => 'Next', 'active' => false, 'disabled' => false];
     } else {
         $buttons[] = ['page' => $totalPages, 'label' => 'Next', 'active' => false, 'disabled' => true];
     }
-    
     return $buttons;
 }
 
-$paginationButtons = generatePaginationButtons($currentPage, $totalPages);
+$paginationButtons = generatePaginationButtons($currentPage, $totalPages, $selectedBarangay);
 
 
 /**

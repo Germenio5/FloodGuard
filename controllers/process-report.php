@@ -22,6 +22,7 @@ $location      = trim($_POST['location'] ?? '');
 $status        = trim($_POST['status'] ?? '');
 $description   = trim($_POST['description'] ?? '');
 $postNews      = isset($_POST['post_discussion']) ? 1 : 0;
+// imageData will hold binary content if uploaded
 $imagePath     = null;
 
 // Get user email from session
@@ -53,26 +54,19 @@ if (!in_array($status, $validStatuses)) {
 }
 
 // Handle photo upload if provided
+$imageData = null;
 if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-    
     // File upload configuration
-    $uploadDir = __DIR__ . '/../assets/images/reports/';
     $maxFileSize = 5 * 1024 * 1024; // 5MB
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-    
-    // Create upload directory if it doesn't exist
-    if (!is_dir($uploadDir)) {
-        @mkdir($uploadDir, 0755, true);
-    }
-    
+
     $file = $_FILES['photo'];
-    $fileName = $file['name'];
     $fileTmpPath = $file['tmp_name'];
     $fileSize = $file['size'];
     $fileType = mime_content_type($fileTmpPath);
-    $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-    
+    $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
     // Validate file size
     if ($fileSize > $maxFileSize) {
         $qs = http_build_query([
@@ -84,7 +78,7 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         header("Location: ../views/user-report-flood.php?$qs");
         exit();
     }
-    
+
     // Validate file type
     if (!in_array($fileType, $allowedTypes) || !in_array($fileExtension, $allowedExtensions)) {
         $qs = http_build_query([
@@ -96,33 +90,23 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
         header("Location: ../views/user-report-flood.php?$qs");
         exit();
     }
-    
-    // Generate unique filename to prevent overwriting
-    $newFileName = 'report_' . $_SESSION['user_id'] . '_' . time() . '.' . $fileExtension;
-    $uploadPath = $uploadDir . $newFileName;
-    
-    // Move uploaded file
-    if (move_uploaded_file($fileTmpPath, $uploadPath)) {
-        $imagePath = 'assets/images/reports/' . $newFileName;
-    } else {
-        $qs = http_build_query([
-            'error' => 'file_upload_failed',
-            'location' => $location,
-            'status' => $status,
-            'description' => $description
-        ]);
-        header("Location: ../views/user-report-flood.php?$qs");
-        exit();
-    }
+
+    // Read binary content for blob storage
+    $imageData = file_get_contents($fileTmpPath);
 }
 
-// Sanitize inputs
+
+
+// Remove duplicate 'Brgy.' prefix in location
+if (preg_match('/^Brgy\.\s*Brgy\./i', $location)) {
+    $location = preg_replace('/^Brgy\.\s*/i', '', $location);
+}
 $location    = htmlspecialchars($location, ENT_QUOTES, 'UTF-8');
 $status      = htmlspecialchars($status, ENT_QUOTES, 'UTF-8');
 $description = htmlspecialchars($description, ENT_QUOTES, 'UTF-8');
 
 // Insert report using model
-if (create_report($conn, $userEmail, $location, $status, $description, $imagePath, $postNews)) {
+if (create_report($conn, $userEmail, $location, $status, $description, $imageData, $postNews)) {
     // Report submitted successfully
     header("Location: ../views/user-report-flood.php?success=report_submitted");
     exit();

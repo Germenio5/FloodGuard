@@ -3,8 +3,8 @@
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// Check admin session
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']) || !isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
+// Check user session (any logged-in user can view)
+if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     http_response_code(403);
     echo json_encode(['error' => 'forbidden']);
     exit();
@@ -34,7 +34,7 @@ $output = [
     'location' => $report['location'] ?? null,
     'status' => $report['status'] ?? null,
     'description' => $report['description'] ?? null,
-    'image_path' => $report['image_path'] ?? null,
+    'image' => isset($report['image']) ? base64_encode($report['image']) : null,
     'created_at' => $report['created_at'] ?? null
 ];
 

@@ -30,6 +30,30 @@ if (!$userFromDb) {
 }
 
 // Initialize form data with database values
+
+// Barangay list (reuse from registration logic or define here)
+$barangays = [
+    'Alijis', 'Banago', 'Bata', 'Barangay 1', 'Barangay 2', 'Barangay 3', 'Barangay 4', 'Barangay 5',
+    'Barangay 6', 'Barangay 7', 'Barangay 8', 'Barangay 9', 'Barangay 10', 'Barangay 11', 'Barangay 12',
+    'Barangay 13', 'Barangay 14', 'Barangay 15', 'Barangay 16', 'Barangay 17', 'Barangay 18', 'Barangay 19',
+    'Barangay 20', 'Barangay 21', 'Barangay 22', 'Barangay 23', 'Barangay 24', 'Barangay 25', 'Barangay 26',
+    'Barangay 27', 'Barangay 28', 'Barangay 29', 'Barangay 30', 'Barangay 31', 'Barangay 32', 'Barangay 33',
+    'Estefania', 'Granada', 'Handumanan', 'Mandalagan', 'Mansilingan', 'Montevista', 'Punta Taytay',
+    'Sum-ag', 'Taculing', 'Tangub', 'Villamonte', 'Vista Alegre'
+];
+
+// Split address for form compatibility
+$barangay = '';
+$specific_address = '';
+if (!empty($userFromDb['address'])) {
+    if (preg_match('/^Brgy\.\s*([^,]+),?\s*(.*)$/i', $userFromDb['address'], $matches)) {
+        $barangay = trim($matches[1]);
+        $specific_address = trim($matches[2]);
+    } else {
+        $specific_address = $userFromDb['address'];
+    }
+}
+
 $userData = [
     'id' => $userFromDb['id'],
     'first_name' => $userFromDb['first_name'],
@@ -37,6 +61,8 @@ $userData = [
     'email' => $userFromDb['email'],
     'phone' => $userFromDb['phone'],
     'address' => $userFromDb['address'],
+    'barangay' => $barangay,
+    'specific_address' => $specific_address,
     'profile_photo' => $userFromDb['profile_photo'] ?? '../assets/images/placeholder-profile.png',
     'created_at' => $userFromDb['created_at']
 ];

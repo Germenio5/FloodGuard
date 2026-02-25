@@ -90,6 +90,14 @@ include '../controllers/admin-report-log-controller.php';
             </tbody>
 
         </table>
+            <!-- Pagination Controls -->
+            <div class="pagination-section" style="margin: 20px 0; text-align: center;">
+                <?php if (!empty($pagination_buttons)): ?>
+                    <?php foreach ($pagination_buttons as $btn): ?>
+                        <?= $btn ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </div>
     </div>
 
     <!-- Upload News Button -->

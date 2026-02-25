@@ -25,10 +25,14 @@ $userAddress = $userFromDb && !empty($userFromDb['address']) ? htmlspecialchars(
 $pageTitle = "Report Flood";
 $pageSubtitle = "Help emergency responders by reporting flood incidents";
 
+
+// Get user's status from dashboard
+$userStatus = $userFromDb['status'] ?? 'Safe';
+
 // Initialize form data and error variables
 $formData = [
     'location' => $_GET['location'] ?? ($userAddress ? "Brgy. " . $userAddress : ''),
-    'status' => $_GET['status'] ?? '',
+    'status' => $_GET['status'] ?? $userStatus,
     'description' => $_GET['description'] ?? '',
     'post_discussion' => isset($_GET['post_discussion']) ? 1 : 0
 ];

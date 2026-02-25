@@ -98,12 +98,17 @@ include '../controllers/water-level-data-controller.php';
         <div class="table-footer">
             <div class="pagination">
                 <?php foreach ($paginationButtons as $btn): ?>
+                    <?php
+                        $isPrev = $btn['label'] === 'Previous';
+                        $isNext = $btn['label'] === 'Next';
+                        $extraClass = ($isPrev || $isNext) ? '' : ' page-num';
+                    ?>
                     <?php if ($btn['disabled']): ?>
-                        <button class="page-btn disabled" disabled><?php echo $btn['label']; ?></button>
+                        <button class="page-btn disabled<?php echo $extraClass; ?>" disabled><?php echo $btn['label']; ?></button>
                     <?php elseif ($btn['active']): ?>
-                        <button class="page-btn active"><?php echo $btn['label']; ?></button>
+                        <button class="page-btn active<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></button>
                     <?php else: ?>
-                        <a href="?page=<?php echo $btn['page']; ?><?php echo $selectedBridge ? '&bridge=' . urlencode($selectedBridge) : ''; ?>" class="page-btn"><?php echo $btn['label']; ?></a>
+                        <a href="?page=<?php echo $btn['page']; ?><?php echo $selectedBridge ? '&bridge=' . urlencode($selectedBridge) : ''; ?>" class="page-btn<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>

@@ -23,7 +23,20 @@ include '../controllers/affected-areas-controller.php';
         <p class="page-subtitle">Creaks / Bridges</p>
     </div>
 
-     <!-- Alert Status Cards -->
+    <!-- Filter Box -->
+    <div class="filter-box" style="margin-bottom: 30px;">
+        <form method="GET" class="filter-form">
+            <label for="barangayFilter">Filter by Barangay:</label>
+            <select id="barangayFilter" name="barangay" onchange="this.form.submit()">
+                <option value="">All Barangays</option>
+                <?php foreach ($barangays as $barangay): ?>
+                    <option value="<?= htmlspecialchars($barangay) ?>" <?= $selectedBarangay === $barangay ? 'selected' : '' ?>>
+                        <?= 'Brgy. ' . htmlspecialchars($barangay) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </form>
+    </div>
     <section class="alert-section">
         <div class="alert-card alert-warning">
             <div class="alert-icon"><span>⚠</span></div>
@@ -111,16 +124,18 @@ include '../controllers/affected-areas-controller.php';
     </div>
 
     <!-- PAGINATION UI -->
-    <div class="pagination">
-        <?php foreach ($paginationButtons as $btn): ?>
-            <?php if ($btn['disabled']): ?>
-                <button class="page-btn disabled" disabled><?php echo $btn['label']; ?></button>
-            <?php elseif ($btn['active']): ?>
-                <button class="page-btn active"><?php echo $btn['label']; ?></button>
-            <?php else: ?>
-                <a href="?page=<?php echo $btn['page']; ?>" class="page-btn"><?php echo $btn['label']; ?></a>
-            <?php endif; ?>
-        <?php endforeach; ?>
+    <div class="pagination-section" style="margin: 20px 0; text-align: center;">
+        <?php if (!empty($paginationButtons)): ?>
+            <?php foreach ($paginationButtons as $btn): ?>
+                <?php if ($btn['active']): ?>
+                    <span class="pagination-btn current"><?php echo $btn['label']; ?></span>
+                <?php elseif ($btn['disabled']): ?>
+                    <span class="pagination-btn disabled" style="opacity:0.5;cursor:not-allowed;"><?php echo $btn['label']; ?></span>
+                <?php else: ?>
+                    <a href="?page=<?php echo $btn['page']; ?>" class="pagination-btn"><?php echo $btn['label']; ?></a>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
     </div>
 
 </div>

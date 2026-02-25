@@ -346,6 +346,7 @@ td {
     .page-header p {
         font-size: 12px;
         font-weight: 100;
+        max-width: 100%;
     }
 
     .data-section {
@@ -356,12 +357,34 @@ td {
         font-size: 20px;
     }
 
+    /* stack header elements and make filter full width */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .filter-box {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .filter-box select {
+        min-width: 100%;
+    }
+
     .table-container {
         overflow-x: auto;
     }
 
     table {
-        min-width: 700px;
+        min-width: 600px; /* allow more flexibility */
+    }
+
+    /* drop speed column on medium screens to save space */
+    th:nth-child(5), td:nth-child(5) {
+        display: none;
     }
 
     .table-footer {
@@ -409,14 +432,6 @@ td {
         font-weight: 600;
     }
 
-    .table-container {
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 700px;
-    }
-
     th,
     td {
         padding: 14px 16px;
@@ -438,6 +453,7 @@ td {
     .page-header p {
         font-size: 11px;
         line-height: 1.5;
+        max-width: 100%;
     }
 
     .data-section {
@@ -447,6 +463,22 @@ td {
     .data-section h2 {
         font-size: 18px;
         margin-bottom: 20px;
+    }
+
+    /* stack filter vertically on very small screens */
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    .filter-box {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .filter-box select {
+        min-width: 100%;
     }
 
     .pagination {
@@ -479,7 +511,6 @@ td {
     }
 
     .pagination-info p {
-        flex-direction: column;
         gap: 6px;
         align-items: stretch;
         line-height: 1.5;
@@ -487,7 +518,13 @@ td {
 
     table {
         font-size: 12px;
-        min-width: 600px;
+        min-width: 500px;
+    }
+
+    /* hide height and speed columns on smallest screens */
+    th:nth-child(4), td:nth-child(4),
+    th:nth-child(5), td:nth-child(5) {
+        display: none;
     }
 
     th,

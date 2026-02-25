@@ -9,13 +9,14 @@ function viewReport(reportId) {
             return res.json();
         })
         .then(report => {
-            const imageSrc = report.image_path ? `../${report.image_path}` : '../assets/images/placeholder.png';
+            let imageSrc;
+            if (report.image) {
+                imageSrc = `data:image/jpeg;base64,${report.image}`; // assuming jpeg, browsers will handle types
+            } else {
+                imageSrc = '../assets/images/placeholder.png';
+            }
 
             modalBody.innerHTML = `
-                <div class="detail-row">
-                    <div class="detail-label">Report ID:</div>
-                    <div class="detail-value">${report.id}</div>
-                </div>
                 <div class="detail-row">
                     <div class="detail-label">Location:</div>
                     <div class="detail-value">${escapeHtml(report.location || report.user_email || 'Unknown')}</div>
@@ -36,8 +37,7 @@ function viewReport(reportId) {
                     <div class="detail-label">Date Submitted:</div>
                     <div class="detail-value">${escapeHtml(report.created_at)}</div>
                 </div>
-                <div class="detail-row">
-                    <div class="detail-label">Photo:</div>
+                <div class="image-row">
                     <img src="${imageSrc}" alt="No Image" class="report-image">
                 </div>
             `;

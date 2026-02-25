@@ -86,7 +86,7 @@ include '../controllers/news-controller.php';
 
         </div>
 
-        <div class="menu">•••</div>
+        <div class="menu" data-report-id="<?= isset($event['id']) ? $event['id'] : '' ?>">•••</div>
 
     </div>
 
@@ -110,6 +110,60 @@ include '../controllers/news-controller.php';
 </div>
 
 <?php endforeach; ?>
+
+</div>
+
+<!-- Report Detail Modal -->
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <div class="modal-header">Report Details</div>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+function getBadgeClassJS(status) {
+    if (status === 'Safe') return 'status-safe';
+    if (status === 'At-Risk' || status === 'Danger') return 'status-danger';
+    return 'status-unknown';
+}
+function viewReport(reportId) {
+    const modal = document.getElementById('reportModal');
+    const modalBody = document.getElementById('modalBody');
+    fetch(`../controllers/get-report.php?id=${encodeURIComponent(reportId)}`)
+        .then(res=>res.json())
+        .then(report=>{
+            let statusBadgeClass = getBadgeClassJS(report.status);
+            modalBody.innerHTML = `
+                <div class="detail-row"><div class="detail-label">Location:</div><div class="detail-value">${escapeHtml(report.location)}</div></div>
+                <div class="detail-row"><div class="detail-label">Status:</div><div class="detail-value"><span class="status-badge ${statusBadgeClass}">${escapeHtml(report.status)}</span></div></div>
+                <div class="detail-row"><div class="detail-label">Description:</div><div class="detail-value">${escapeHtml(report.description)}</div></div>
+                <div class="detail-row"><div class="detail-label">Date Submitted:</div><div class="detail-value">${escapeHtml(report.created_at)}</div></div>
+                <div class="image-row">${report.image ? `<img src="data:image/jpeg;base64,${report.image}" class="report-image">` : ''}</div>
+            `;
+            modal.style.display='block';
+        })
+        .catch(err=>console.error(err));
+}
+function closeModal(){document.getElementById('reportModal').style.display='none';}
+document.addEventListener('click',function(e){
+    if(e.target.classList.contains('menu')){
+        const id=e.target.getAttribute('data-report-id');
+        if(id) viewReport(id);
+    }
+    if(e.target==document.getElementById('reportModal')) closeModal();
+});
+</script>
 
 </div>
 
