@@ -203,4 +203,40 @@ foreach ($eventList as $e) {
     }
 }
 
+// ---- pagination logic ----
+// show 8 news items per page
+$itemsPerPage = 8;
+$currentPage = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$totalItems = count($eventList);
+$totalPages = $totalItems > 0 ? ceil($totalItems / $itemsPerPage) : 1;
+if ($currentPage > $totalPages) {
+    $currentPage = $totalPages;
+}
+
+// generate structured pagination buttons array compatible with user-water-level-data design
+function generatePaginationButtons($currentPage, $totalPages) {
+    $buttons = [];
+    // previous
+    if ($currentPage > 1) {
+        $buttons[] = ['page' => $currentPage - 1, 'label' => 'Previous', 'active' => false, 'disabled' => false];
+    } else {
+        $buttons[] = ['page' => 1, 'label' => 'Previous', 'active' => false, 'disabled' => true];
+    }
+    // current page
+    $buttons[] = ['page' => $currentPage, 'label' => $currentPage, 'active' => true, 'disabled' => false];
+    // next
+    if ($currentPage < $totalPages) {
+        $buttons[] = ['page' => $currentPage + 1, 'label' => 'Next', 'active' => false, 'disabled' => false];
+    } else {
+        $buttons[] = ['page' => $totalPages, 'label' => 'Next', 'active' => false, 'disabled' => true];
+    }
+    return $buttons;
+}
+
+$paginationButtons = generatePaginationButtons($currentPage, $totalPages);
+
+// slice the events that will actually be output on this page
+$offset = ($currentPage - 1) * $itemsPerPage;
+$eventList = array_slice($eventList, $offset, $itemsPerPage);
+
 ?>

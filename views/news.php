@@ -104,6 +104,31 @@ include '../controllers/news-controller.php';
 
 </div>
 
+<!-- Pagination Info -->
+<div class="pagination-info">
+    <p>Showing page <strong><?php echo $currentPage; ?></strong> of <strong><?php echo $totalPages; ?></strong> | Total news: <strong><?php echo $totalItems; ?></strong></p>
+</div>
+
+<!-- Pagination Footer (same pattern as water-level-data) -->
+<div class="table-footer">
+    <div class="pagination">
+        <?php foreach ($paginationButtons as $btn): ?>
+            <?php
+                $isPrev = $btn['label'] === 'Previous';
+                $isNext = $btn['label'] === 'Next';
+                $extraClass = ($isPrev || $isNext) ? '' : ' page-num';
+            ?>
+            <?php if ($btn['disabled']): ?>
+                <button class="page-btn disabled<?php echo $extraClass; ?>" disabled><?php echo $btn['label']; ?></button>
+            <?php elseif ($btn['active']): ?>
+                <button class="page-btn active<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></button>
+            <?php else: ?>
+                <a href="?page=<?php echo $btn['page']; ?>" class="page-btn<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+</div>
+
 <!-- Report Detail Modal -->
 <div id="reportModal" class="modal">
     <div class="modal-content">
