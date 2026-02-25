@@ -129,7 +129,46 @@ function makeIcon(type) {
     });
 }
 
-// No markers yet (no DB) — map is ready for when DB is connected
+// Load markers from database
+function loadMarkersFromDatabase() {
+    fetch('../controllers/marker-api.php?action=list')
+        .then(res => res.json())
+        .then(result => {
+            if (result.success && result.markers) {
+                // Display all markers on the user map
+                result.markers.forEach(m => {
+                    const lm = L.marker([m.lat, m.lng], {
+                        icon: makeIcon(m.type)
+                    }).addTo(map);
+
+                    // Show popup with marker information
+                    const typeInfo = TYPE[m.type] || TYPE.danger;
+                    const popupContent = `
+                        <div style="min-width: 280px; font-family: Arial, sans-serif;">
+                            <div style="padding: 12px 14px; border-bottom: 3px solid ${typeInfo.color}; margin-bottom: 10px;">
+                                <h3 style="margin: 0 0 8px 0; font-size: 16px; color: #1f2937;">${m.title}</h3>
+                                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px;">
+                                    <span style="font-size: 18px;">${typeInfo.emoji}</span>
+                                    <strong style="color: ${typeInfo.color};">${typeInfo.label}</strong>
+                                </div>
+                            </div>
+                            ${m.description ? `<div style="padding: 0 14px 12px 14px; font-size: 13px; color: #4b5563; line-height: 1.5;">${m.description}</div>` : ''}
+                        </div>
+                    `;
+                    lm.bindPopup(popupContent, { maxWidth: 300 });
+                    
+                    lm.bindTooltip(
+                        `<strong>${m.title}</strong><br><em>${TYPE[m.type]?.label}</em>`,
+                        { direction: 'top', offset: [0,-38] }
+                    );
+                });
+            }
+        })
+        .catch(err => console.error('Failed to load markers:', err));
+}
+
+// Load markers when page loads
+document.addEventListener('DOMContentLoaded', loadMarkersFromDatabase);
 </script>
 
 </body>
