@@ -60,9 +60,6 @@ include '../controllers/admin-dashboard-controller.php';
                 <p>Registered Residents</p>
                 <h3><?= $stats["registered"] ?></h3>
             </div>
-
-
-
         </div>
     </div>
 
