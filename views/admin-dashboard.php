@@ -61,11 +61,6 @@ include '../controllers/admin-dashboard-controller.php';
                 <h3><?= $stats["registered"] ?></h3>
             </div>
 
-            <div class="status-card card-no-response">
-                <p>No Response</p>
-                <h3><?= $stats["no_response"] ?></h3>
-            </div>
-
         </div>
     </div>
 

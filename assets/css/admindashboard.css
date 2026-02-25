@@ -76,7 +76,7 @@ main {
 /* Status Cards */
 .status-cards {
     display: grid;
-    grid-template-columns: 275px 275px 275px 275px;
+    grid-template-columns: 375px 375px 375px;
     gap: 24px;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -125,10 +125,6 @@ main {
 
 .card-registered::before {
     background-color: #2563eb;
-}
-
-.card-no-response::before {
-    background-color: #6b7280;
 }
 
 /* List Section */
