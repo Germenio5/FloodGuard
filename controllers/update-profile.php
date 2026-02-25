@@ -28,6 +28,21 @@ $address = isset($_POST['address']) ? trim($_POST['address']) : '';
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $phone = isset($_POST['phone']) ? trim($_POST['phone']) : '';
 
+// normalize barangay prefix if present in address
+if ($address !== '') {
+    // check if the address has a barangay segment (before comma)
+    $parts = explode(',', $address, 2);
+    $first = trim($parts[0]);
+    if (!preg_match('/^\s*(Brgy\.|Barangay)/i', $first)) {
+        $first = 'Brgy. ' . $first;
+    }
+    if (count($parts) > 1) {
+        $address = $first . ', ' . trim($parts[1]);
+    } else {
+        $address = $first;
+    }
+}
+
 // Required field validation
 if (empty($firstName) || empty($lastName) || empty($address) || empty($email) || empty($phone)) {
     $errors[] = 'required';

@@ -40,13 +40,16 @@ include '../controllers/user-dashboard-controller.php';
     <div class="water-card">
 
         <div class="card-header">
-            <h2>Water Level Data</h2>
-            <p>Updated <?= $waterLevel['date'] ?></p>
+            <h2><?= htmlspecialchars($cardHeaderTitle) ?></h2>
+            <p>Updated <?= htmlspecialchars($cardHeaderUpdated) ?></p>
         </div>
 
         <div class="location-section">
             <h3><?= $waterLevel['bridge'] ?></h3>
             <p><?= $waterLevel['location'] ?></p>
+            <?php if (!empty($userBarangay) && empty($bridgeMatchedUser)): ?>
+                <p class="small muted">(no bridge data for your barangay; showing latest available)</p>
+            <?php endif; ?>
 
             <p class="label">Current Level:</p>
                 

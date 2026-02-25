@@ -179,6 +179,34 @@ function get_latest_affected_area($conn) {
 }
 
 /**
+ * Get the most recently updated affected area for a specific barangay/location.
+ *
+ * @param mysqli $conn Database connection
+ * @param string $location Barangay or location name (should match the "location" column)
+ * @return array|bool Area record or false if none found
+ */
+function get_latest_affected_area_by_location($conn, $location) {
+    $location = $conn->real_escape_string(trim($location));
+    if ($location === '') {
+        return false;
+    }
+    $prefixed1 = $conn->real_escape_string('Brgy. ' . $location);
+    $prefixed2 = $conn->real_escape_string('Barangay ' . $location);
+
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
+              FROM affected_areas 
+              WHERE location = '$location' OR location = '$prefixed1' OR location = '$prefixed2'
+              ORDER BY updated_at DESC LIMIT 1";
+
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+    return false;
+}
+
+/**
  * Get affected area by name
  * 
  * @param mysqli $conn Database connection
@@ -209,19 +237,25 @@ function get_affected_area_by_name($conn, $name) {
 function get_unique_barangays($conn) {
     $barangays = [];
     $query = "SELECT DISTINCT location FROM affected_areas 
-              WHERE location IS NOT NULL AND location != '' 
-              ORDER BY location ASC";
+              WHERE location IS NOT NULL AND location != ''";
     
     $result = $conn->query($query);
     
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $barangays[] = $row['location'];
+            $loc = trim($row['location']);
+            if ($loc === '') continue;
+            // strip any Brgy. or Barangay prefix for consistency
+            $loc = preg_replace('/^\s*(Brgy\.|Barangay)\s*/i', '', $loc);
+            $barangays[] = $loc;
         }
         $result->free();
     }
-    
-    return $barangays;
+
+    // ensure unique and sorted
+    $barangays = array_unique($barangays);
+    sort($barangays, SORT_STRING | SORT_FLAG_CASE);
+    return array_values($barangays);
 }
 
 /**
@@ -234,10 +268,18 @@ function get_unique_barangays($conn) {
 function get_affected_areas_by_location($conn, $location) {
     $areas = [];
     $location = $conn->real_escape_string(trim($location));
-    
+    if ($location === '') {
+        return $areas;
+    }
+    // match plain location or with common prefixes
+    $prefixed1 = 'Brgy. ' . $location;
+    $prefixed2 = 'Barangay ' . $location;
+    $prefixed1 = $conn->real_escape_string($prefixed1);
+    $prefixed2 = $conn->real_escape_string($prefixed2);
+
     $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
               FROM affected_areas 
-              WHERE location = '$location'
+              WHERE location = '$location' OR location = '$prefixed1' OR location = '$prefixed2'
               ORDER BY name ASC";
     
     $result = $conn->query($query);

@@ -247,19 +247,58 @@ function get_users_count($conn, $search_area = '') {
  * @return array Array of unique addresses
  */
 function get_unique_user_addresses($conn) {
-    $addresses = [];
-    $query = "SELECT DISTINCT address FROM users WHERE role = 'user' AND address IS NOT NULL AND address != '' ORDER BY address ASC";
-    
+    // Return a list of distinct barangays extracted from users' addresses.
+    // Addresses are assumed to store the barangay as the first comma-separated
+    // segment (e.g. "Brgy. Something, City, Province").
+    $barangays = [];
+    $query = "SELECT DISTINCT address FROM users WHERE role = 'user' AND address IS NOT NULL AND address != ''";
+
     $result = $conn->query($query);
-    
+
     if ($result && $result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            $addresses[] = $row['address'];
+            $addr = trim($row['address']);
+            if ($addr === '') {
+                continue;
+            }
+            // take the first component before comma as barangay
+            $parts = explode(',', $addr);
+            $brgy = trim($parts[0]);
+            if ($brgy !== '') {
+                // remove any existing "Brgy." or "Barangay" prefix so we don't double up
+                $brgy = preg_replace('/^\s*(Brgy\.|Barangay)\s*/i', '', $brgy);
+                $barangays[] = $brgy;
+            }
         }
         $result->free();
     }
-    
-    return $addresses;
+
+    // ensure unique and alphabetically sorted
+    $barangays = array_unique($barangays);
+    sort($barangays, SORT_STRING | SORT_FLAG_CASE);
+    return array_values($barangays);
+}
+
+/**
+ * Extract barangay segment from a full address string.
+ *
+ * The address is expected to contain the barangay as the first
+ * comma-separated component, optionally prefixed with "Brgy." or
+ * "Barangay". This helper returns the barangay name without prefix.
+ *
+ * @param string $address Full address stored for the user
+ * @return string Cleaned barangay name (empty string if none)
+ */
+function extract_barangay_from_address($address) {
+    $address = trim($address);
+    if ($address === '') {
+        return '';
+    }
+    $parts = explode(',', $address);
+    $brgy = trim($parts[0]);
+    // strip any leading prefix
+    $brgy = preg_replace('/^\s*(Brgy\.|Barangay)\s*/i', '', $brgy);
+    return $brgy;
 }
 
 ?>

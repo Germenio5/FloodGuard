@@ -20,11 +20,16 @@ $itemsPerPage = 10;
 $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
 if ($currentPage < 1) $currentPage = 1;
 
-// Get selected area from filter
-$selectedArea = isset($_POST['area']) ? trim($_POST['area']) : '';
+// Get selected barangay from filter. We accept POST (form submission) or GET (pagination links).
+$selectedBarangay = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['barangay'])) {
+    $selectedBarangay = trim($_POST['barangay']);
+} elseif (isset($_GET['barangay'])) {
+    $selectedBarangay = trim($_GET['barangay']);
+}
 
-// Get total count using model
-$totalRecords = get_users_count($conn, $selectedArea);
+// Get total count using model (filters by barangay substring)
+$totalRecords = get_users_count($conn, $selectedBarangay);
 $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
 
 // Ensure current page doesn't exceed total pages
@@ -36,7 +41,7 @@ if ($currentPage > $totalPages) {
 $offset = ($currentPage - 1) * $itemsPerPage;
 
 // Fetch residents using model
-$users_data = get_users_paginated($conn, $itemsPerPage, $offset, $selectedArea);
+$users_data = get_users_paginated($conn, $itemsPerPage, $offset, $selectedBarangay);
 
 // Transform data for view
 $residents = [];
@@ -53,9 +58,9 @@ if ($users_data) {
     }
 }
 
-// Get all unique areas for dropdown using model
-$areas_data = get_unique_user_addresses($conn);
-$areas = array_map(function($addr) { return htmlspecialchars($addr); }, $areas_data);
+// Get all unique barangays for dropdown using model
+$barangays_data = get_unique_user_addresses($conn);
+$barangays = array_map(function($addr) { return htmlspecialchars($addr); }, $barangays_data);
 
 // Calculate statistics
 $totalResidents = count($residents);

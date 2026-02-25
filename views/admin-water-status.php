@@ -31,7 +31,7 @@ include '../controllers/admin-water-level-status-controller.php';
                 <option value="">All Barangays</option>
                 <?php foreach ($barangays as $barangay): ?>
                     <option value="<?= htmlspecialchars($barangay) ?>" <?= $selectedLocation === $barangay ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($barangay) ?>
+                        <?= 'Brgy. ' . htmlspecialchars($barangay) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

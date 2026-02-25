@@ -39,8 +39,31 @@ $user = [
     'status' => $dbStatus ?? 'Safe' // Default to Safe if no status saved
 ];
 
-// Get latest water level data for monitoring using model
-$latestArea = get_latest_affected_area($conn);
+// Determine nearest affected area based on user's barangay location
+$latestArea = false;
+
+// determine barangay using helper from user model
+$barangay = extract_barangay_from_address($user['address']);
+// expose for view
+$userBarangay = $barangay;
+$bridgeMatchedUser = false;
+if ($barangay !== '') {
+    // try to load the latest area for this barangay
+    $areaForUser = get_latest_affected_area_by_location($conn, $barangay);
+    if ($areaForUser) {
+        $latestArea = $areaForUser;
+        $bridgeMatchedUser = true;
+    }
+}
+
+// fall back to most recent area overall if none found for user
+if (!$latestArea) {
+    $latestArea = get_latest_affected_area($conn);
+}
+
+// header variables for water level card
+$cardHeaderTitle = 'Water Level Data';
+$cardHeaderUpdated = $latestArea ? date('M d, Y', strtotime($latestArea['updated_at'])) : date('M d, Y');
 
 if ($latestArea) {
     $current = (float)$latestArea['current_level'];

@@ -122,6 +122,11 @@ $email = htmlspecialchars($email);
 $addr  = htmlspecialchars($addr);
 $specific_addr = htmlspecialchars($specific_addr);
 
+// if the barangay doesn't already start with "Brgy." or "Barangay" add the prefix
+if (!preg_match('/^\s*(Brgy\.|Barangay)/i', $addr)) {
+    $addr = 'Brgy. ' . $addr;
+}
+
 // Combine barangay and specific address
 $full_address = $addr . ', ' . $specific_addr;
 

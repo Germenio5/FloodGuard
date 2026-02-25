@@ -91,7 +91,7 @@ include '../controllers/register-controller.php';
                         <option value="">-- Select Barangay --</option>
                         <?php foreach($barangays as $barangay): ?>
                             <option value="<?= $barangay ?>" <?= ($old['address'] == $barangay) ? 'selected' : '' ?>>
-                                <?= $barangay ?>
+                                <?= 'Brgy. ' . $barangay ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

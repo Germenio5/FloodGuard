@@ -28,17 +28,17 @@ include '../controllers/admin-dashboard-controller.php';
     <div class="status-section">
         <h2>Residents Status</h2>
 
-        <!-- Area Dropdown Form -->
-        <form method="POST" class="area-filter-form">
-            <div class="area-select">
-                <label for="areaFilter">Filter by Area</label>
-                <select id="areaFilter" name="area" onchange="document.getElementsByClassName('area-filter-form')[0].submit()">
-                    <option value="">All Areas</option>
-                    <?php foreach ($areas as $area): ?>
-                        <option value="<?= $area ?>" <?= ($selectedArea === $area) ? 'selected' : '' ?>>
-                            <?= $area ?>
-                        </option>
-                    <?php endforeach; ?>
+<!-- Barangay Dropdown Form -->
+            <form method="POST" class="area-filter-form">
+                <div class="area-select">
+                    <label for="areaFilter">Filter by Barangay</label>
+                    <select id="areaFilter" name="barangay" onchange="document.getElementsByClassName('area-filter-form')[0].submit()">
+                        <option value="">All Barangays</option>
+                        <?php foreach ($barangays as $area): ?>
+                            <option value="<?= $area ?>" <?= ($selectedBarangay === $area) ? 'selected' : '' ?>>
+                                <?= 'Brgy. ' . $area ?>
+                            </option>
+                        <?php endforeach; ?>
                 </select>
             </div>
         </form>
@@ -80,7 +80,7 @@ include '../controllers/admin-dashboard-controller.php';
         
         <?php if (empty($residents)): ?>
             <div class="no-residents">
-                <p>No residents found<?php if (!empty($selectedArea)): ?> in <?= htmlspecialchars($selectedArea) ?><?php endif; ?>.</p>
+                <p>No residents found<?php if (!empty($selectedBarangay)): ?> in <?= htmlspecialchars($selectedBarangay) ?><?php endif; ?>.</p>
             </div>
         <?php else: ?>
         
@@ -128,7 +128,7 @@ include '../controllers/admin-dashboard-controller.php';
                 <?php if ($btn['disabled']): ?>
                     <button class="pagination-btn disabled" disabled><?= $btn['label'] ?></button>
                 <?php else: ?>
-                    <a href="?page=<?= $btn['page'] ?><?= !empty($selectedArea) ? '&area=' . urlencode($selectedArea) : '' ?>" 
+                    <a href="?page=<?= $btn['page'] ?><?= !empty($selectedBarangay) ? '&barangay=' . urlencode($selectedBarangay) : '' ?>" 
                        class="pagination-btn <?= $btn['active'] ? 'active' : '' ?>">
                         <?= $btn['label'] ?>
                     </a>
