@@ -24,12 +24,12 @@ include '../controllers/admin-report-log-controller.php';
     <!-- Filter Box -->
     <div class="filter-box">
         <form method="GET" class="filter-form">
-            <label for="locationFilter">Filter by Location:</label>
-            <select id="locationFilter" name="location" onchange="this.form.submit()">
-                <option value="">All Locations</option>
-                <?php foreach ($locations as $location): ?>
-                    <option value="<?= htmlspecialchars($location) ?>" <?= $selectedLocation === $location ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($location) ?>
+            <label for="barangayFilter">Filter by Barangay:</label>
+            <select id="barangayFilter" name="barangay" onchange="this.form.submit()">
+                <option value="">All Barangays</option>
+                <?php foreach ($barangays as $barangay): ?>
+                    <option value="<?= htmlspecialchars($barangay) ?>" <?= $selectedBarangay === $barangay ? 'selected' : '' ?>>
+                        <?= 'Brgy. ' . htmlspecialchars($barangay) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

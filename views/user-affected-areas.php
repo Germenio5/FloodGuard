@@ -24,7 +24,7 @@ include '../controllers/affected-areas-controller.php';
     </div>
 
     <!-- Filter Box -->
-    <div class="filter-box" style="margin-bottom: 30px;">
+    <div class="filter-box">
         <form method="GET" class="filter-form">
             <label for="barangayFilter">Filter by Barangay:</label>
             <select id="barangayFilter" name="barangay" onchange="this.form.submit()">

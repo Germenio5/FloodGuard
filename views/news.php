@@ -32,13 +32,6 @@ include '../controllers/news-controller.php';
         <div class="warnings">
 
             <div class="warning-item">
-                <div class="warning-icon danger">⚠</div>
-                <span class="danger-text">
-                    <?= $dangerCount ?> Danger Warnings
-                </span>
-            </div>
-
-            <div class="warning-item">
                 <div class="warning-icon alert">⚠</div>
                 <span class="alert-text">
                     <?= $alertCount ?> Alert Warnings
@@ -46,8 +39,6 @@ include '../controllers/news-controller.php';
             </div>
 
         </div>
-
-
 
         <div class="info-section">
 

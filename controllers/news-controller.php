@@ -16,7 +16,7 @@ $lastUpdated = [
     'time' => date('g:i A')
 ];
 
-// start with some hard‑coded sample events so the page is never empty
+// start with FloodGuard system entry
 $eventList = [
     [
         'name'        => 'FloodGuard',
@@ -25,33 +25,6 @@ $eventList = [
         'area'        => 'Mandalagan Bridge',
         'picture'     => '../assets/images/Sample.png',
         'description' => 'Water rising rapidly, might flood soon. Stay safe and avoid the area.',
-        'status'      => 'Danger'
-    ],
-    [
-        'name'        => 'Tim Chavez',
-        'avatar'      => '../assets/images/placeholder-image.png',
-        'time'        => '9 hours ago',
-        'area'        => 'La Salle Avenue',
-        'picture'     => '../assets/images/placeholder-image.png',
-        'description' => 'Slow rising of water, might flood or not',
-        'status'      => 'Safe'
-    ],
-    [
-        'name'        => 'Abdul Rahman',
-        'avatar'      => '../assets/images/placeholder-image.png',
-        'time'        => '12 hours ago',
-        'area'        => 'Mandalagan Bridge',
-        'picture'     => '../assets/images/placeholder-image.png',
-        'description' => 'Water rising but still safe',
-        'status'      => 'Safe'
-    ],
-    [
-        'name'        => 'Juan Dela Cruz',
-        'avatar'      => '../assets/images/placeholder-image.png',
-        'time'        => '2 hours ago',
-        'area'        => 'Banago Road',
-        'picture'     => '../assets/images/placeholder-image.png',
-        'description' => 'Water increasing near bridge',
         'status'      => 'Danger'
     ]
 ];

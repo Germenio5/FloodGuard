@@ -3,32 +3,56 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 
-// Get selected location filter
-$selectedLocation = isset($_GET['location']) ? trim($_GET['location']) : '';
-
-// Fetch reports from database using model with filter
+// Get selected barangay filter
+$selectedBarangay = isset($_GET['barangay']) ? trim($_GET['barangay']) : '';
 
 // Pagination setup
 $page = isset($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
 $limit = 10; // Items per page
 $offset = ($page - 1) * $limit;
 
-if ($selectedLocation) {
-    $reports_data = get_reports_by_location($conn, $selectedLocation, $limit, $offset);
-    $total_reports = get_reports_count_by_location($conn, $selectedLocation);
-} else {
-    $reports_data = get_all_reports($conn, $limit, $offset);
-    $total_reports = get_reports_count($conn);
+// Fetch all reports and get unique barangays
+$all_reports = get_all_reports($conn);
+$barangays = [];
+$filtered_reports_all = [];
+
+if ($all_reports) {
+    foreach ($all_reports as $report) {
+        // Extract barangay from location (usually formatted as "Brgy. Barangay Name")
+        $location = $report['location'];
+        preg_match('/^Brgy\.\s*([^,]+)/i', $location, $matches);
+        $barangay = $matches[1] ?? trim($location);
+        $barangay = preg_replace('/^Brgy\.\s*/i', '', $barangay);
+        
+        // Add to unique barangays list
+        if (!in_array($barangay, $barangays)) {
+            $barangays[] = $barangay;
+        }
+        
+        // Filter by selected barangay if specified
+        if (!$selectedBarangay || stripos($location, $barangay) !== false && $barangay === $selectedBarangay) {
+            $filtered_reports_all[] = $report;
+        } elseif (!$selectedBarangay) {
+            $filtered_reports_all[] = $report;
+        }
+    }
 }
 
+sort($barangays);
+
+// Get total count and apply pagination
+$total_reports = count($filtered_reports_all);
 $total_pages = $total_reports > 0 ? ceil($total_reports / $limit) : 1;
 
+// Get paginated data
+$reports_data = array_slice($filtered_reports_all, $offset, $limit);
+
 // Generate minimal pagination buttons
-function generatePaginationButtons($page, $total_pages, $selectedLocation) {
+function generatePaginationButtons($page, $total_pages, $selectedBarangay) {
     $buttons = [];
     $baseUrl = $_SERVER['PHP_SELF'];
-    $query = $selectedLocation ? ('?location=' . urlencode($selectedLocation)) : '?';
-    $query .= ($selectedLocation ? '&' : '') . 'page=';
+    $query = $selectedBarangay ? ('?barangay=' . urlencode($selectedBarangay)) : '?';
+    $query .= ($selectedBarangay ? '&' : '') . 'page=';
 
     // Previous
     if ($page > 1) {
@@ -60,12 +84,8 @@ if ($reports_data) {
     }
 }
 
-// Get all unique locations for filter dropdown
-$locations = get_unique_report_locations($conn);
-sort($locations);
-
 // For view
-$pagination_buttons = generatePaginationButtons($page, $total_pages, $selectedLocation);
+$pagination_buttons = generatePaginationButtons($page, $total_pages, $selectedBarangay);
 
 /**
  * Get CSS badge class based on status

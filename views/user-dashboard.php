@@ -110,7 +110,9 @@ include '../controllers/user-dashboard-controller.php';
 
     <!-- GRAPH -->
     <div class="graph-box">
-        <canvas id="waterLevelChart" style="max-height: 300px;"></canvas>
+        <h3>Water Level History - Last 24 Hours</h3>
+        <p class="graph-box-info"><?= htmlspecialchars($waterLevel['bridge']) ?> - <?= htmlspecialchars($waterLevel['location']) ?></p>
+        <canvas id="waterLevelChart"></canvas>
     </div>
 
 
@@ -180,10 +182,14 @@ include '../controllers/user-dashboard-controller.php';
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 <script src="../assets/js/status-modal.js"></script>
 <script>
-    // Water Level Chart
+    // Water Level Chart - Displays last 24 hours of water level data for current location
     document.addEventListener('DOMContentLoaded', function() {
         const chartData = <?= $chartDataJson ?>;
         const ctx = document.getElementById('waterLevelChart').getContext('2d');
+        
+        // Check if data is available
+        const hasData = chartData.labels && chartData.labels.length > 0 && chartData.labels[0] !== 'No Data';
+        
         new Chart(ctx, {
             type: 'line',
             data: {
@@ -196,7 +202,7 @@ include '../controllers/user-dashboard-controller.php';
                     borderWidth: 3,
                     tension: 0.4,
                     fill: true,
-                    pointRadius: 5,
+                    pointRadius: hasData ? 5 : 0,
                     pointBackgroundColor: '#457d8a',
                     pointBorderColor: '#fff',
                     pointBorderWidth: 2,

@@ -169,6 +169,49 @@ body {
     line-height: 1.5;
 }
 
+/* ===== FILTER BOX ===== */
+.filter-box {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.filter-form {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filter-form label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #377586;
+}
+
+.filter-form select {
+    padding: 10px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-form select:hover {
+    border-color: #457d8a;
+}
+
+.filter-form select:focus {
+    outline: none;
+    border-color: #457d8a;
+    box-shadow: 0 0 0 3px rgba(69, 125, 138, 0.1);
+}
+
 /* ===== BRIDGE CARDS GRID ===== */
 .bridge-grid {
     display: grid;
@@ -367,6 +410,19 @@ body {
     .alert-section {
         grid-template-columns: 1fr;
         gap: 15px;
+    }
+
+    .filter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-form label {
+        display: block;
+    }
+
+    .filter-form select {
+        width: 100%;
     }
 
     .bridge-grid {

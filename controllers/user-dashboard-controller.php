@@ -167,8 +167,9 @@ $hotline = [
     'note' => '(24/7 Roxas Emergency Dispatch)'
 ];
 
-// Fetch last 24 hours water level data for chart
+// Fetch last 24 hours water level data for chart based on current location
 $areaName = $waterLevel['bridge'] ?? 'Default Area';
+$areaLocation = $waterLevel['location'] ?? '';
 $last24hData = get_water_level_last_24h($conn, $areaName);
 
 // Prepare chart data from water level history table
@@ -177,14 +178,34 @@ $chartHeights = [];
 
 if (!empty($last24hData)) {
     foreach ($last24hData as $record) {
+        // Format time as HH:MM for chart label
         $chartLabels[] = date('H:i', strtotime($record['record_time']));
         $chartHeights[] = (float)$record['height'];
     }
+} else {
+    // Sample data for demonstration if no database records exist
+    $sampleTimes = [
+        '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+        '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+        '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+        '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
+    ];
+    $sampleHeights = [
+        4.2, 4.5, 4.3, 4.1, 3.9, 3.8,
+        4.0, 4.3, 4.6, 5.0, 5.3, 5.5,
+        5.4, 5.2, 5.1, 5.3, 5.5, 5.7,
+        5.8, 5.6, 5.4, 5.2, 4.8, 4.5
+    ];
+    $chartLabels = $sampleTimes;
+    $chartHeights = $sampleHeights;
+    error_log("No water level history data found for area: " . $areaName . ". Using sample data for display.");
 }
 
 $chartDataJson = json_encode([
-    'labels' => $chartLabels,
-    'heights' => $chartHeights
+    'labels' => !empty($chartLabels) ? $chartLabels : ['No Data'],
+    'heights' => !empty($chartHeights) ? $chartHeights : [0],
+    'area' => $areaName,
+    'location' => $areaLocation
 ]);
 
 /**
