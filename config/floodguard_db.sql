@@ -95,7 +95,7 @@ CREATE TABLE `users` (
   `password_hash` varchar(255) NOT NULL,
   `role` enum('user','admin') NOT NULL DEFAULT 'user',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `profile_photo` varchar(255) DEFAULT NULL,
+  `profile_photo` MEDIUMBLOB DEFAULT NULL,
   `status` varchar(32) DEFAULT 'Safe'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

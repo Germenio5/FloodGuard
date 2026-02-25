@@ -42,7 +42,7 @@ include '../controllers/profile-settings-controller.php';
             <div class="profile-photo-section">
                 <div class="photo-container">
                     <div class="profile-photo" id="photoPreview">
-                        <?php if (!empty($userData['profile_photo']) && $userData['profile_photo'] !== '../assets/images/placeholder-profile.png'): ?>
+                        <?php if (!empty($userData['profile_photo']) && strpos($userData['profile_photo'], 'data:') === 0): ?>
                             <img src="<?= htmlspecialchars($userData['profile_photo']) ?>" alt="Profile Photo" id="photoImg">
                         <?php else: ?>
                             <div class="photo-placeholder">

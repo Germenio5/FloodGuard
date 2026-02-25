@@ -74,7 +74,7 @@ if ($reports_data) {
                 if ($userInfo) {
                     $fullName = trim($userInfo['first_name'] . ' ' . $userInfo['last_name']);
                     if (!empty($userInfo['profile_photo'])) {
-                        $avatarSrc = $userInfo['profile_photo'];
+                        $avatarSrc = 'data:image/jpeg;base64,' . base64_encode($userInfo['profile_photo']);
                     }
                 } else {
                     $fullName = $row['user_email'];

@@ -137,10 +137,22 @@ function update_user($conn, $user_id, $data) {
     $allowed_fields = ['first_name', 'last_name', 'phone', 'address', 'email', 'profile_photo', 'status'];
     
     $set_clause = [];
+    $types = '';
+    $params = [];
+    $paramNames = [];
+    
     foreach ($data as $key => $value) {
         if (in_array($key, $allowed_fields)) {
-            $value = $conn->real_escape_string(trim($value));
-            $set_clause[] = "`$key` = '$value'";
+            $set_clause[] = "`$key` = ?";
+            if ($key === 'profile_photo' && is_string($value) && !empty($value)) {
+                // Binary data for profile_photo
+                $types .= 'b';
+            } else {
+                // String data for other fields
+                $types .= 's';
+            }
+            $params[] = $value;
+            $paramNames[] = $key;
         }
     }
     
@@ -148,14 +160,51 @@ function update_user($conn, $user_id, $data) {
         return false;
     }
     
-    $query = "UPDATE users SET " . implode(", ", $set_clause) . " WHERE id = $user_id";
+    // Add user_id parameter
+    $types .= 'i';
+    $params[] = $user_id;
     
-    if ($conn->query($query) === TRUE) {
-        return true;
-    } else {
-        error_log("Database error in update_user: " . $conn->error);
+    $query = "UPDATE users SET " . implode(", ", $set_clause) . " WHERE id = ?";
+    
+    $stmt = $conn->prepare($query);
+    
+    if (!$stmt) {
+        error_log("Prepare failed: " . $conn->error);
         return false;
     }
+    
+    // Build bind_param call dynamically
+    $bindParams = [$types];
+    foreach ($params as &$param) {
+        $bindParams[] = &$param;
+    }
+    
+    if (!call_user_func_array([$stmt, 'bind_param'], $bindParams)) {
+        error_log("Bind param failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+    
+    // Handle blob data with send_long_data if present
+    $profilePhotoIndex = -1;
+    foreach ($data as $key => $value) {
+        if ($key === 'profile_photo' && is_string($value) && !empty($value)) {
+            $profilePhotoIndex = array_search('profile_photo', $paramNames);
+            if ($profilePhotoIndex !== false) {
+                $stmt->send_long_data($profilePhotoIndex, $value);
+            }
+            break;
+        }
+    }
+    
+    if (!$stmt->execute()) {
+        error_log("Execute failed: " . $stmt->error);
+        $stmt->close();
+        return false;
+    }
+    
+    $stmt->close();
+    return true;
 }
 
 /**

@@ -69,23 +69,12 @@ if (!empty($_FILES['profile_photo']['name'])) {
     }
     // If no errors, process the file
     else {
-        // Create uploads directory if it doesn't exist
-        $uploadDir = __DIR__ . '/../assets/images/profiles/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
-        
-        // Generate unique filename with timestamp
-        $fileExt = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $newFileName = 'profile_' . $userId . '_' . time() . '.' . $fileExt;
-        $uploadPath = $uploadDir . $newFileName;
-        
-        // Move uploaded file
-        if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-            // Store relative path for database
-            $profilePhotoPath = '../assets/images/profiles/' . $newFileName;
-        } else {
+        // Read file into binary data
+        $imageData = file_get_contents($file['tmp_name']);
+        if ($imageData === false) {
             $errors[] = 'upload_failed';
+        } else {
+            $profilePhotoPath = $imageData; // Store binary data directly
         }
     }
 }

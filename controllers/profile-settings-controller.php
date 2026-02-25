@@ -54,6 +54,12 @@ if (!empty($userFromDb['address'])) {
     }
 }
 
+// Convert profile_photo blob to data URI if exists
+$profilePhotoSrc = '../assets/images/placeholder-profile.png';
+if (!empty($userFromDb['profile_photo'])) {
+    $profilePhotoSrc = 'data:image/jpeg;base64,' . base64_encode($userFromDb['profile_photo']);
+}
+
 $userData = [
     'id' => $userFromDb['id'],
     'first_name' => $userFromDb['first_name'],
@@ -63,7 +69,7 @@ $userData = [
     'address' => $userFromDb['address'],
     'barangay' => $barangay,
     'specific_address' => $specific_address,
-    'profile_photo' => $userFromDb['profile_photo'] ?? '../assets/images/placeholder-profile.png',
+    'profile_photo' => $profilePhotoSrc,
     'created_at' => $userFromDb['created_at']
 ];
 

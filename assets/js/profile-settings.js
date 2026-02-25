@@ -23,7 +23,6 @@ const changePhotoBtn = document.getElementById('changePhotoBtn');
 const photoInput = document.getElementById('photoInput');
 const photoUpload = document.getElementById('photoUpload');
 const photoPreview = document.getElementById('photoPreview');
-const photoImg = document.getElementById('photoImg');
 
 // Open file picker when "Change Photo" button is clicked
 changePhotoBtn.addEventListener('click', function() {
@@ -54,21 +53,15 @@ photoInput.addEventListener('change', function() {
         // Preview image
         const reader = new FileReader();
         reader.onload = function(e) {
-            // Display preview
-            if (photoImg) {
-                photoImg.src = e.target.result;
-            } else {
-                // If no image exists, create one
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.alt = 'Profile Photo';
-                img.id = 'photoImg';
-                const placeholder = photoPreview.querySelector('.photo-placeholder');
-                if (placeholder) {
-                    placeholder.remove();
-                }
-                photoPreview.appendChild(img);
-            }
+            // Clear photoPreview contents
+            photoPreview.innerHTML = '';
+            
+            // Create and display new image
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Profile Photo';
+            img.id = 'photoImg';
+            photoPreview.appendChild(img);
         };
         reader.readAsDataURL(file);
         
