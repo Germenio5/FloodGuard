@@ -122,15 +122,7 @@ include '../controllers/water-level-data-controller.php';
 </div>
 </main>
 
-<script>
-function filterByBridge(bridgeValue) {
-    if (bridgeValue) {
-        window.location.href = '?bridge=' + encodeURIComponent(bridgeValue);
-    } else {
-        window.location.href = '?';
-    }
-}
-</script>
+<script src="../assets/js/filter-bridge.js"></script>
 
 </body>
 </html>

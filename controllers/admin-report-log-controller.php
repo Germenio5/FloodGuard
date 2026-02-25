@@ -81,13 +81,19 @@ function generatePaginationButtons($page, $total_pages, $selectedBarangay) {
 $reports = [];
 if ($reports_data) {
     foreach ($reports_data as $report) {
+        // normalize any "No Response" status to avoid that category
+        $statusText = $report['status'];
+        if (strcasecmp($statusText, 'No Response') === 0) {
+            $statusText = 'Safe';
+        }
+
         $reports[] = [
             'id' => (int)$report['id'],
             'name' => htmlspecialchars($report['user_email'] ?: 'Unknown'),
             'user_email' => htmlspecialchars($report['user_email']),
             'area' => htmlspecialchars($report['location']),
             'location' => htmlspecialchars($report['location']),
-            'status' => htmlspecialchars($report['status']),
+            'status' => htmlspecialchars($statusText),
             'last_updated' => $report['created_at'],
             'created_at' => $report['created_at']
         ];
@@ -105,8 +111,6 @@ $pagination_buttons = generatePaginationButtons($page, $total_pages, $selectedBa
  */
 function getBadgeClass($status) {
     switch ($status) {
-        case "No Response":
-            return "badge-no-response";
         case "Danger":
             return "badge-danger";
         case "Alert":

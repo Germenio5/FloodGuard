@@ -70,8 +70,7 @@ $registeredCount = get_users_count($conn);
 $stats = [
     "safe" => max(0, floor($registeredCount * 0.6)),
     "danger" => max(0, floor($registeredCount * 0.2)),
-    "registered" => $registeredCount,
-    "no_response" => max(0, $registeredCount - floor($registeredCount * 0.8))
+    "registered" => $registeredCount
 ];
 
 // Helper function for status badge

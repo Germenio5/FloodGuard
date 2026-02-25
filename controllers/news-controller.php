@@ -194,6 +194,9 @@ if ($reports_data) {
     }
 }
 
+// determine whether non‑logged in users may look at the details
+$allowAnonymousReportDetails = defined('ALLOW_REPORT_DETAILS_ANONYMOUS') && ALLOW_REPORT_DETAILS_ANONYMOUS === true;
+
 // compute simple summary counts based on the loaded events
 foreach ($eventList as $e) {
     if ($e['status'] === 'Danger') {

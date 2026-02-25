@@ -137,10 +137,6 @@ td {
     min-width: 110px;
 }
 
-.badge-no-response {
-    background: #86efac;
-    color: #065f46;
-}
 
 .badge-danger {
     background: #fca5a5;

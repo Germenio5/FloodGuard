@@ -3,8 +3,9 @@
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// Check user session (any logged-in user can view)
-if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
+// Check user session (any logged-in user can view) unless anonymous access is permitted
+$requireLogin = !(defined('ALLOW_REPORT_DETAILS_ANONYMOUS') && ALLOW_REPORT_DETAILS_ANONYMOUS === true);
+if ($requireLogin && (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']))) {
     http_response_code(403);
     echo json_encode(['error' => 'forbidden']);
     exit();

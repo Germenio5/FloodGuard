@@ -1,4 +1,9 @@
 <?php
+// configuration flag: allow unauthenticated visitors to view report details
+// set to true to let anyone see the popup, false to require login (option 2)
+define('ALLOW_REPORT_DETAILS_ANONYMOUS', true);
+
+
 define('DB_SERVER', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASSWORD', '');
