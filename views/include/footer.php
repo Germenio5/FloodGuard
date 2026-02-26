@@ -28,7 +28,17 @@ if (!defined("BASE_URL")) {
 
         <div class="footer-right">
             <nav class="footer-nav">
-                <a href="../index.php">Home</a>
+                <?php
+                // when the footer is included from index.php, ../index.php would point outside the
+                // document root and lead to an error. disable the link on the home page instead.
+                $currentPage = basename($_SERVER['PHP_SELF']);
+                if ($currentPage === 'index.php') :
+                ?>
+                    <span class="disabled-link">Home</span>
+                <?php else : ?>
+                    <a href="../index.php">Home</a>
+                <?php endif; ?>
+
                 <a href="<?= BASE_URL ?>user-affected-areas.php">Monitor</a>
                 <a href="<?= BASE_URL ?>user-water-level-data.php">Water Level Data</a>
                 <a href="<?= BASE_URL ?>user-report-flood.php">Report</a>

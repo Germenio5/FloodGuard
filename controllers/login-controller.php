@@ -41,7 +41,7 @@ if (isset($_GET['error'])) {
             break;
         
         default:
-            $errorMessage = "An error occurred. Please try again.";
+            $errorMessage = "Log in is required to access this page.";
             break;
     }
 }
