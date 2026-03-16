@@ -56,6 +56,7 @@ include '../controllers/admin-report-log-controller.php';
                     <th>Name</th>
                     <th>Location</th>
                     <th>Status</th>
+                    <th>SMS Sent</th>
                     <th>Date</th>
                     <th>Actions</th>
                 </tr>
@@ -82,6 +83,14 @@ include '../controllers/admin-report-log-controller.php';
                         <span class="status-badge <?= getBadgeClass($r["status"]) ?>">
                             <?= htmlspecialchars($r["status"]) ?>
                         </span>
+                    </td>
+
+                    <td>
+                        <?php if (!empty($r['sms_sent_at'])): ?>
+                            <?= htmlspecialchars(date('Y-m-d H:i', strtotime($r['sms_sent_at']))) ?>
+                        <?php else: ?>
+                            <span style="color:#6b7280;">No</span>
+                        <?php endif; ?>
                     </td>
 
                     <td><?= htmlspecialchars(date('Y-m-d H:i', strtotime($r["last_updated"]))) ?></td>

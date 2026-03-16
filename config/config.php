@@ -3,6 +3,11 @@
 // set to true to let anyone see the popup, false to require login (option 2)
 define('ALLOW_REPORT_DETAILS_ANONYMOUS', true);
 
+// PhilSMS API Configuration
+define('PHILSMS_API_TOKEN', '1846|Eygb0YJE2EP1wABlI7A8STJ4IQKMK4Ostte5FPU1de405ad3');
+define('PHILSMS_API_URL', 'https://dashboard.philsms.com/api/v3/sms/send');
+define('PHILSMS_SENDER_ID', 'PhilSMS');
+
 
 define('DB_SERVER', 'localhost');
 define('DB_USER', 'root');
@@ -47,9 +52,13 @@ $createReports = "CREATE TABLE IF NOT EXISTS `reports` (
     `description` TEXT NULL,
     `image` MEDIUMBLOB NULL,
     `post_news` TINYINT(1) NOT NULL DEFAULT 0,
+    `sms_sent_at` DATETIME NULL,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
 $conn->query($createReports);
+
+// Add sms_sent_at column if it doesn't exist
+$conn->query("ALTER TABLE `reports` ADD COLUMN IF NOT EXISTS `sms_sent_at` DATETIME NULL");
 ?>

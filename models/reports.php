@@ -46,9 +46,13 @@ function get_all_reports($conn, $limit = null, $offset = 0) {
  */
 function get_report_by_id($conn, $report_id) {
     $report_id = intval($report_id);
-    $query = "SELECT id, user_email, location, status, description, image, post_news, created_at 
-              FROM reports 
-              WHERE id = $report_id LIMIT 1";
+
+    // Join with users to include the report author's phone number and name
+    $query = "SELECT r.id, r.user_email, r.location, r.status, r.description, r.image, r.post_news, r.sms_sent_at, r.created_at, 
+              u.first_name, u.last_name, u.phone 
+              FROM reports r 
+              LEFT JOIN users u ON r.user_email = u.email 
+              WHERE r.id = $report_id LIMIT 1";
     
     $result = $conn->query($query);
     

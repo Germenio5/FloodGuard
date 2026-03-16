@@ -346,8 +346,52 @@ td {
     text-align: center;
 }
 
-.image-row .detail-label {
-    margin-bottom: 10px;
+/* SMS Button Styles */
+.sms-button-row {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.send-sms-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+}
+
+.send-sms-btn:hover {
+    background: linear-gradient(135deg, #218838, #1aa085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.send-sms-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.sms-sent-row {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.sms-sent-text {
+    color: #28a745;
+    font-size: 14px;
+    font-weight: 500;
+    background: #d4edda;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #c3e6cb;
+}
     font-weight: 600;
 }
 

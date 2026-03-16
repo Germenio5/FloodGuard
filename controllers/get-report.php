@@ -32,10 +32,13 @@ if (!$report) {
 $output = [
     'id' => (int)$report['id'],
     'user_email' => $report['user_email'] ?? null,
+    'user_phone' => $report['phone'] ?? null,
+    'user_name' => trim(($report['first_name'] ?? '') . ' ' . ($report['last_name'] ?? '')) ?: null,
     'location' => $report['location'] ?? null,
     'status' => $report['status'] ?? null,
     'description' => $report['description'] ?? null,
     'image' => isset($report['image']) ? base64_encode($report['image']) : null,
+    'sms_sent_at' => $report['sms_sent_at'] ?? null,
     'created_at' => $report['created_at'] ?? null
 ];
 

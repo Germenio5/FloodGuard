@@ -14,7 +14,19 @@ $limit = 10; // Items per page
 $offset = ($page - 1) * $limit;
 
 // Fetch all reports and get unique barangays
-$all_reports = get_all_reports($conn);
+$query = "SELECT r.id, r.user_email, r.location, r.status, r.description, r.image, r.post_news, r.sms_sent_at, r.created_at, 
+          u.first_name, u.last_name 
+          FROM reports r 
+          LEFT JOIN users u ON r.user_email = u.email 
+          ORDER BY r.created_at DESC";
+$all_reports_result = $conn->query($query);
+$all_reports = [];
+if ($all_reports_result) {
+    while ($row = $all_reports_result->fetch_assoc()) {
+        $all_reports[] = $row;
+    }
+    $all_reports_result->free();
+}
 $barangays = [];
 $filtered_reports_all = [];
 
@@ -111,13 +123,19 @@ if ($reports_data) {
             $statusText = 'Safe';
         }
 
+        $userName = trim(($report['first_name'] ?? '') . ' ' . ($report['last_name'] ?? ''));
+        if (empty($userName)) {
+            $userName = $report['user_email'] ?: 'Unknown';
+        }
+
         $reports[] = [
             'id' => (int)$report['id'],
-            'name' => htmlspecialchars($report['user_email'] ?: 'Unknown'),
+            'name' => htmlspecialchars($userName),
             'user_email' => htmlspecialchars($report['user_email']),
             'area' => htmlspecialchars($report['location']),
             'location' => htmlspecialchars($report['location']),
             'status' => htmlspecialchars($statusText),
+            'sms_sent_at' => $report['sms_sent_at'] ?? null,
             'last_updated' => $report['created_at'],
             'created_at' => $report['created_at']
         ];
