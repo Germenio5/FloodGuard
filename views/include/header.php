@@ -28,16 +28,12 @@ $isLoggedIn = isset($_SESSION['email']);
     <nav>
         <ul class="nav-menu">
             <li>
-                <a href="../index.php"
+                <?php
+                    $homeLink = $current_page === 'index.php' ? '#' : '../index.php';
+                ?>
+                <a href="<?= $homeLink ?>"
                    class="<?= $current_page == 'index.php' ? 'active' : '' ?>">
                    Home
-                </a>
-            </li>
-
-            <li>
-                <a href="<?= BASE_URL ?>aboutus.php"
-                   class="<?= $current_page == 'aboutus.php' ? 'active' : '' ?>">
-                   About Us
                 </a>
             </li>
 

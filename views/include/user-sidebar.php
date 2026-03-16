@@ -34,8 +34,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li>
-            <a href="aboutus.php"
-               class="<?= $current_page == 'aboutus.php' ? 'active' : '' ?>">
+            <a href="../index.php#about">
                 <span class="icon">ℹ️</span>
                 <span class="text">About Us</span>
             </a>

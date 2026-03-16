@@ -56,6 +56,8 @@ const ALLOW_REPORT_DETAILS_ANONYMOUS = document.body && document.body.dataset.al
     }
 
     function closeModal(){document.getElementById('reportModal').style.display='none';}
+    // make available for inline onclick attribute used in PHP
+    window.closeModal = closeModal;
 
     document.addEventListener('click',function(e){
         if(e.target.classList.contains('menu')){

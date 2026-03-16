@@ -22,6 +22,11 @@ $location      = trim($_POST['location'] ?? '');
 $status        = trim($_POST['status'] ?? '');
 $description   = trim($_POST['description'] ?? '');
 $postNews      = isset($_POST['post_discussion']) ? 1 : 0;
+
+// normalize status value; user selects "In Danger" but database uses "Danger"
+if (strcasecmp($status, 'In Danger') === 0) {
+    $status = 'Danger';
+}
 // imageData will hold binary content if uploaded
 $imagePath     = null;
 
@@ -41,7 +46,8 @@ if ($location === '' || $status === '' || $description === '') {
 }
 
 // Validate status field - must be one of the allowed values
-$validStatuses = ['Safe', 'In Danger', 'Danger'];
+// we already normalized "In Danger" above so only check for statuses that exist
+$validStatuses = ['Safe', 'Danger'];
 if (!in_array($status, $validStatuses)) {
     $qs = http_build_query([
         'error' => 'invalid_status',

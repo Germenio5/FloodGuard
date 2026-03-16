@@ -151,8 +151,9 @@ include '../controllers/admin-report-log-controller.php';
                     <select id="bridgeSelect" name="area" required>
                         <option value="">Select a Bridge or Area</option>
                         <?php foreach ($bridges_for_news as $bridge): ?>
+                            <?php $displayName = preg_replace('/^Brgy\.\s*/i', '', $bridge); ?>
                             <option value="<?= htmlspecialchars($bridge) ?>">
-                                📍 <?= htmlspecialchars($bridge) ?>
+                                📍 <?= htmlspecialchars($displayName) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

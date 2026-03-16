@@ -39,6 +39,16 @@ if (!defined("BASE_URL")) {
                     <a href="../index.php">Home</a>
                 <?php endif; ?>
 
+                <?php
+                    $aboutHref = $currentPage === 'index.php' ? '#about' : '/FloodGuard/index.php#about';
+                    $howHref = $currentPage === 'index.php' ? '#how' : '/FloodGuard/index.php#how';
+                    $featuresHref = $currentPage === 'index.php' ? '#features' : '/FloodGuard/index.php#features';
+                ?>
+
+                <a href="<?= $aboutHref ?>">About</a>
+                <a href="<?= $howHref ?>">How It Works</a>
+                <a href="<?= $featuresHref ?>">Features</a>
+
                 <a href="<?= BASE_URL ?>user-affected-areas.php">Monitor</a>
                 <a href="<?= BASE_URL ?>user-water-level-data.php">Water Level Data</a>
                 <a href="<?= BASE_URL ?>user-report-flood.php">Report</a>

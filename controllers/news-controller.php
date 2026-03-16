@@ -109,19 +109,6 @@ $lastUpdated = [
     'time' => date('g:i A')
 ];
 
-// start with FloodGuard system entry
-$eventList = [
-    [
-        'name'        => 'FloodGuard',
-        'avatar'      => '../assets/images/FloodGuard_logo.png',
-        'time'        => '2 weeks ago',
-        'area'        => 'Mandalagan Bridge',
-        'picture'     => '../assets/images/Sample.png',
-        'description' => 'Water rising rapidly, might flood soon. Stay safe and avoid the area.',
-        'status'      => 'Danger'
-    ]
-];
-
 // Load additional events from reports table using model
 // Fetch all reported news items
 $reports_data = get_all_reports($conn);
@@ -182,13 +169,13 @@ if ($reports_data) {
             }
             $eventList[] = [
                 'id'          => $row['id'],
-                'name'        => htmlspecialchars($fullName),
+                'name'        => $fullName,            // escape later in view
                 'avatar'      => $avatarSrc,
                 'time'        => $timeStr,
-                'area'        => htmlspecialchars($areaName),
+                'area'        => $areaName,
                 'picture'     => $pictureSrc,
-                'description' => htmlspecialchars($row['description']),
-                'status'      => htmlspecialchars($row['status'])
+                'description' => $row['description'], // escape later in view
+                'status'      => $row['status']
             ];
         }
     }

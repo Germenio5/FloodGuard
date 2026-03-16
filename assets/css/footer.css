@@ -54,7 +54,8 @@
 
 .footer-nav {
     display: flex;
-    gap: 35px;
+    flex-wrap: wrap;
+    gap: 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.4);
     padding-top: 12px;
 }

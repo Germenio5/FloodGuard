@@ -16,46 +16,107 @@ include 'controllers/homepage-controller.php';
 <main>
 
 <!-- Hero Section -->
-<section class="hero-section">
+<section id="hero" class="hero-section">
     <div class="hero-content">
-        <h1>Are You in Danger?</h1>
-        <p>Find out if you're in a flood danger zone and get immediate assistance.</p>
+        <h1>FloodGuard</h1>
+        <p>A flood monitoring website that helps communities track rising water levels near bridges and flood-prone areas.</p>
         <div class="hero-buttons">
-            <a href="views/aboutus.php" class="btn btn-learn">Learn More</a>
-            <a href="views/user-dashboard.php" class="btn btn-status">Check My Status</a>
+            <a href="#about" class="btn btn-learn">Learn More</a>
+            <a href="views/user-dashboard.php" class="btn btn-status">View Dashboard</a>
         </div>
     </div>
 </section>
 
 <!-- About Section -->
-<section class="about-section">
-    <h2>About FloodGuard</h2>
-    <p>FloodGuard offers several features through its web application. These include an interactive flood map that shows affected areas, real-time updates on flood depth and water movement, and alerts to inform users of changing conditions.</p>
-    <a href="views/aboutus.php">Learn more about our website</a>
+<section id="about" class="about-section">
+    <div class="about-inner">
+        <h2 class="section-heading">About FloodGuard</h2>
+        <p>FloodGuard helps communities stay prepared by monitoring water levels at key bridge locations and delivering timely alerts through SMS. Our goal is to reduce risk, improve situational awareness, and support safer decision making when flood conditions change.</p>
+
+        <div class="about-grid">
+            <div class="about-card">
+                <img src="assets/images/community.png" alt="Community icon" class="about-icon">
+                <h3>Purpose</h3>
+                <p>Provide a reliable way to track rising water levels and share real-time flood status with residents and responders.</p>
+            </div>
+
+            <div class="about-card">
+                <img src="assets/images/insights.png" alt="Insights icon" class="about-icon">
+                <h3>Who it helps</h3>
+                <p>Communities living near bridges and flood-prone areas, local responders, and anyone seeking early warning of dangerous water levels.</p>
+            </div>
+
+            <div class="about-card">
+                <img src="assets/images/sustainability.png" alt="Impact icon" class="about-icon">
+                <h3>Community Impact</h3>
+                <p>By centralizing water level data and automating alerts, FloodGuard helps people take action sooner and stay safer during flood events.</p>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- Cards Section -->
-<section class="cards-container">
-    <div class="card">
-        <h3>Monitor Area</h3>
-        <p>Discover the latest flood conditions, area-specific alerts, and safety information.</p>
-        <a href="views/user-view-map.php">View Area →</a>
-    </div>
+<!-- How It Works -->
+<section id="how" class="how-it-works">
+    <h2 class="section-heading">How It Works</h2>
+    <p class="section-subtitle">A simple, reliable process that turns water readings into actionable alerts.</p>
 
-    <div class="card">
-        <h3>Report</h3>
-        <p>Report flood incidents in your area to help the community stay informed.</p>
-        <a href="views/user-report-flood.php">Report Now →</a>
+    <div class="steps-grid">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Water level monitoring</h3>
+            <p>Sensors collect water height data at bridges and key locations in real time.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Data processing</h3>
+            <p>The system analyzes readings and compares them against flood thresholds for each site.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Alert classification</h3>
+            <p>Water levels are classified into Warning, Alert, or Danger categories based on set thresholds.</p>
+        </div>
+
+        <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>SMS notification</h3>
+            <p>When thresholds are exceeded, residents receive SMS alerts so they can take precautionary actions.</p>
+        </div>
     </div>
 </section>
 
-<!-- Reports Section -->
+<!-- Key Features -->
+<section id="features" class="features-section">
+    <h2 class="section-heading">Key Features</h2>
+    <p class="section-subtitle">Tools and capabilities that help you stay informed and safe.</p>
+
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Real-time monitoring</h3>
+            <p>See current water levels across monitored bridges and areas instantly.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Three-level alert system</h3>
+            <p>Warning, Alert, and Danger statuses help you understand how serious conditions are.</p>
+        </div>
+        <div class="feature-card">
+            <h3>SMS notifications</h3>
+            <p>Automated messages ensure people get alerts even without opening the app.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Monitoring dashboard</h3>
+            <p>Use the dashboard to view live bridge status and recent flood reports.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Latest Flood Reports -->
 <section class="reports-section">
-    <h2>Latest Flood Reports</h2>
+    <h2 class="section-heading">Latest Flood Reports</h2>
     <p class="subtitle">Get details about recent flood levels.</p>
     <a href="views/news.php" class="btn">View Reports</a>
-
-    <br><br><br><br>
 </section>
 
 </main>

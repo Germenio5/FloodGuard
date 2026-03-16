@@ -71,7 +71,14 @@ include '../controllers/news-controller.php';
 
                 <span class="meta">
                     <?= htmlspecialchars($event['time']) ?> • 
-                    <?= htmlspecialchars($event['area']) ?>
+                    <?php
+                        $areaText = $event['area'];
+                        // if the alert was posted by FloodGuard (admin) treat location as bridge/area
+                        if (isset($event['name']) && $event['name'] === 'FloodGuard') {
+                            $areaText = preg_replace('/^Brgy\.\s*/i', '', $areaText);
+                        }
+                    ?>
+                    <?= htmlspecialchars($areaText) ?>
                 </span>
             </div>
 

@@ -21,6 +21,14 @@ $userId = $_SESSION['user_id'];
 $errors = [];
 $profilePhotoPath = null;
 
+// allowed mime types for profile photo uploads
+$allowedTypes = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp'
+];
+
 // Validate form input
 $firstName = isset($_POST['first_name']) ? trim($_POST['first_name']) : '';
 $lastName = isset($_POST['last_name']) ? trim($_POST['last_name']) : '';
