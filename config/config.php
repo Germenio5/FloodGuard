@@ -32,6 +32,7 @@ $createUsers = "CREATE TABLE IF NOT EXISTS `users` (
     `address` VARCHAR(255) NOT NULL,
     `password_hash` VARCHAR(255) NOT NULL,
     `role` ENUM('user','admin') NOT NULL DEFAULT 'user',
+    `phone_verified` TINYINT(1) NOT NULL DEFAULT 0,
     `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     UNIQUE KEY (`email`)
@@ -42,6 +43,14 @@ $conn->query($createUsers);
 $adminEmail = 'admin@floodguard.com';
 $adminPass  = password_hash('admin1234', PASSWORD_DEFAULT);
 $conn->query("INSERT IGNORE INTO users (first_name,last_name,email,phone,address,password_hash,role) VALUES ('Admin','User','$adminEmail','','','$adminPass','admin')");
+
+// Add/ensure phone verification column
+$conn->query("ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `phone_verified` TINYINT(1) NOT NULL DEFAULT 0");
+
+// Clean up legacy columns no longer used
+$conn->query("ALTER TABLE `users` DROP COLUMN IF EXISTS `verification_code`");
+$conn->query("ALTER TABLE `users` DROP COLUMN IF EXISTS `otp_code`");
+$conn->query("ALTER TABLE `users` DROP COLUMN IF EXISTS `otp_expires_at`");
 
 // automatically create reports table if it doesn't already exist
 $createReports = "CREATE TABLE IF NOT EXISTS `reports` (
@@ -61,4 +70,32 @@ $conn->query($createReports);
 
 // Add sms_sent_at column if it doesn't exist
 $conn->query("ALTER TABLE `reports` ADD COLUMN IF NOT EXISTS `sms_sent_at` DATETIME NULL");
+
+// Create flood_alerts_sent table for tracking flood alert SMS notifications
+$createFloodAlerts = "CREATE TABLE IF NOT EXISTS `flood_alerts_sent` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `area_name` VARCHAR(255) NOT NULL,
+    `alert_status` ENUM('warning','danger','critical') NOT NULL,
+    `sent_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `recipients_count` INT NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    INDEX (`area_name`, `alert_status`, `sent_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+$conn->query($createFloodAlerts);
+
+// Create verification_codes table for phone verification
+$createVerificationCodes = "CREATE TABLE IF NOT EXISTS `verification_codes` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `email` VARCHAR(255) NOT NULL,
+    `phone` VARCHAR(20) NOT NULL,
+    `verification_code` VARCHAR(6) NOT NULL,
+    `code_type` ENUM('phone_verification','password_reset') NOT NULL DEFAULT 'phone_verification',
+    `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `expires_at` DATETIME NOT NULL,
+    `used` TINYINT(1) NOT NULL DEFAULT 0,
+    PRIMARY KEY (`id`),
+    INDEX (`email`, `phone`, `verification_code`, `code_type`, `used`),
+    INDEX (`expires_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+$conn->query($createVerificationCodes);
 ?>

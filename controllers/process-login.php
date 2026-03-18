@@ -23,12 +23,26 @@ $email = strtolower($email);
 $user = authenticate_user($conn, $email, $password);
 
 if ($user) {
+    // Allow bypass for built-in test/admin accounts
+    $bypassVerifiedEmails = [
+        'user@floodguard.com',
+        'admin@floodguard.com'
+    ];
+
+    $shouldVerifyPhone = !in_array(strtolower($email), $bypassVerifiedEmails, true);
+
+    // Check if phone is verified (unless bypassed)
+    if ($shouldVerifyPhone && $user['phone_verified'] != 1) {
+        header("Location: ../views/verify-phone.php?email=" . urlencode($email) . "&error=phone_not_verified");
+        exit();
+    }
+
     // Login successful - create session
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['user_email'] = $user['email'];
     $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
     $_SESSION['user_role'] = $user['role'];
-    
+
     // Redirect based on role
     if ($user['role'] === 'admin') {
         header("Location: ../views/admin-dashboard.php");

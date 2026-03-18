@@ -80,6 +80,11 @@ include '../controllers/login-controller.php';
             <a href="register-user.php">Register here</a>
         </p>
 
+        <p class="bottom-link">
+            Forgot your password?
+            <a href="reset-password-modal.php">Reset Password</a>
+        </p>
+
         </div>
         </div>
 

@@ -1,0 +1,141 @@
+<?php
+
+/**
+ * SMS Utility Functions for PhilSMS API Integration
+ */
+
+/**
+ * Normalize Philippine phone number to E.164 format
+ */
+function normalizePhilippinesPhone($phone) {
+    // Remove all non-digit characters
+    $digits = preg_replace('/\D+/', '', $phone);
+
+    // If it starts with '0' (local format, e.g., 09091234567) -> replace with '63'
+    if (strlen($digits) === 11 && strpos($digits, '0') === 0) {
+        return '63' . substr($digits, 1);
+    }
+
+    // If it starts with '9' and is 10 digits, assume mobile without leading 0
+    if (strlen($digits) === 10 && strpos($digits, '9') === 0) {
+        return '63' . $digits;
+    }
+
+    // If already starts with country code 63 and length is 12, accept it
+    if (strlen($digits) === 12 && strpos($digits, '63') === 0) {
+        return $digits;
+    }
+
+    // Otherwise return digits as-is; let API validate
+    return $digits;
+}
+
+/**
+ * Send SMS via PhilSMS API
+ */
+function sendSMS($recipient, $message, $type = 'plain') {
+    $normalizedPhone = normalizePhilippinesPhone($recipient);
+
+    $payload = [
+        'recipient' => $normalizedPhone,
+        'sender_id' => PHILSMS_SENDER_ID,
+        'type' => $type,
+        'message' => $message
+    ];
+
+    $ch = curl_init(PHILSMS_API_URL);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . PHILSMS_API_TOKEN,
+        'Content-Type: application/json',
+        'Accept: application/json',
+    ]);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+    $response = curl_exec($ch);
+    $httpStatus = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
+    curl_close($ch);
+
+    $decodedResponse = $response ? json_decode($response, true) : null;
+
+    if ($response === false || $httpStatus < 200 || $httpStatus >= 300) {
+        $errorMsg = 'Failed to send SMS.';
+        if ($curlError) {
+            $errorMsg .= ' ' . $curlError;
+        } elseif (is_array($decodedResponse)) {
+            if (isset($decodedResponse['message'])) {
+                $errorMsg .= ' ' . $decodedResponse['message'];
+            } elseif (isset($decodedResponse['error'])) {
+                $errorMsg .= ' ' . $decodedResponse['error'];
+            }
+        }
+        return ['success' => false, 'message' => $errorMsg, 'api_response' => $decodedResponse];
+    }
+
+    return ['success' => true, 'message' => 'SMS sent successfully', 'api_response' => $decodedResponse];
+}
+
+/**
+ * Generate a random 6-digit code
+ */
+function generateVerificationCode() {
+    return str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+}
+
+/**
+ * Send verification code SMS
+ */
+function sendVerificationCode($phone, $code) {
+    $message = "FloodGuard Verification Code: $code. This code will expire in 10 minutes.";
+    return sendSMS($phone, $message);
+}
+
+/**
+ * Send OTP for password reset
+ */
+function sendOTP($phone, $otp) {
+    $message = "FloodGuard Password Reset OTP: $otp. This OTP will expire in 10 minutes.";
+    return sendSMS($phone, $message);
+}
+
+/**
+ * Send flood alert notification
+ */
+function sendFloodAlert($phone, $status, $location = '') {
+    $messages = [
+        'Warning' => "FloodGuard Alert: Water levels are rising in your area. Stay alert and prepare for possible evacuation.",
+        'Alert' => "FloodGuard Alert: Flood warning issued for your area. Monitor local news and be ready to evacuate if necessary.",
+        'Danger' => "FloodGuard Emergency: Flood danger in your area. Emergency support is on the way. Please follow safety instructions and evacuate immediately if advised."
+    ];
+
+    $message = $messages[$status] ?? "FloodGuard Update: Flood status changed to $status in $location. Stay safe.";
+    return sendSMS($phone, $message);
+}
+
+/**
+ * Send safety advisory/news SMS to all users
+ */
+function sendSafetyAdvisoryToAll($message, $conn) {
+    $stmt = $conn->prepare("SELECT phone FROM users WHERE phone_verified = 1 AND phone != ''");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $successCount = 0;
+    $failCount = 0;
+
+    while ($row = $result->fetch_assoc()) {
+        $result = sendSMS($row['phone'], "FloodGuard Safety Advisory: $message");
+        if ($result['success']) {
+            $successCount++;
+        } else {
+            $failCount++;
+        }
+    }
+
+    $stmt->close();
+    return ['success_count' => $successCount, 'fail_count' => $failCount];
+}
+
+?>

@@ -89,7 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->send_long_data(4, $imageData);
     
     if ($stmt->execute()) {
-        echo json_encode(['success' => true, 'message' => 'News posted successfully']);
+        // Send safety advisory SMS to all verified users
+        require_once __DIR__ . '/sms-utils.php';
+        $sms_message = "FloodGuard Safety Advisory: $description";
+        $sms_result = sendSafetyAdvisoryToAll($sms_message, $conn);
+
+        echo json_encode([
+            'success' => true, 
+            'message' => 'News posted successfully. SMS sent to ' . $sms_result['success_count'] . ' users.'
+        ]);
         $stmt->close();
         exit();
     } else {

@@ -106,6 +106,8 @@ function update_affected_area($conn, $area_id, $data) {
     $query = "UPDATE affected_areas SET " . implode(", ", $set_clause) . " WHERE id = $area_id";
     
     if ($conn->query($query) === TRUE) {
+        // Trigger flood alerts if status changed to warning/danger/critical
+        trigger_flood_alerts($conn, $area_id, $data);
         return true;
     } else {
         error_log("Database error in update_affected_area: " . $conn->error);
@@ -179,31 +181,94 @@ function get_latest_affected_area($conn) {
 }
 
 /**
- * Get the most recently updated affected area for a specific barangay/location.
- *
+ * Trigger flood alerts when water levels reach warning/danger/critical status
+ * 
  * @param mysqli $conn Database connection
- * @param string $location Barangay or location name (should match the "location" column)
- * @return array|bool Area record or false if none found
+ * @param int $area_id Area ID that was updated
+ * @param array $update_data The data that was updated
  */
-function get_latest_affected_area_by_location($conn, $location) {
-    $location = $conn->real_escape_string(trim($location));
-    if ($location === '') {
-        return false;
+function trigger_flood_alerts($conn, $area_id, $update_data) {
+    // Only trigger if current_level was updated
+    if (!isset($update_data['current_level'])) {
+        return;
     }
-    $prefixed1 = $conn->real_escape_string('Brgy. ' . $location);
-    $prefixed2 = $conn->real_escape_string('Barangay ' . $location);
 
-    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
-              FROM affected_areas 
-              WHERE location = '$location' OR location = '$prefixed1' OR location = '$prefixed2'
-              ORDER BY updated_at DESC LIMIT 1";
+    // Get the updated area data
+    $area = get_affected_area_by_id($conn, $area_id);
+    if (!$area) {
+        return;
+    }
 
-    $result = $conn->query($query);
+    // Calculate status based on percentage
+    $maxLevel = (float)$area['max_level'];
+    $currentLevel = (float)$area['current_level'];
+    $percentage = ($maxLevel > 0) ? min(100, ($currentLevel / $maxLevel) * 100) : 0;
+
+    // Determine status
+    $status = 'safe';
+    if ($percentage >= 75) {
+        $status = 'critical';
+    } elseif ($percentage >= 30) {
+        $status = 'danger';
+    } elseif ($percentage >= 15) {
+        $status = 'warning';
+    }
+
+    // Only send alerts for warning, danger, or critical
+    if (!in_array($status, ['warning', 'danger', 'critical'])) {
+        return;
+    }
+
+    // Check if we already sent an alert for this status recently (within last hour)
+    $area_name = $conn->real_escape_string($area['name']);
+    $status_escaped = $conn->real_escape_string($status);
+    $one_hour_ago = date('Y-m-d H:i:s', strtotime('-1 hour'));
+
+    $check_query = "SELECT COUNT(*) as count FROM flood_alerts_sent 
+                    WHERE area_name = '$area_name' AND alert_status = '$status_escaped' 
+                    AND sent_at > '$one_hour_ago'";
     
-    if ($result && $result->num_rows > 0) {
-        return $result->fetch_assoc();
+    $check_result = $conn->query($check_query);
+    if ($check_result && $check_result->fetch_assoc()['count'] > 0) {
+        $check_result->close();
+        return; // Already sent alert for this status recently
     }
-    return false;
+
+    // Send SMS alerts to all verified users
+    require_once __DIR__ . '/../controllers/sms-utils.php';
+    $result = sendFloodAlertToAllUsers($conn, $status, $area['location']);
+
+    // Log the alert
+    $log_query = "INSERT INTO flood_alerts_sent (area_name, alert_status, sent_at, recipients_count) 
+                  VALUES ('$area_name', '$status_escaped', NOW(), {$result['total_sent']})";
+    $conn->query($log_query);
+}
+
+/**
+ * Send flood alert SMS to all verified users
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $status Alert status (warning, danger, critical)
+ * @param string $location Location/area name
+ * @return array Result with total_sent count
+ */
+function sendFloodAlertToAllUsers($conn, $status, $location) {
+    require_once __DIR__ . '/../controllers/sms-utils.php';
+    
+    $stmt = $conn->prepare("SELECT phone FROM users WHERE phone_verified = 1 AND phone != ''");
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $total_sent = 0;
+    while ($row = $result->fetch_assoc()) {
+        $sms_result = sendFloodAlert($row['phone'], ucfirst($status), $location);
+        if ($sms_result['success']) {
+            $total_sent++;
+        }
+    }
+
+    $stmt->close();
+    return ['total_sent' => $total_sent];
 }
 
 /**
@@ -292,6 +357,38 @@ function get_affected_areas_by_location($conn, $location) {
     }
     
     return $areas;
+}
+
+/**
+ * Get the latest affected area record for a specific location
+ *
+ * @param mysqli $conn Database connection
+ * @param string $location Barangay/location name
+ * @return array|bool Latest affected area record or false if not found
+ */
+function get_latest_affected_area_by_location($conn, $location) {
+    $location = $conn->real_escape_string(trim($location));
+    if ($location === '') {
+        return false;
+    }
+
+    // match plain location or with common prefixes
+    $prefixed1 = 'Brgy. ' . $location;
+    $prefixed2 = 'Barangay ' . $location;
+    $prefixed1 = $conn->real_escape_string($prefixed1);
+    $prefixed2 = $conn->real_escape_string($prefixed2);
+
+    $query = "SELECT id, name, location, current_level, max_level, speed, updated_at 
+              FROM affected_areas 
+              WHERE location = '$location' OR location = '$prefixed1' OR location = '$prefixed2'
+              ORDER BY updated_at DESC LIMIT 1";
+
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+
+    return false;
 }
 
 ?>

@@ -32,7 +32,7 @@ function user_exists($conn, $email) {
  */
 function get_user_by_email($conn, $email) {
     $email = $conn->real_escape_string(strtolower(trim($email)));
-    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, created_at, status FROM users WHERE LOWER(email) = '$email' LIMIT 1";
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, created_at, status FROM users WHERE LOWER(email) = '$email' LIMIT 1";
     $result = $conn->query($query);
     if ($result && $result->num_rows > 0) {
         return $result->fetch_assoc();
@@ -52,7 +52,7 @@ function get_user_by_email($conn, $email) {
  * @param string $password Plain text password (will be hashed)
  * @return bool True if user created successfully, false otherwise
  */
-function create_user($conn, $first_name, $last_name, $email, $phone, $address, $password) {
+function create_user($conn, $first_name, $last_name, $email, $phone, $address, $password, $passwordIsHashed = false) {
     // Sanitize inputs
     $first_name = $conn->real_escape_string(trim($first_name));
     $last_name = $conn->real_escape_string(trim($last_name));
@@ -60,8 +60,8 @@ function create_user($conn, $first_name, $last_name, $email, $phone, $address, $
     $phone = $conn->real_escape_string(trim($phone));
     $address = $conn->real_escape_string(trim($address));
     
-    // Hash the password using bcrypt
-    $password_hash = password_hash($password, PASSWORD_BCRYPT);
+    // Hash the password if it isn't already hashed
+    $password_hash = $passwordIsHashed ? $password : password_hash($password, PASSWORD_BCRYPT);
     
     // Insert new user
     $query = "INSERT INTO users (first_name, last_name, email, phone, address, password_hash, role) 
@@ -87,7 +87,7 @@ function authenticate_user($conn, $email, $password) {
     $email = $conn->real_escape_string(strtolower(trim($email)));
     
     // Fetch user from database
-    $query = "SELECT id, first_name, last_name, email, role, password_hash FROM users WHERE LOWER(email) = '$email' LIMIT 1";
+    $query = "SELECT id, first_name, last_name, email, role, phone_verified, password_hash FROM users WHERE LOWER(email) = '$email' LIMIT 1";
     $result = $conn->query($query);
     
     if (!$result || $result->num_rows === 0) {
@@ -115,7 +115,7 @@ function authenticate_user($conn, $email, $password) {
  */
 function get_user_by_id($conn, $user_id) {
     $user_id = intval($user_id);
-    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, created_at, status FROM users WHERE id = $user_id LIMIT 1";
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, created_at, status FROM users WHERE id = $user_id LIMIT 1";
     $result = $conn->query($query);
     
     if ($result && $result->num_rows > 0) {

@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $first    = trim($_POST['first_name'] ?? "");
 $last     = trim($_POST['last_name'] ?? "");
 $email    = trim($_POST['email'] ?? "");
@@ -152,11 +154,34 @@ if (user_exists($conn, $email)) {
     exit();
 }
 
-// try to insert new user
-$created = create_user($conn, $first, $last, $email, $phone, $full_address, $pass);
-if ($created) {
-    header("Location: ../views/register-user.php?success=created");
+// Store pending registration in session (user created after phone verification)
+$_SESSION['pending_registration'] = [
+    'first_name' => $first,
+    'last_name' => $last,
+    'email' => $email,
+    'phone' => $phone,
+    'address' => $full_address,
+    'password_hash' => password_hash($pass, PASSWORD_BCRYPT),
+];
+
+// Create verification code in separate table
+require_once __DIR__ . '/sms-utils.php';
+require_once __DIR__ . '/../models/verification_codes.php';
+
+$verificationCode = create_verification_code($conn, $email, $phone, 'phone_verification');
+
+if ($verificationCode) {
+    // Send verification SMS
+    $smsResult = sendVerificationCode($phone, $verificationCode);
+
+    if ($smsResult['success']) {
+        header("Location: ../views/verify-phone.php?email=" . urlencode($email));
+    } else {
+        // SMS failed, but pending registration saved - user can try resending
+        header("Location: ../views/verify-phone.php?email=" . urlencode($email) . "&sms_error=1");
+    }
 } else {
+    // Failed to create verification code
     $qs = http_build_query([
         'error' => 'db',
         'first_name' => $first,

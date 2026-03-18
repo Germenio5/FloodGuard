@@ -26,22 +26,67 @@ if (isset($_GET['logout'])) {
 
 if (isset($_GET['error'])) {
     $error = $_GET['error'];
-    
+
     switch ($error) {
         case "invalid":
             $errorMessage = "Invalid email or password. Please try again.";
             break;
-        
+
         case "empty":
             $errorMessage = "Please fill out all fields.";
             break;
-        
+
         case "session":
             $errorMessage = "Session error. Please log in again.";
             break;
-        
+
+        case "forgot_empty":
+            $errorMessage = "Please enter your email address.";
+            break;
+
+        case "forgot_not_found":
+            $errorMessage = "No account found with that email address.";
+            break;
+
+        case "forgot_unverified":
+            $errorMessage = "Your phone number is not verified. Please verify your phone first.";
+            break;
+
+        case "forgot_sms_failed":
+            $errorMessage = "Failed to send OTP. Please try again later.";
+            break;
+
+        case "reset_invalid_user":
+            $errorMessage = "Invalid user. Please try again.";
+            break;
+
+        case "resend_failed":
+            $errorMessage = "Failed to resend verification code.";
+            break;
+
         default:
             $errorMessage = "Log in is required to access this page.";
+            break;
+    }
+}
+
+if (isset($_GET['message'])) {
+    $message = $_GET['message'];
+
+    switch ($message) {
+        case "verification_success":
+            $successMessage = "Phone number verified successfully! You can now log in.";
+            break;
+
+        case "already_verified":
+            $successMessage = "Your phone number is already verified.";
+            break;
+
+        case "password_reset_success":
+            $successMessage = "Password reset successfully! You can now log in with your new password.";
+            break;
+
+        default:
             break;
     }
 }
