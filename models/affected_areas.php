@@ -225,24 +225,30 @@ function trigger_flood_alerts($conn, $area_id, $update_data) {
         return;
     }
 
-    // Check if we already sent an alert for this status recently (within last hour)
+    // Check if the status changed compared to the last alert sent for this area.
+    // If the last sent status is the same as the new status, no need to resend.
     $area_name = $conn->real_escape_string($area['name']);
     $status_escaped = $conn->real_escape_string($status);
-    $one_hour_ago = date('Y-m-d H:i:s', strtotime('-1 hour'));
 
-    $check_query = "SELECT COUNT(*) as count FROM flood_alerts_sent 
-                    WHERE area_name = '$area_name' AND alert_status = '$status_escaped' 
-                    AND sent_at > '$one_hour_ago'";
-    
+    $check_query = "SELECT alert_status FROM flood_alerts_sent 
+                    WHERE area_name = '$area_name' 
+                    ORDER BY sent_at DESC 
+                    LIMIT 1";
+
     $check_result = $conn->query($check_query);
-    if ($check_result && $check_result->fetch_assoc()['count'] > 0) {
+    if ($check_result) {
+        $row = $check_result->fetch_assoc();
+        if ($row && isset($row['alert_status']) && strtolower($row['alert_status']) === strtolower($status)) {
+            $check_result->close();
+            return; // Status did not change since last alert
+        }
         $check_result->close();
-        return; // Already sent alert for this status recently
     }
 
     // Send SMS alerts to all verified users
     require_once __DIR__ . '/../controllers/sms-utils.php';
-    $result = sendFloodAlertToAllUsers($conn, $status, $area['location']);
+    // Use bridge name as the location in the SMS.
+    $result = sendFloodAlertToAllUsers($conn, $status, $area['name']);
 
     // Log the alert
     $log_query = "INSERT INTO flood_alerts_sent (area_name, alert_status, sent_at, recipients_count) 

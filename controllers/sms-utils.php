@@ -103,14 +103,31 @@ function sendOTP($phone, $otp) {
 /**
  * Send flood alert notification
  */
-function sendFloodAlert($phone, $status, $location = '') {
-    $messages = [
-        'Warning' => "FloodGuard Alert: Water levels are rising in your area. Stay alert and prepare for possible evacuation.",
-        'Alert' => "FloodGuard Alert: Flood warning issued for your area. Monitor local news and be ready to evacuate if necessary.",
-        'Danger' => "FloodGuard Emergency: Flood danger in your area. Emergency support is on the way. Please follow safety instructions and evacuate immediately if advised."
+function sendFloodAlert($phone, $status, $location = '', $description = '') {
+    // Use a standard message format:
+    // FloodGuard Alert:
+    //
+    // Location: {location}
+    // Status: {status}
+    // {description}
+
+    $statusText = ucfirst($status);
+
+    // Default descriptions based on status
+    $defaultDescriptions = [
+        'Warning' => 'Water levels are rising in your area. Stay alert and prepare for possible evacuation.',
+        'Alert' => 'Flood warning issued for your area. Monitor local news and be ready to evacuate if necessary.',
+        'Danger' => 'Flood danger in your area. Emergency support is on the way. Please follow safety instructions and evacuate immediately if advised.',
+        'Critical' => 'Flood conditions are critical. Evacuate immediately if advised and seek higher ground.'
     ];
 
-    $message = $messages[$status] ?? "FloodGuard Update: Flood status changed to $status in $location. Stay safe.";
+    $description = $description ?: ($defaultDescriptions[$statusText] ?? "Flood status changed to $statusText in your area. Stay safe.");
+
+    $message = "FloodGuard Alert:\n\n" .
+               "Location: " . ($location ?: 'Your Area') . "\n" .
+               "Status: $statusText\n" .
+               "$description";
+
     return sendSMS($phone, $message);
 }
 

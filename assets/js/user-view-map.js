@@ -107,11 +107,17 @@ function makeIcon(type) {
     });
 }
 
+// Determine if a specific bridge should be focused on (via ?bridge=...)
+const urlParams = new URLSearchParams(window.location.search);
+const focusBridgeName = urlParams.get('bridge') ? decodeURIComponent(urlParams.get('bridge')) : null;
+
 function loadMarkersFromDatabase() {
     fetch('../controllers/marker-api.php?action=list')
         .then(res => res.json())
         .then(result => {
             if (result.success && result.markers) {
+                const loadedMarkers = [];
+
                 result.markers.forEach(m => {
                     if (!m.updated_at) m.updated_at = new Date().toISOString();
                     const lm = L.marker([m.lat, m.lng], { icon: makeIcon(m.type) }).addTo(map);
@@ -121,7 +127,18 @@ function loadMarkersFromDatabase() {
                         `<strong>${m.title}</strong><br><em>${TYPE[labelType].label}</em>`,
                         { direction: 'top', offset: [0,-38] }
                     );
+
+                    loadedMarkers.push({ marker: lm, data: m });
                 });
+
+                // Focus map on a specific bridge if requested
+                if (focusBridgeName) {
+                    const match = loadedMarkers.find(entry => entry.data.title.toLowerCase() === focusBridgeName.toLowerCase());
+                    if (match) {
+                        map.setView(match.marker.getLatLng(), 16);
+                        match.marker.openPopup();
+                    }
+                }
             }
         })
         .catch(err => console.error('Failed to load markers:', err));

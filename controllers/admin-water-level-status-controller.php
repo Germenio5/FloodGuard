@@ -71,6 +71,25 @@ if ($affected_areas_data) {
     }
 }
 
+// Pagination (6 cards per page)
+$itemsPerPage = 6;
+$currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? max(1, intval($_GET['page'])) : 1;
+$totalRecords = count($waterStatusData);
+$totalPages = max(1, ceil($totalRecords / $itemsPerPage));
+$offset = ($currentPage - 1) * $itemsPerPage;
+$waterStatusData = array_slice($waterStatusData, $offset, $itemsPerPage);
+
+// Build pagination buttons
+$paginationButtons = [];
+for ($p = 1; $p <= $totalPages; $p++) {
+    $paginationButtons[] = [
+        'page' => $p,
+        'label' => (string)$p,
+        'active' => $p === $currentPage,
+        'disabled' => false
+    ];
+}
+
 // Fallback to empty array if no data
 if (empty($waterStatusData)) {
     $waterStatusData = [];

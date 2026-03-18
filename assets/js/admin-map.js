@@ -21,6 +21,8 @@ function normalizeType(type) {
 }
 
 // Map centered on Bacolod City
+const urlParams = new URLSearchParams(window.location.search);
+const focusBridgeName = urlParams.get('bridge') ? decodeURIComponent(urlParams.get('bridge')) : null;
 const map = L.map('map', { center: [10.6765, 122.9509], zoom: 14 });
 
 // format timestamp into "X ago" text
@@ -171,6 +173,15 @@ function loadMarkersFromDatabase() {
 
                     store[m.id] = { marker: lm, data: m };
                 });
+
+                // If a bridge name is provided in the query string, focus it on the map
+                if (focusBridgeName) {
+                    const match = Object.values(store).find(entry => entry?.data?.title?.toLowerCase() === focusBridgeName.toLowerCase());
+                    if (match) {
+                        map.setView(match.marker.getLatLng(), 16);
+                        match.marker.openPopup();
+                    }
+                }
             }
         })
         .catch(err => console.error('Failed to load markers:', err));
