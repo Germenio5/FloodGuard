@@ -3,13 +3,9 @@
 session_start();
 header('Content-Type: application/json; charset=utf-8');
 
-// Check user session (any logged-in user can view) unless anonymous access is permitted
-$requireLogin = !(defined('ALLOW_REPORT_DETAILS_ANONYMOUS') && ALLOW_REPORT_DETAILS_ANONYMOUS === true);
-if ($requireLogin && (!isset($_SESSION['user_id']) || empty($_SESSION['user_id']))) {
-    http_response_code(403);
-    echo json_encode(['error' => 'forbidden']);
-    exit();
-}
+// Allow anonymous users to view report details (no login required)
+// This is used by the public news page to show full report information.
+// If you want to require authentication, revert this block to use the ALLOW_REPORT_DETAILS_ANONYMOUS constant.
 
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';

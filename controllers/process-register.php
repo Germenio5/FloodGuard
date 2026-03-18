@@ -157,6 +157,22 @@ if (user_exists($conn, $email)) {
     exit();
 }
 
+// Prevent a verified phone number from being used by another account
+require_once __DIR__ . '/../models/user.php';
+if (is_phone_verified_by_other($conn, $phone)) {
+    $qs = http_build_query([
+        'error' => 'phone_in_use',
+        'first_name' => $first,
+        'last_name'  => $last,
+        'email'      => $email,
+        'phone'      => $phone,
+        'address'    => $addr,
+        'specific_address' => $specific_addr
+    ]);
+    header("Location: ../views/register-user.php?$qs");
+    exit();
+}
+
 // Store pending registration in session (user created after phone verification)
 $_SESSION['pending_registration'] = [
     'first_name' => $first,

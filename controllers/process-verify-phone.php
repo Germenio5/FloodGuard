@@ -57,6 +57,13 @@ if (!verify_code($conn, $email, $code, 'phone_verification')) {
     exit();
 }
 
+// Prevent phone reuse: if the phone number is already verified on another account, stop.
+$targetPhone = $user ? $user['phone'] : ($pendingRegistration['phone'] ?? '');
+if ($targetPhone && is_phone_verified_by_other($conn, $targetPhone, $email)) {
+    header("Location: ../views/verify-phone.php?email=" . urlencode($email) . "&error=phone_in_use");
+    exit();
+}
+
 // If user does not exist yet, create account now that phone is verified
 if (!$user && $pendingRegistration) {
     $created = create_user(

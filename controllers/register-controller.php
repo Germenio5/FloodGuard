@@ -65,6 +65,10 @@ if(isset($_GET['error'])) {
             $errors['phone'] = "Invalid PH phone number.";
             break;
 
+        case "phone_in_use":
+            $errors['phone'] = "This phone number is already verified by another account.";
+            break;
+
         case "address":
             $errors['address'] = "Address too short.";
             break;

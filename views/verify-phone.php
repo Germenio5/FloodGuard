@@ -20,7 +20,7 @@ include '../controllers/verify-phone-controller.php';
             <h1>Verify Your Phone Number</h1>
 
             <p class="verify-description">
-                We've sent a 6-digit verification code to <strong><?php echo htmlspecialchars($userPhone ?? 'your phone'); ?></strong>.
+                We've sent a 6-digit verification code to <strong><?php echo htmlspecialchars($maskedPhone ?? $userPhone ?? 'your phone'); ?></strong>.
                 Enter the code below to activate your account.
             </p>
 

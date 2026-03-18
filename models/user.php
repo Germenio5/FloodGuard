@@ -57,6 +57,28 @@ function get_user_by_phone($conn, $phone) {
     return false;
 }
 
+/**
+ * Check whether a phone number is already verified by another user.
+ *
+ * @param mysqli $conn
+ * @param string $phone
+ * @param string|null $excludeEmail Optional email to exclude from the check
+ * @return bool
+ */
+function is_phone_verified_by_other($conn, $phone, $excludeEmail = null) {
+    $phone = $conn->real_escape_string(trim($phone));
+    $excludeEmail = $excludeEmail ? $conn->real_escape_string(strtolower(trim($excludeEmail))) : null;
+
+    $query = "SELECT id FROM users WHERE phone = '$phone' AND phone_verified = 1";
+    if ($excludeEmail) {
+        $query .= " AND LOWER(email) != '$excludeEmail'";
+    }
+    $query .= " LIMIT 1";
+
+    $result = $conn->query($query);
+    return ($result && $result->num_rows > 0);
+}
+
 
 /**
 /**
