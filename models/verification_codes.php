@@ -5,6 +5,9 @@
  * Handles all database operations related to verification codes
  */
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
 /**
  * Create a new verification code
  *

@@ -150,6 +150,10 @@ body {
     background: linear-gradient(90deg, #F44336, #EF5350);
 }
 
+.progress-normal {
+    background: linear-gradient(90deg, #10B981, #34D399);
+}
+
 .progress-info-row {
     display: flex;
     justify-content: space-between;
@@ -176,6 +180,12 @@ body {
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
+}
+
+.status-normal {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
 }
 
 .status-warning {

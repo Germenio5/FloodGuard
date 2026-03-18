@@ -184,6 +184,10 @@ td {
     font-weight: 500;
 }
 
+.status-normal {
+    color: #10b981;
+}
+
 .status-warning {
     color: #ffd147;
 }

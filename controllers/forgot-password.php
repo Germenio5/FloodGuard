@@ -1,7 +1,7 @@
 <?php
-$email = trim($_POST['email'] ?? '');
+$phone = trim($_POST['phone'] ?? '');
 
-if (empty($email)) {
+if (empty($phone)) {
     header("Location: ../views/reset-password-modal.php?error=forgot_empty");
     exit();
 }
@@ -11,9 +11,10 @@ require_once __DIR__ . '/../models/user.php';
 require_once __DIR__ . '/sms-utils.php';
 require_once __DIR__ . '/../models/verification_codes.php';
 
-$user = get_user_by_email($conn, $email);
+// Find user by phone number
+$user = get_user_by_phone($conn, $phone);
 if (!$user) {
-    header("Location: ../views/reset-password-modal.php?error=forgot_not_found&email=" . urlencode($email));
+    header("Location: ../views/reset-password-modal.php?error=forgot_not_found&phone=" . urlencode($phone));
     exit();
 }
 
@@ -23,25 +24,25 @@ $bypassVerifiedEmails = [
     'admin@floodguard.com'
 ];
 
-if (!in_array(strtolower($email), $bypassVerifiedEmails, true) && $user['phone_verified'] != 1) {
-    header("Location: ../views/reset-password-modal.php?error=forgot_unverified&email=" . urlencode($email));
+if (!in_array(strtolower($user['email']), $bypassVerifiedEmails, true) && $user['phone_verified'] != 1) {
+    header("Location: ../views/reset-password-modal.php?error=forgot_unverified&phone=" . urlencode($phone));
     exit();
 }
 
 // Create OTP for password reset
-$otp = create_verification_code($conn, $email, $user['phone'], 'password_reset');
+$otp = create_verification_code($conn, $user['email'], $phone, 'password_reset');
 
 if ($otp) {
     // Send OTP SMS
-    $smsResult = sendOTP($user['phone'], $otp);
+    $smsResult = sendOTP($phone, $otp);
 
     if ($smsResult['success']) {
-        header("Location: ../views/reset-password.php?email=" . urlencode($email));
+        header("Location: ../views/enter-otp.php?email=" . urlencode($user['email']));
     } else {
-        header("Location: ../views/reset-password-modal.php?error=forgot_sms_failed&email=" . urlencode($email));
+        header("Location: ../views/reset-password-modal.php?error=forgot_sms_failed&phone=" . urlencode($phone));
     }
 } else {
-    header("Location: ../views/reset-password-modal.php?error=forgot_failed&email=" . urlencode($email));
+    header("Location: ../views/reset-password-modal.php?error=forgot_failed&phone=" . urlencode($phone));
 }
 exit();
 ?>

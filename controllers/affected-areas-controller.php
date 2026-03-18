@@ -42,7 +42,10 @@ if ($bridges_data) {
         $percentage = ($max > 0) ? min(100, ($current / $max) * 100) : 0;
         
         // Determine status class based on percentage thresholds
-        if ($percentage < 30) {
+        // normal: 0-24.9%, warning: 25-49.9%, danger: 50-74.9%, critical: >= 75%
+        if ($percentage < 25) {
+            $statusClass = 'normal';
+        } elseif ($percentage < 50) {
             $statusClass = 'warning';
         } elseif ($percentage < 75) {
             $statusClass = 'danger';
@@ -101,19 +104,22 @@ $paginationButtons = generatePaginationButtons($currentPage, $totalPages, $selec
 /**
  * Map database status values to CSS class names
  * 
- * @param string $status Status from database (normal, alert, danger)
- * @return string CSS class name (warning, danger, critical)
+ * @param string $status Status from database (normal, warning, danger, critical)
+ * @return string CSS class name (normal, warning, danger, critical)
  */
 function mapStatusClass($status) {
     $status = strtolower(trim($status));
     switch ($status) {
-        case 'danger':
-            return 'critical';
-        case 'alert':
-            return 'danger';
         case 'normal':
-        default:
+            return 'normal';
+        case 'warning':
             return 'warning';
+        case 'danger':
+            return 'danger';
+        case 'critical':
+            return 'critical';
+        default:
+            return 'normal';
     }
 }
 
@@ -135,6 +141,8 @@ function getProgressClass($status) {
  */
 function getStatusLabel($status) {
     switch ($status) {
+        case 'normal':
+            return 'Normal';
         case 'warning':
             return 'Warning';
         case 'danger':
@@ -142,7 +150,7 @@ function getStatusLabel($status) {
         case 'critical':
             return 'Critical';
         default:
-            return 'Warning';
+            return 'Normal';
     }
 }
 

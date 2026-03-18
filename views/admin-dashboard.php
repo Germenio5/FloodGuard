@@ -24,6 +24,18 @@ include '../controllers/admin-dashboard-controller.php';
         <p>Real-time Flood Monitoring, Map & Warning System.</p>
     </div>
 
+    <!-- Messages -->
+    <?php if (!empty($message)): ?>
+        <div class="message-box success">
+            <?= htmlspecialchars($message) ?>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($error)): ?>
+        <div class="message-box error">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Residents Status Section -->
     <div class="status-section">
         <h2>Residents Status</h2>
@@ -88,7 +100,9 @@ include '../controllers/admin-dashboard-controller.php';
                         <th>Address</th>
                         <th>Phone Number</th>
                         <th>Email</th>
+                        <th>Active</th>
                         <th>Status</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -102,11 +116,24 @@ include '../controllers/admin-dashboard-controller.php';
                         <td><?= $r["address"] ?></td>
                         <td><?= $r["phone"] ?></td>
                         <td><?= $r["email"] ?></td>
-
+                        <td>
+                            <?php $activeStatus = getActiveStatus($r["last_active"]); ?>
+                            <?php if ($activeStatus['is_online']): ?>
+                                <span class="status-online-text"><?= $activeStatus['text'] ?></span>
+                            <?php else: ?>
+                                <span class="status-time-text"><?= $activeStatus['text'] ?></span>
+                            <?php endif; ?>
+                        </td>
                         <td>
                             <span class="status-badge <?= getStatusClass($r["status"]) ?>">
                                 <?= $r["status"] ?>
                             </span>
+                        </td>
+                        <td>
+                            <form method="POST" action="../controllers/admin-delete-user.php" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                <input type="hidden" name="user_id" value="<?= $r["id"] ?>">
+                                <button type="submit" class="delete-btn" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer;">Delete</button>
+                            </form>
                         </td>
                     </tr>
 

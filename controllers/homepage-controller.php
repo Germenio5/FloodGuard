@@ -3,6 +3,9 @@
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
 // Fetch latest 2 reports from database
 $reports_data = get_all_reports($conn, 2, 0);
 

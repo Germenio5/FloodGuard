@@ -19,7 +19,7 @@ include '../controllers/affected-areas-controller.php';
 <div class="container">
 
     <div class="page-header">
-        <h1 class="page-title">Affected Areas</h1>
+        <h1 class="page-title">Monitor Areas</h1>
         <p class="page-subtitle">Creaks / Bridges</p>
     </div>
 
@@ -38,11 +38,19 @@ include '../controllers/affected-areas-controller.php';
         </form>
     </div>
     <section class="alert-section">
+        <div class="alert-card alert-normal">
+            <div class="alert-icon"><span>✓</span></div>
+            <div class="alert-content">
+                <h3 class="alert-level">Normal</h3>
+                <p class="alert-message">Water levels are safe and within normal range. Continue monitoring regularly.</p>
+            </div>
+        </div>
+
         <div class="alert-card alert-warning">
             <div class="alert-icon"><span>⚠</span></div>
             <div class="alert-content">
                 <h3 class="alert-level">Warning</h3>
-                <p class="alert-message">Water levels are within normal range. Remain aware and continue monitoring.</p>
+                <p class="alert-message">Water levels are rising. Stay alert and prepare emergency supplies.</p>
             </div>
         </div>
 
@@ -55,7 +63,7 @@ include '../controllers/affected-areas-controller.php';
         </div>
 
         <div class="alert-card alert-critical">
-            <div class="alert-icon"><span>⚠</span></div>
+            <div class="alert-icon"><span>🚨</span></div>
             <div class="alert-content">
                 <h3 class="alert-level">Critical</h3>
                 <p class="alert-message">Flooding is imminent. Evacuate immediately to higher ground or shelters.</p>

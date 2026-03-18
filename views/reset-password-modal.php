@@ -19,7 +19,7 @@ include '../controllers/reset-password-modal-controller.php';
 
             <h1>Reset Your Password</h1>
             <p class="subtitle">
-                Enter your email address and we'll send you an OTP to reset your password.
+                Enter your phone number and we'll send you an OTP to reset your password.
             </p>
 
         <!-- ERROR MESSAGE -->
@@ -32,11 +32,12 @@ include '../controllers/reset-password-modal-controller.php';
         <form action="../controllers/forgot-password.php" method="POST" class="auth-form">
 
             <div class="form-group">
-                <label>Email Address</label>
-                <input type="email"
-                    name="email"
-                    value="<?= htmlspecialchars($oldEmail) ?>"
-                    placeholder="Enter your email address"
+                <label>Phone Number</label>
+                <input type="tel"
+                    name="phone"
+                    value="<?= htmlspecialchars($oldPhone) ?>"
+                    placeholder="Enter your phone number (e.g., 09123456789)"
+                    pattern="^(09|\+639)[0-9]{9}$"
                     required>
             </div>
 

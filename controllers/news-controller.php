@@ -89,15 +89,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->send_long_data(4, $imageData);
     
     if ($stmt->execute()) {
-        // Send safety advisory SMS to all verified users
+        // Get the ID of the newly inserted report
+        $reportId = $conn->insert_id;
+        
+        // Send flood alert SMS to all verified users with custom description (only for Alert status)
         require_once __DIR__ . '/sms-utils.php';
-        $sms_message = "FloodGuard Safety Advisory: $description";
-        $sms_result = sendSafetyAdvisoryToAll($sms_message, $conn);
-
-        echo json_encode([
-            'success' => true, 
-            'message' => 'News posted successfully. SMS sent to ' . $sms_result['success_count'] . ' users.'
-        ]);
+        
+        // Only send SMS for Alert status
+        if (strtolower($status) === 'alert') {
+            $sms_result = sendFloodAlertWithDescription($description, $area, $status, $conn);
+            
+            // Record the SMS sent in the flood_alert_sms_log table
+            $logQuery = "INSERT INTO flood_alert_sms_log (
+                report_id, area_location, alert_status, alert_description, 
+                total_recipients, successful_sms, failed_sms, sent_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
+            
+            $logStmt = $conn->prepare($logQuery);
+            if ($logStmt) {
+                $totalRecipients = $sms_result['success_count'] + $sms_result['fail_count'];
+                $logStmt->bind_param(
+                    'isssiii',
+                    $reportId,
+                    $area,
+                    $status,
+                    $description,
+                    $totalRecipients,
+                    $sms_result['success_count'],
+                    $sms_result['fail_count']
+                );
+                $logStmt->execute();
+                $logStmt->close();
+            }
+            
+            echo json_encode([
+                'success' => true, 
+                'message' => 'Flood Alert posted successfully. SMS notification sent to ' . $sms_result['success_count'] . ' users.'
+            ]);
+        } else {
+            // For non-Alert statuses, just confirm posting
+            echo json_encode([
+                'success' => true, 
+                'message' => 'News posted successfully. No SMS sent (status is not Alert).'
+            ]);
+        }
         $stmt->close();
         exit();
     } else {

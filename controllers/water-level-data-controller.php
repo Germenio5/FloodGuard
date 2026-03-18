@@ -122,6 +122,8 @@ function getTrendBadge($trend) {
 
 function getStatusBadge($status) {
     switch ($status) {
+        case "normal":
+            return '<span class="status status-normal">● Normal</span>';
         case "warning":
             return '<span class="status status-warning">● Warning</span>';
         case "danger":

@@ -47,6 +47,9 @@ $conn->query("INSERT IGNORE INTO users (first_name,last_name,email,phone,address
 // Add/ensure phone verification column
 $conn->query("ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `phone_verified` TINYINT(1) NOT NULL DEFAULT 0");
 
+// Add/ensure last active timestamp column
+$conn->query("ALTER TABLE `users` ADD COLUMN IF NOT EXISTS `last_active` TIMESTAMP NULL DEFAULT NULL");
+
 // Clean up legacy columns no longer used
 $conn->query("ALTER TABLE `users` DROP COLUMN IF EXISTS `verification_code`");
 $conn->query("ALTER TABLE `users` DROP COLUMN IF EXISTS `otp_code`");
@@ -98,4 +101,21 @@ $createVerificationCodes = "CREATE TABLE IF NOT EXISTS `verification_codes` (
     INDEX (`expires_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 $conn->query($createVerificationCodes);
+
+// Create flood_alert_sms_log table for tracking SMS sent with flood alerts
+$createFloodAlertSmsLog = "CREATE TABLE IF NOT EXISTS `flood_alert_sms_log` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `report_id` INT UNSIGNED NOT NULL,
+    `area_location` VARCHAR(255) NOT NULL,
+    `alert_status` VARCHAR(50) NOT NULL,
+    `alert_description` TEXT NOT NULL,
+    `total_recipients` INT NOT NULL DEFAULT 0,
+    `successful_sms` INT NOT NULL DEFAULT 0,
+    `failed_sms` INT NOT NULL DEFAULT 0,
+    `sent_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`report_id`) REFERENCES `reports`(`id`) ON DELETE CASCADE,
+    INDEX (`area_location`, `alert_status`, `sent_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+$conn->query($createFloodAlertSmsLog);
 ?>

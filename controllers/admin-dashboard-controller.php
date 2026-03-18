@@ -15,6 +15,35 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] !== 'admin') {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/user.php';
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
+// Update last active timestamp for admin
+if (isset($_SESSION['user_id'])) {
+    update_user_last_active($conn, $_SESSION['user_id']);
+}
+
+// Handle messages from delete operations
+$message = '';
+$error = '';
+if (isset($_GET['message'])) {
+    switch ($_GET['message']) {
+        case 'user_deleted':
+            $message = 'User account has been successfully deleted.';
+            break;
+    }
+}
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'cannot_delete_self':
+            $error = 'You cannot delete your own account.';
+            break;
+        case 'delete_failed':
+            $error = 'Failed to delete user account. Please try again.';
+            break;
+    }
+}
+
 // Pagination settings
 $itemsPerPage = 10;
 $currentPage = isset($_GET['page']) && is_numeric($_GET['page']) ? intval($_GET['page']) : 1;
@@ -53,6 +82,8 @@ if ($users_data) {
             'address' => htmlspecialchars($row['address']),
             'phone' => htmlspecialchars($row['phone']),
             'email' => htmlspecialchars($row['email']),
+            'phone_verified' => (int)$row['phone_verified'],
+            'last_active' => $row['last_active'],
             'status' => !empty($row['status']) ? htmlspecialchars($row['status']) : 'Safe'
         ];
     }
@@ -80,6 +111,38 @@ function getStatusClass($status) {
         return "status-danger";
     }
     return "status-safe";
+}
+
+/**
+ * Format active status based on last active time
+ *
+ * @param string|null $last_active
+ * @return array ['text' => string, 'class' => string, 'is_online' => bool]
+ */
+function getActiveStatus($last_active) {
+    if (!$last_active) {
+        return ['text' => 'Never active', 'class' => 'status-danger', 'is_online' => false];
+    }
+
+    $now = new DateTime();
+    $last_active_time = new DateTime($last_active);
+    $interval = $now->diff($last_active_time);
+
+    // Online if active within last 5 minutes
+    if ($interval->i < 5 && $interval->h == 0 && $interval->d == 0) {
+        return ['text' => 'Online now', 'class' => 'status-online', 'is_online' => true];
+    }
+
+    // Format time difference
+    if ($interval->d > 0) {
+        $text = $interval->d . ' day' . ($interval->d > 1 ? 's' : '') . ' ago';
+    } elseif ($interval->h > 0) {
+        $text = $interval->h . ' hour' . ($interval->h > 1 ? 's' : '') . ' ago';
+    } else {
+        $text = $interval->i . ' min' . ($interval->i > 1 ? 's' : '') . ' ago';
+    }
+
+    return ['text' => $text, 'class' => 'status-time', 'is_online' => false];
 }
 
 // Generate pagination buttons

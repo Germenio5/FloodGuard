@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header("Location: ../views/login-user.php");
     exit();
@@ -18,6 +21,9 @@ require_once __DIR__ . '/../models/water_level.php';
 
 $userId = $_SESSION['user_id'];
 $userEmail = $_SESSION['user_email'] ?? '';
+
+// Update last active timestamp
+update_user_last_active($conn, $userId);
 $userFromDb = get_user_by_id($conn, $userId);
 
 if (!$userFromDb) {
@@ -70,9 +76,11 @@ if ($latestArea) {
     $max = (float)$latestArea['max_level'];
     $percentage = $max > 0 ? ($current / $max) * 100 : 0;
     
-    // Determine status based on water level percentage (same as affected-areas)
-    // warning: < 30%, danger: 30-74%, critical: >= 75%
-    if ($percentage < 30) {
+    // Determine status based on water level percentage
+    // normal: 0-24.9%, warning: 25-49.9%, danger: 50-74.9%, critical: >= 75%
+    if ($percentage < 25) {
+        $levelStatus = 'normal';
+    } elseif ($percentage < 50) {
         $levelStatus = 'warning';
     } elseif ($percentage < 75) {
         $levelStatus = 'danger';
@@ -134,6 +142,13 @@ if (strtolower($waterLevel['status']) === 'critical') {
         'Prepare emergency supplies and evacuation route',
         'Keep important documents and valuables in safe place',
         'Avoid low-lying areas and stay informed through official channels'
+    ];
+} elseif (strtolower($waterLevel['status']) === 'normal') {
+    $alertTips = [
+        'Water levels are normal - conditions are safe',
+        'Continue to monitor flood alerts for any updates',
+        'Keep emergency contact numbers accessible',
+        'Review evacuation routes periodically'
     ];
 } else {
     $alertTips = [

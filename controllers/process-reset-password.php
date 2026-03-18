@@ -1,10 +1,9 @@
 <?php
 $email = trim($_POST['email'] ?? '');
-$otp = trim($_POST['otp'] ?? '');
 $newPassword = trim($_POST['new_password'] ?? '');
 $confirmPassword = trim($_POST['confirm_password'] ?? '');
 
-if (empty($email) || empty($otp) || empty($newPassword) || empty($confirmPassword)) {
+if (empty($email) || empty($newPassword) || empty($confirmPassword)) {
     header("Location: ../views/reset-password.php?email=" . urlencode($email) . "&error=empty");
     exit();
 }
@@ -19,6 +18,13 @@ if (strlen($newPassword) < 8) {
     exit();
 }
 
+if(!preg_match("/[A-Z]/", $newPassword) ||
+   !preg_match("/[a-z]/", $newPassword) ||
+   !preg_match("/[0-9]/", $newPassword)) {
+    header("Location: ../views/reset-password.php?email=" . urlencode($email) . "&error=passweak");
+    exit();
+}
+
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/user.php';
 require_once __DIR__ . '/../models/verification_codes.php';
@@ -29,23 +35,12 @@ if (!$user) {
     exit();
 }
 
-// Verify the OTP using the verification_codes table
-if (!verify_code($conn, $email, $otp, 'password_reset')) {
-    header("Location: ../views/reset-password.php?email=" . urlencode($email) . "&error=invalid_otp");
-    exit();
-}
-
 // Update password
 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 $updateStmt = $conn->prepare("UPDATE users SET password_hash = ? WHERE email = ?");
 $updateStmt->bind_param('ss', $hashedPassword, $email);
 $updateStmt->execute();
 $updateStmt->close();
-
-// Send confirmation SMS
-require_once __DIR__ . '/sms-utils.php';
-$confirmationMessage = "FloodGuard: Your password has been successfully reset! You can now log in with your new password.";
-$smsResult = sendSMS($user['phone'], $confirmationMessage);
 
 // Clean up used OTP codes for this user
 invalidate_user_codes($conn, $email, 'password_reset');

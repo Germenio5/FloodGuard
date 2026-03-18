@@ -20,7 +20,7 @@ include '../controllers/reset-password-controller.php';
             <h1>Reset Your Password</h1>
 
             <p class="reset-description">
-                We've sent a 6-digit OTP to your phone. Enter the OTP and your new password below.
+                Enter your new password below.
             </p>
 
             <?php if($errorMessage): ?>
@@ -31,16 +31,6 @@ include '../controllers/reset-password-controller.php';
 
             <form action="../controllers/process-reset-password.php" method="POST" class="auth-form">
                 <input type="hidden" name="email" value="<?php echo htmlspecialchars($userEmail); ?>">
-
-                <div class="form-group">
-                    <label>OTP Code</label>
-                    <input type="text"
-                        name="otp"
-                        placeholder="Enter 6-digit OTP"
-                        maxlength="6"
-                        pattern="[0-9]{6}"
-                        required>
-                </div>
 
                 <div class="form-group">
                     <label>New Password</label>

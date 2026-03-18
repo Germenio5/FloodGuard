@@ -19,14 +19,8 @@ if ($errorMessage) {
         case 'password_short':
             $errorMessage = 'Password must be at least 8 characters long.';
             break;
-        case 'invalid_otp':
-            $errorMessage = 'Invalid OTP code. Please check and try again.';
-            break;
-        case 'otp_expired':
-            $errorMessage = 'OTP has expired. Please request a new one.';
-            break;
-        default:
-            $errorMessage = 'An error occurred. Please try again.';
+        case 'passweak':
+            $errorMessage = 'Password must contain at least one uppercase letter, one lowercase letter, and one number.';
             break;
     }
 }

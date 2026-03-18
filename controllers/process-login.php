@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
 // Get POST data
 $email    = trim($_POST['email'] ?? "");
 $password = trim($_POST['password'] ?? "");
@@ -42,6 +45,9 @@ if ($user) {
     $_SESSION['user_email'] = $user['email'];
     $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
     $_SESSION['user_role'] = $user['role'];
+
+    // Update last active timestamp
+    update_user_last_active($conn, $user['id']);
 
     // Redirect based on role
     if ($user['role'] === 'admin') {

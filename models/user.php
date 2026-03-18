@@ -32,7 +32,7 @@ function user_exists($conn, $email) {
  */
 function get_user_by_email($conn, $email) {
     $email = $conn->real_escape_string(strtolower(trim($email)));
-    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, created_at, status FROM users WHERE LOWER(email) = '$email' LIMIT 1";
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, last_active, created_at, status FROM users WHERE LOWER(email) = '$email' LIMIT 1";
     $result = $conn->query($query);
     if ($result && $result->num_rows > 0) {
         return $result->fetch_assoc();
@@ -40,6 +40,42 @@ function get_user_by_email($conn, $email) {
     return false;
 }
 
+/**
+ * Fetch user record by phone number
+ *
+ * @param mysqli $conn
+ * @param string $phone
+ * @return array|bool User row or false if not found
+ */
+function get_user_by_phone($conn, $phone) {
+    $phone = $conn->real_escape_string(trim($phone));
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, last_active, created_at, status FROM users WHERE phone = '$phone' LIMIT 1";
+    $result = $conn->query($query);
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+    return false;
+}
+
+
+/**
+/**
+ * Fetch user record by ID
+ *
+ * @param mysqli $conn Database connection
+ * @param int $user_id User ID
+ * @return array|bool User data if found, false otherwise
+ */
+function get_user_by_id($conn, $user_id) {
+    $user_id = intval($user_id);
+    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, last_active, created_at, status FROM users WHERE id = $user_id LIMIT 1";
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+    return false;
+}
 /**
  * Create a new user account
  * 
@@ -107,21 +143,16 @@ function authenticate_user($conn, $email, $password) {
 }
 
 /**
- * Get user by ID
- * 
- * @param mysqli $conn Database connection
- * @param int $user_id User ID
- * @return array|bool User data if found, false otherwise
+ * Update user's last active timestamp
+ *
+ * @param mysqli $conn
+ * @param int $user_id
+ * @return bool
  */
-function get_user_by_id($conn, $user_id) {
+function update_user_last_active($conn, $user_id) {
     $user_id = intval($user_id);
-    $query = "SELECT id, first_name, last_name, email, phone, address, profile_photo, role, phone_verified, created_at, status FROM users WHERE id = $user_id LIMIT 1";
-    $result = $conn->query($query);
-    
-    if ($result && $result->num_rows > 0) {
-        return $result->fetch_assoc();
-    }
-    return false;
+    $query = "UPDATE users SET last_active = CURRENT_TIMESTAMP WHERE id = $user_id";
+    return $conn->query($query);
 }
 
 /**
@@ -261,7 +292,7 @@ function get_users_paginated($conn, $limit = 10, $offset = 0, $search_area = '')
     $limit = intval($limit);
     $offset = intval($offset);
     
-    $query = "SELECT id, first_name, last_name, email, phone, address, status FROM users WHERE role = 'user'";
+    $query = "SELECT id, first_name, last_name, email, phone, address, phone_verified, last_active, status FROM users WHERE role = 'user'";
     
     if (!empty($search_area)) {
         $search_area = $conn->real_escape_string(trim($search_area));

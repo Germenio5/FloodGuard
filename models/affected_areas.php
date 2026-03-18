@@ -5,6 +5,9 @@
  * Handles all database operations related to affected areas
  */
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
 /**
  * Get all affected areas
  * 
@@ -204,14 +207,17 @@ function trigger_flood_alerts($conn, $area_id, $update_data) {
     $currentLevel = (float)$area['current_level'];
     $percentage = ($maxLevel > 0) ? min(100, ($currentLevel / $maxLevel) * 100) : 0;
 
-    // Determine status
-    $status = 'safe';
-    if ($percentage >= 75) {
-        $status = 'critical';
-    } elseif ($percentage >= 30) {
-        $status = 'danger';
-    } elseif ($percentage >= 15) {
+    // Determine status based on new thresholds:
+    // 0-24.9% = normal, 25-49.9% = warning, 50-74.9% = danger, 75-100% = critical
+    $status = 'normal';
+    if ($percentage < 25) {
+        $status = 'normal';
+    } elseif ($percentage < 50) {
         $status = 'warning';
+    } elseif ($percentage < 75) {
+        $status = 'danger';
+    } else {
+        $status = 'critical';
     }
 
     // Only send alerts for warning, danger, or critical

@@ -46,6 +46,18 @@ include '../controllers/admin-report-log-controller.php';
         </form>
     </div>
 
+    <!-- Messages -->
+    <?php if (!empty($message)): ?>
+        <div class="message-box success" style="margin: 20px 0; padding: 15px 20px; border-radius: 5px; font-weight: 500; display: flex; align-items: center; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb;">
+            <?= htmlspecialchars($message) ?>
+        </div>
+    <?php endif; ?>
+    <?php if (!empty($error)): ?>
+        <div class="message-box error" style="margin: 20px 0; padding: 15px 20px; border-radius: 5px; font-weight: 500; display: flex; align-items: center; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb;">
+            <?= htmlspecialchars($error) ?>
+        </div>
+    <?php endif; ?>
+
     <!-- Reports Table -->
     <div class="table-container">
         <table>
@@ -96,9 +108,17 @@ include '../controllers/admin-report-log-controller.php';
                     <td><?= htmlspecialchars(date('Y-m-d H:i', strtotime($r["last_updated"]))) ?></td>
 
                     <td>
-                        <button class="view-details-btn" onclick="viewReport(<?= (int)$r['id'] ?>)">
-                            View Details
-                        </button>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: nowrap;">
+                            <button class="view-details-btn" onclick="viewReport(<?= (int)$r['id'] ?>)">
+                                View Details
+                            </button>
+                            <form method="POST" action="../controllers/admin-delete-report.php" style="display: inline; margin: 0;" onsubmit="return confirm('Are you sure you want to delete this report? This action cannot be undone.')">
+                                <input type="hidden" name="report_id" value="<?= (int)$r['id'] ?>">
+                                <button type="submit" class="delete-btn">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
 

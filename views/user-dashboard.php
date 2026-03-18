@@ -51,17 +51,28 @@ include '../controllers/user-dashboard-controller.php';
                 <p class="small muted">(no bridge data for your barangay; showing latest available)</p>
             <?php endif; ?>
 
-            <p class="label">Current Level:</p>
+            <div class="level-stats">
+                <div class="stat-box">
+                    <span class="stat-label">Current Level</span>
+                    <span class="stat-value"><?= number_format($waterLevel['current'], 2) ?>m</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Max Level</span>
+                    <span class="stat-value"><?= number_format($waterLevel['max'], 2) ?>m</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Percentage</span>
+                    <span class="stat-value"><?= number_format($waterLevel['percentage'], 1) ?>%</span>
+                </div>
+            </div>
+
+            <p class="label">Water Level Status:</p>
                 
             <div class="progress-bar">
                 <div class="progress-fill progress-<?= strtolower($waterLevel['status']) ?>"
                      style="<?= getProgressWidth($waterLevel['percentage']) ?>">
                 </div>
             </div>
-
-            <p class="level-text">
-                <?= formatLevelText($waterLevel['current'], $waterLevel['max']) ?>
-            </p>
         </div>
 
 

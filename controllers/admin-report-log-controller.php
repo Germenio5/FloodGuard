@@ -4,6 +4,27 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 require_once __DIR__ . '/../models/affected_areas.php';
 
+// Set timezone to GMT+8 (Asia/Manila)
+date_default_timezone_set('Asia/Manila');
+
+// Handle messages from delete operations
+$message = '';
+$error = '';
+if (isset($_GET['message'])) {
+    switch ($_GET['message']) {
+        case 'report_deleted':
+            $message = 'Report has been successfully deleted.';
+            break;
+    }
+}
+if (isset($_GET['error'])) {
+    switch ($_GET['error']) {
+        case 'delete_failed':
+            $error = 'Failed to delete report. Please try again.';
+            break;
+    }
+}
+
 // Get selected filters
 $selectedBarangay = isset($_GET['barangay']) ? trim($_GET['barangay']) : '';
 $selectedBridge = isset($_GET['bridge']) ? trim($_GET['bridge']) : '';

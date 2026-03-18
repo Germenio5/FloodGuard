@@ -12,7 +12,7 @@ if (isset($_SESSION['user_id']) && !empty($_SESSION['user_id'])) {
     exit();
 }
 
-$oldEmail = $_GET['email'] ?? "";
+$oldPhone = $_GET['phone'] ?? "";
 $errorMessage = "";
 
 // Handle error messages
@@ -21,11 +21,11 @@ if (isset($_GET['error'])) {
 
     switch ($error) {
         case "forgot_empty":
-            $errorMessage = "Please enter your email address.";
+            $errorMessage = "Please enter your phone number.";
             break;
 
         case "forgot_not_found":
-            $errorMessage = "No account found with that email address.";
+            $errorMessage = "No account found with that phone number.";
             break;
 
         case "forgot_unverified":

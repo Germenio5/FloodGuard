@@ -41,7 +41,10 @@ if ($affected_areas_data) {
         $percentage = ($maxLevel > 0) ? min(100, ($currentLevel / $maxLevel) * 100) : 0;
         
         // Determine status class based on percentage thresholds
-        if ($percentage < 30) {
+        // normal: 0-24.9%, warning: 25-49.9%, danger: 50-74.9%, critical: >= 75%
+        if ($percentage < 25) {
+            $statusClass = 'normal';
+        } elseif ($percentage < 50) {
             $statusClass = 'warning';
         } elseif ($percentage < 75) {
             $statusClass = 'danger';
@@ -83,6 +86,8 @@ function getProgressClass($status) {
 
 function getStatusBadge($status) {
     switch (strtolower($status)) {
+        case 'normal':
+            return '<span class="status-badge status-normal">● Normal</span>';
         case 'warning':
             return '<span class="status-badge status-warning">● Warning</span>';
         case 'danger':

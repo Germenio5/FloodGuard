@@ -106,6 +106,38 @@ main {
     margin: 15px 0 8px 0;
 }
 
+/* Level Stats Display */
+.level-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+    margin: 15px 0;
+}
+
+.stat-box {
+    background: #f0f9ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 11px;
+    color: #0c4a6e;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 16px;
+    color: #0369a1;
+    font-weight: 700;
+}
+
 .progress-bar {
     width: 100%;
     height: 24px;
@@ -117,6 +149,10 @@ main {
 
 .progress-fill {
     height: 100%;
+}
+
+.progress-fill.progress-normal {
+    background: linear-gradient(90deg, #10B981, #34D399);
 }
 
 .progress-fill.progress-warning {

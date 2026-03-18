@@ -115,6 +115,38 @@ function sendFloodAlert($phone, $status, $location = '') {
 }
 
 /**
+ * Send flood alert with custom description to all verified users
+ * Used when admin posts a flood alert via the admin panel
+ */
+function sendFloodAlertWithDescription($description, $location, $status, $conn) {
+    $stmt = $conn->prepare("SELECT phone FROM users WHERE phone_verified = 1 AND phone != ''");
+    if (!$stmt) {
+        return ['success_count' => 0, 'fail_count' => 0, 'error' => 'Database query failed'];
+    }
+    
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $successCount = 0;
+    $failCount = 0;
+
+    // Construct the SMS message with alert details
+    $sms_message = "FloodGuard Alert - $location ($status): $description";
+    
+    while ($row = $result->fetch_assoc()) {
+        $sms_result = sendSMS($row['phone'], $sms_message);
+        if ($sms_result['success']) {
+            $successCount++;
+        } else {
+            $failCount++;
+        }
+    }
+
+    $stmt->close();
+    return ['success_count' => $successCount, 'fail_count' => $failCount];
+}
+
+/**
  * Send safety advisory/news SMS to all users
  */
 function sendSafetyAdvisoryToAll($message, $conn) {
