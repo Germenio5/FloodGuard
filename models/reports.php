@@ -48,7 +48,8 @@ function get_report_by_id($conn, $report_id) {
     $report_id = intval($report_id);
 
     // Join with users to include the report author's phone number and name
-    $query = "SELECT r.id, r.user_email, r.location, r.status, r.description, r.image, r.post_news, r.sms_sent_at, r.created_at, 
+    $query = "SELECT r.id, r.user_email, r.location, r.status, r.description, r.image, r.post_news, r.sms_sent_at, r.created_at,
+              r.admin_response, r.admin_response_date, r.is_responded,
               u.first_name, u.last_name, u.phone 
               FROM reports r 
               LEFT JOIN users u ON r.user_email = u.email 
@@ -250,4 +251,101 @@ function get_reports_count_by_location($conn, $location) {
     return 0;
 }
 
+/**
+ * Get user report history with admin response status
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $email User email
+ * @param int $limit Number of records to retrieve
+ * @param int $offset Offset for pagination
+ * @return array Array of reports with response information
+ */
+function get_user_report_history($conn, $email, $limit = null, $offset = 0) {
+    $reports = [];
+    $email = $conn->real_escape_string(strtolower(trim($email)));
+    
+    $query = "SELECT 
+              id, 
+              user_email, 
+              location, 
+              status, 
+              description, 
+              image, 
+              post_news, 
+              created_at,
+              admin_response,
+              admin_response_date,
+              is_responded
+              FROM reports 
+              WHERE LOWER(user_email) = '$email'
+              ORDER BY created_at DESC";
+    
+    if ($limit !== null) {
+        $limit = intval($limit);
+        $offset = intval($offset);
+        $query .= " LIMIT $limit OFFSET $offset";
+    }
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $reports[] = $row;
+        }
+        $result->free();
+    }
+    
+    return $reports;
+}
+
+/**
+ * Get user report history count
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $email User email
+ * @return int Total number of reports by user
+ */
+function get_user_report_count($conn, $email) {
+    $email = $conn->real_escape_string(strtolower(trim($email)));
+    
+    $query = "SELECT COUNT(*) as total FROM reports WHERE LOWER(user_email) = '$email'";
+    $result = $conn->query($query);
+    
+    if ($result) {
+        $row = $result->fetch_assoc();
+        return (int)$row['total'];
+    }
+    return 0;
+}
+
+/**
+ * Get user report history stats
+ * 
+ * @param mysqli $conn Database connection
+ * @param string $email User email
+ * @return array Statistics about user's reports
+ */
+function get_user_report_stats($conn, $email) {
+    $email = $conn->real_escape_string(strtolower(trim($email)));
+    
+    $query = "SELECT 
+              COUNT(*) as total_reports,
+              SUM(CASE WHEN is_responded = 1 THEN 1 ELSE 0 END) as responded_reports,
+              SUM(CASE WHEN is_responded = 0 THEN 1 ELSE 0 END) as pending_reports
+              FROM reports 
+              WHERE LOWER(user_email) = '$email'";
+    
+    $result = $conn->query($query);
+    
+    if ($result && $result->num_rows > 0) {
+        return $result->fetch_assoc();
+    }
+    return [
+        'total_reports' => 0,
+        'responded_reports' => 0,
+        'pending_reports' => 0
+    ];
+}
+
 ?>
+

@@ -114,8 +114,8 @@ include '../controllers/affected-areas-controller.php';
                     Water Level Data
                 </a>
 
-                <a href="user-view-map.php" class="btn btn-primary">
-                    More Details
+                <a href="user-view-map.php?bridge=<?= urlencode($bridge['name']) ?>" class="btn btn-primary">
+                    View Map
                 </a>
             </div>
 

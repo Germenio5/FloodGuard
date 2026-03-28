@@ -91,6 +91,14 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </li>
 
         <li>
+            <a href="user-report-history.php"
+               class="<?= $current_page == 'user-report-history.php' ? 'active' : '' ?>">
+                <span class="icon">📋</span>
+                <span class="text">Report History</span>
+            </a>
+        </li>
+
+        <li>
             <a href="user-profile-settings.php"
                class="<?= $current_page == 'user-profile-settings.php' ? 'active' : '' ?>">
                 <span class="icon">👤</span>
