@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-// Set timezone to GMT+8 (Asia/Manila)
-date_default_timezone_set('Asia/Manila');
-
 // Get POST data
 $email    = trim($_POST['email'] ?? "");
 $password = trim($_POST['password'] ?? "");

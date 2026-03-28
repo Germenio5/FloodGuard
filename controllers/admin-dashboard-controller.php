@@ -15,9 +15,6 @@ if (isset($_SESSION['user_role']) && $_SESSION['user_role'] !== 'admin') {
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/user.php';
 
-// Set timezone to GMT+8 (Asia/Manila)
-date_default_timezone_set('Asia/Manila');
-
 // Update last active timestamp for admin
 if (isset($_SESSION['user_id'])) {
     update_user_last_active($conn, $_SESSION['user_id']);

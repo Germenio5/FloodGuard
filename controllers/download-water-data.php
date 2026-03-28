@@ -6,9 +6,6 @@
 
 session_start();
 
-// Set timezone to GMT+8 (Asia/Manila)
-date_default_timezone_set('Asia/Manila');
-
 // Check if user is logged in
 if (!isset($_SESSION['user_id']) || empty($_SESSION['user_id'])) {
     header("Location: ../views/login-user.php?error=login_required");

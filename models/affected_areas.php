@@ -5,9 +5,6 @@
  * Handles all database operations related to affected areas
  */
 
-// Set timezone to GMT+8 (Asia/Manila)
-date_default_timezone_set('Asia/Manila');
-
 /**
  * Get all affected areas
  * 

@@ -1,8 +1,6 @@
 <?php
 session_start();
 
-date_default_timezone_set('Asia/Manila');
-
 require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 require_once __DIR__ . '/../models/user.php';

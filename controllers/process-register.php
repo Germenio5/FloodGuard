@@ -1,9 +1,6 @@
 <?php
 session_start();
 
-// Set timezone to GMT+8 (Asia/Manila)
-date_default_timezone_set('Asia/Manila');
-
 $first    = trim($_POST['first_name'] ?? "");
 $last     = trim($_POST['last_name'] ?? "");
 $email    = trim($_POST['email'] ?? "");
@@ -194,6 +191,10 @@ if ($verificationCode) {
     $smsResult = sendVerificationCode($phone, $verificationCode);
 
     if ($smsResult['success']) {
+        // Mark that SMS has been sent for this email (prevents duplicate SMS on verify page)
+        $sessionKey = 'verification_sms_sent_' . md5(strtolower($email));
+        $_SESSION[$sessionKey] = true;
+        
         header("Location: ../views/verify-phone.php?email=" . urlencode($email));
     } else {
         // SMS failed, but pending registration saved - user can try resending

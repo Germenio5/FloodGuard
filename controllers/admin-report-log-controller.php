@@ -4,9 +4,6 @@ require_once __DIR__ . '/../config/config.php';
 require_once __DIR__ . '/../models/reports.php';
 require_once __DIR__ . '/../models/affected_areas.php';
 
-// Set timezone to GMT+8 (Asia/Manila)
-date_default_timezone_set('Asia/Manila');
-
 // Handle messages from delete operations
 $message = '';
 $error = '';
