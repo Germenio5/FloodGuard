@@ -268,27 +268,29 @@ main {
 /* Graph Box */
 .graph-box {
     background: white;
-    padding: 20px;
+    padding: 30px;
     border-radius: 12px;
     margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(16,24,40,0.04);
+    box-shadow: 0 2px 8px rgba(16,24,40,0.06);
     position: relative;
 }
 
 .graph-box h3 {
-    font-size: 16px;
+    font-size: 18px;
     color: #457d8a;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
+    margin-top: 0;
+    font-weight: 600;
 }
 
 .graph-box-info {
     font-size: 13px;
     color: #666;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .graph-box canvas {
-    max-height: 300px !important;
+    max-height: 400px !important;
     display: block;
     width: 100% !important;
     height: auto !important;

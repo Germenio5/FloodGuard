@@ -110,7 +110,7 @@ include '../controllers/affected-areas-controller.php';
             </p>
 
             <div class="button-group">
-                <a href="user-water-level-data.php" class="btn btn-outline">
+                <a href="user-water-level-data.php?bridge=<?= urlencode($bridge['name']) ?>" class="btn btn-outline">
                     Water Level Data
                 </a>
 

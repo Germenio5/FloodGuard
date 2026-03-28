@@ -17,12 +17,12 @@ main {
 .page-header {
     background: linear-gradient(135deg, #457d8a 0%, #3d6b77 100%);
     color: white;
-    padding: 50px 40px;
+    padding: 25px 30px;
 }
 
 .page-header h1 {
-    font-size: 36px;
-    margin-bottom: 15px;
+    font-size: 28px;
+    margin-bottom: 0;
 }
 
 .page-header p {
@@ -34,7 +34,7 @@ main {
 
 /* Data Section */
 .data-section {
-    padding: 40px;
+    padding: 30px 40px;
 }
 
 .section-header {
@@ -293,10 +293,13 @@ td {
     transition: all 0.3s ease;
 }
 
-.download-btn:hover {
+.download-btn:hover,
+.download-btn:focus {
     background: #3d6b77;
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    text-decoration: none;
+    color: white;
 }
 
 .download-btn:disabled {
@@ -441,6 +444,44 @@ td {
         padding: 14px 16px;
         font-size: 13px;
     }
+}
+
+/* Empty State */
+.empty-state {
+    background: white;
+    border-radius: 12px;
+    padding: 60px 40px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.empty-message {
+    font-size: 18px;
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.chart-container h3 {
+    color: #457d8a;
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-top: 0;
+    font-weight: 600;
+}
+
+.chart-container canvas {
+    max-height: 400px;
 }
 
 /* Extra Small Devices */

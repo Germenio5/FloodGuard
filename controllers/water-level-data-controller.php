@@ -24,22 +24,28 @@ if ($currentPage < 1) $currentPage = 1;
 // Get selected bridge filter
 $selectedBridge = isset($_GET['bridge']) ? trim($_GET['bridge']) : '';
 
-// Get total count and calculate pages
-$totalRecords = $selectedBridge ? get_water_levels_count($conn, $selectedBridge) : get_water_levels_count($conn);
-$totalPages = max(1, ceil($totalRecords / $itemsPerPage));
-
-// Ensure current page doesn't exceed total pages
-if ($currentPage > $totalPages) {
-    $currentPage = $totalPages;
+// Only fetch data if a bridge is selected
+if ($selectedBridge) {
+    $totalRecords = get_water_levels_count($conn, $selectedBridge);
+    $totalPages = max(1, ceil($totalRecords / $itemsPerPage));
+    
+    // Ensure current page doesn't exceed total pages
+    if ($currentPage > $totalPages) {
+        $currentPage = $totalPages;
+    }
+    
+    // Calculate offset
+    $offset = ($currentPage - 1) * $itemsPerPage;
+    
+    // Fetch water level history for selected bridge
+    $waterLevels_data = get_water_levels_by_area($conn, $selectedBridge, 1000);
+} else {
+    // No bridge selected - don't fetch data
+    $waterLevels_data = [];
+    $totalRecords = 0;
+    $totalPages = 1;
+    $offset = 0;
 }
-
-// Calculate offset
-$offset = ($currentPage - 1) * $itemsPerPage;
-
-// Fetch water level history using model
-$waterLevels_data = $selectedBridge 
-    ? get_water_levels_by_area($conn, $selectedBridge, 1000) // Get all for filtering
-    : get_water_levels_paginated($conn, null, $itemsPerPage, $offset);
 
 // Transform data for view
 $waterLevels = [];

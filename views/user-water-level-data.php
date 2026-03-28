@@ -9,6 +9,7 @@ include '../controllers/water-level-data-controller.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Water Level Data History</title>
     <link rel="stylesheet" href="../assets/css/userwaterleveldata.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -21,25 +22,16 @@ include '../controllers/water-level-data-controller.php';
     <!-- Page Header -->
     <div class="page-header">
         <h1>Water Level Data History</h1>
-
-        <p>
-        Water level information provides insight into the current state of rivers,
-        creeks, and other waterways. It helps residents and authorities understand
-        potential flood risks, track changes over time, and make informed decisions
-        to stay safe.
-        </p>
     </div>
 
     <!-- Recent Data Section -->
     <div class="data-section">
         <div class="section-header">
-            <h2>Recent Monitoring Data</h2>
-            
             <!-- Bridge Filter -->
             <div class="filter-box">
-                <label for="bridgeFilter">Filter by Bridge:</label>
+                <label for="bridgeFilter">Select Bridge:</label>
                 <select id="bridgeFilter" name="bridge" onchange="filterByBridge(this.value)">
-                    <option value="">All Bridges</option>
+                    <option value="" selected>Select Bridges</option>
                     <?php foreach ($allAreas as $area): ?>
                         <option value="<?= htmlspecialchars($area) ?>" <?= ($selectedBridge === $area) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($area) ?>
@@ -49,6 +41,7 @@ include '../controllers/water-level-data-controller.php';
             </div>
         </div>
 
+        <?php if ($selectedBridge): ?>
         <!-- Data Table -->
         <div class="table-container">
             <table>
@@ -108,21 +101,163 @@ include '../controllers/water-level-data-controller.php';
                     <?php elseif ($btn['active']): ?>
                         <button class="page-btn active<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></button>
                     <?php else: ?>
-                        <a href="?page=<?php echo $btn['page']; ?><?php echo $selectedBridge ? '&bridge=' . urlencode($selectedBridge) : ''; ?>" class="page-btn<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></a>
+                        <a href="?page=<?php echo $btn['page']; ?>&bridge=<?php echo urlencode($selectedBridge); ?>" class="page-btn<?php echo $extraClass; ?>"><?php echo $btn['label']; ?></a>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </div>
 
             <div class="download-actions">
-                <button class="download-btn" title="PDF download feature coming soon">📄 Download PDF</button>
+                <a href="../controllers/download-water-level-pdf.php?bridge=<?php echo urlencode($selectedBridge); ?>" class="download-btn" title="Download water level data as PDF">📄 Download PDF</a>
             </div>
         </div>
+
+        <!-- Water Level Chart -->
+        <div class="chart-container">
+            <h3>Water Level Trend</h3>
+            <canvas id="waterLevelChart"></canvas>
+        </div>
+
+        <?php else: ?>
+        <!-- No Bridge Selected Message -->
+        <div class="empty-state">
+            <p class="empty-message">Select a bridge to display water level data</p>
+        </div>
+        <?php endif; ?>
 
     </div>
 </div>
 </main>
 
 <script src="../assets/js/filter-bridge.js"></script>
+
+<script>
+// Initialize water level chart
+document.addEventListener('DOMContentLoaded', function() {
+    const chartCanvas = document.getElementById('waterLevelChart');
+    
+    <?php if ($selectedBridge): ?>
+    // Prepare chart data from PHP water levels data
+    const waterLevelData = <?php echo json_encode($waterLevels); ?>;
+    
+    if (waterLevelData && waterLevelData.length > 0) {
+        // Sort data by date (oldest first for better visualization)
+        waterLevelData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // Extract times and heights for chart
+        const labels = waterLevelData.map(data => {
+            // Extract time from date string (format: "m/d/Y H:i" -> "H:i")
+            const parts = data.date.split(' ');
+            return parts[1]; // Get the time part
+        });
+        const heights = waterLevelData.map(data => data.height);
+        
+        // Get color based on status
+        const getStatusColor = (status) => {
+            switch(status) {
+                case 'normal': return 'rgba(16, 185, 129, 0.7)';
+                case 'warning': return 'rgba(255, 209, 71, 0.7)';
+                case 'danger': return 'rgba(255, 128, 0, 0.7)';
+                case 'critical': return 'rgba(244, 67, 54, 0.7)';
+                default: return 'rgba(69, 125, 138, 0.7)';
+            }
+        };
+        
+        // Create line chart
+        new Chart(chartCanvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Water Level (m)',
+                    data: heights,
+                    borderColor: '#457d8a',
+                    backgroundColor: 'rgba(69, 125, 138, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#457d8a',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointHoverRadius: 7,
+                    pointHoverBackgroundColor: '#3d6b77'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            font: {
+                                size: 14,
+                                weight: '600'
+                            },
+                            color: '#333',
+                            padding: 15,
+                            usePointStyle: true
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: {
+                            size: 14,
+                            weight: 'bold'
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        callbacks: {
+                            label: function(context) {
+                                return 'Height: ' + context.parsed.y + ' m';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        title: {
+                            display: true,
+                            text: 'Water Level (meters)'
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            },
+                            color: '#666',
+                            callback: function(value) {
+                                return value + ' m';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 12
+                            },
+                            color: '#666',
+                            maxRotation: 45,
+                            minRotation: 0
+                        },
+                        grid: {
+                            display: true,
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+    <?php endif; ?>
+});
+</script>
 
 </body>
 </html>
