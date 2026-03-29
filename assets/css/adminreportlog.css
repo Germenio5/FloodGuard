@@ -251,7 +251,7 @@ td {
     border-radius: 12px;
     width: 90%;
     max-width: 800px;
-    max-height: 90vh;
+    max-height: 75vh;
     overflow-y: auto;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     animation: slideDown 0.3s;
@@ -315,9 +315,9 @@ td {
 
 .report-image {
     width: 100%;
-    max-width: 100%;
+    max-width: 400px;
     height: auto;
-    max-height: 600px;
+    max-height: 300px;
     border-radius: 8px;
     margin-top: 10px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -412,6 +412,30 @@ td {
     border: 1px solid #c3e6cb;
 }
 
+/* Download PDF Button Styles */
+.download-button-row {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.download-pdf-btn {
+    background: #0056b3;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 86, 179, 0.2);
+}
+
+.download-pdf-btn:hover {
+    background: #004085;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 86, 179, 0.25);
+}
 
 /* Form Styles for News Modal */
 .form-group {

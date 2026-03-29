@@ -57,6 +57,11 @@ function viewReport(reportId) {
                 <div class="image-row">
                     <img src="${imageSrc}" alt="No Image" class="report-image">
                 </div>
+                <div class="download-button-row">
+                    <button class="download-pdf-btn" onclick="downloadReportPDF(${report.id})">
+                        📄 Download PDF Report
+                    </button>
+                </div>
             `;
 
             modal.style.display = 'block';
@@ -135,6 +140,11 @@ function sendSMS(reportId, forceSend = false) {
             button.disabled = false;
         }
     });
+}
+
+function downloadReportPDF(reportId) {
+    // Open the PDF download in a new window/tab
+    window.open(`../controllers/admin-download-report-pdf.php?id=${encodeURIComponent(reportId)}`, '_blank');
 }
 
 function closeModal() {
