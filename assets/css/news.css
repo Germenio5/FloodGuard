@@ -249,8 +249,8 @@ body {
     padding: 30px;
     border-radius: 12px;
     width: 90%;
-    max-width: 800px;
-    max-height: 90vh;
+    max-width: 700px;
+    max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     animation: slideDown 0.3s;

@@ -65,13 +65,7 @@ include '../controllers/verify-phone-controller.php';
     </div>
 </main>
 
-<script>
-function resendCode() {
-    if (confirm('Resend verification code to your phone?')) {
-        document.getElementById('resendForm').submit();
-    }
-}
-</script>
+<script src="../assets/js/verify-phone.js"></script>
 
 </body>
 </html>

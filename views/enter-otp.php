@@ -57,13 +57,7 @@ include '../controllers/enter-otp-controller.php';
     </div>
 </main>
 
-<script>
-function resendOTP() {
-    if (confirm('Resend OTP code to your phone?')) {
-        document.getElementById('resendForm').submit();
-    }
-}
-</script>
+<script src="../assets/js/enter-otp.js"></script>
 
 </body>
 </html>
