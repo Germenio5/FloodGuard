@@ -94,11 +94,13 @@ $barangays = array_map(function($addr) { return htmlspecialchars($addr); }, $bar
 $totalResidents = count($residents);
 $registeredCount = get_users_count($conn);
 
-// For now, use basic distribution (can be enhanced with actual status column)
+// Get actual status counts from database
+$statusCounts = get_users_count_by_status($conn);
+
 $stats = [
-    "safe" => max(0, floor($registeredCount * 0.6)),
-    "danger" => max(0, floor($registeredCount * 0.2)),
-    "registered" => $registeredCount
+    "safe" => $statusCounts['safe'],
+    "danger" => $statusCounts['danger'],
+    "registered" => $statusCounts['total']
 ];
 
 // Helper function for status badge

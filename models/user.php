@@ -420,4 +420,31 @@ function extract_barangay_from_address($address) {
     return $brgy;
 }
 
+/**
+ * Get count of users by status
+ *
+ * @param mysqli $conn Database connection
+ * @return array Associative array with status counts ['safe' => int, 'danger' => int, 'total' => int]
+ */
+function get_users_count_by_status($conn) {
+    $query = "SELECT 
+        SUM(CASE WHEN LOWER(TRIM(status)) LIKE '%danger%' OR LOWER(TRIM(status)) LIKE '%alert%' THEN 1 ELSE 0 END) as danger_count,
+        SUM(CASE WHEN LOWER(TRIM(status)) NOT LIKE '%danger%' AND LOWER(TRIM(status)) NOT LIKE '%alert%' AND TRIM(status) != '' THEN 1 ELSE 0 END) as safe_count,
+        COUNT(*) as total_count
+        FROM users WHERE role = 'user'";
+
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return [
+            'safe' => (int)$row['safe_count'],
+            'danger' => (int)$row['danger_count'],
+            'total' => (int)$row['total_count']
+        ];
+    }
+
+    return ['safe' => 0, 'danger' => 0, 'total' => 0];
+}
+
 ?>

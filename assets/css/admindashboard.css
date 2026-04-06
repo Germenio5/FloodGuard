@@ -194,8 +194,62 @@ th {
     font-weight: 600;
 }
 
-tbody tr {
-    border-bottom: 1px solid #e5e7eb;
+/* Column widths */
+th:nth-child(1), td:nth-child(1) { /* ID */
+    width: 60px;
+    min-width: 60px;
+}
+
+th:nth-child(2), td:nth-child(2) { /* Name */
+    width: 150px;
+    min-width: 120px;
+}
+
+th:nth-child(3), td:nth-child(3) { /* Address */
+    width: 180px;
+    min-width: 150px;
+    max-width: 200px;
+}
+
+th:nth-child(4), td:nth-child(4) { /* Phone Number */
+    width: 140px;
+    min-width: 120px;
+}
+
+th:nth-child(5), td:nth-child(5) { /* Email */
+    width: 200px;
+    min-width: 150px;
+}
+
+th:nth-child(6), td:nth-child(6) { /* Active */
+    width: 120px;
+    min-width: 100px;
+}
+
+th:nth-child(7), td:nth-child(7) { /* Status */
+    width: 100px;
+    min-width: 80px;
+}
+
+th:nth-child(8), td:nth-child(8) { /* Actions */
+    width: 100px;
+    min-width: 80px;
+}
+
+/* Address column specific styling */
+td:nth-child(3) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    position: relative;
+}
+
+td:nth-child(3):hover {
+    white-space: normal;
+    overflow: visible;
+    background: #f9fafb;
+    z-index: 10;
+    position: relative;
 }
 
 tbody tr:last-child {
@@ -219,6 +273,7 @@ td {
     border-radius: 12px;
     font-size: 12px;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .status-safe {
@@ -396,6 +451,23 @@ td {
 
     table {
         min-width: 700px;
+    }
+
+    /* Adjust column widths for mobile */
+    th:nth-child(3), td:nth-child(3) { /* Address - make even smaller on mobile */
+        width: 120px;
+        min-width: 100px;
+        max-width: 140px;
+    }
+
+    th:nth-child(4), td:nth-child(4) { /* Phone Number - keep reasonable */
+        width: 130px;
+        min-width: 110px;
+    }
+
+    th:nth-child(7), td:nth-child(7) { /* Status - ensure visible */
+        width: 90px;
+        min-width: 70px;
     }
 
     th,
