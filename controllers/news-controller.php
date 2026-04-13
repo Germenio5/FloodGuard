@@ -194,8 +194,12 @@ if ($reports_data) {
                 $timeStr = floor($diff/60) . ' minutes ago';
             } elseif ($diff < 86400) {
                 $timeStr = floor($diff/3600) . ' hours ago';
+            } elseif ($diff < 2592000) { // 30 days
+                $days = floor($diff/86400);
+                $timeStr = $days . ' day' . ($days !== 1 ? 's' : '') . ' ago';
             } else {
-                $timeStr = floor($diff/86400) . ' days ago';
+                $months = floor($diff/2592000);
+                $timeStr = $months . ' month' . ($months !== 1 ? 's' : '') . ' ago';
             }
             // extract only barangay portion and prefix with 'Brgy.'
             $parts = explode(',', $row['location']);

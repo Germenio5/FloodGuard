@@ -35,7 +35,11 @@ function formatTimeAgo(ts) {
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`;
     const hours = Math.floor(minutes / 60);
-    return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    if (hours < 24) return `${hours} hour${hours !== 1 ? 's' : ''} ago`;
+    const days = Math.floor(hours / 24);
+    if (days < 30) return `${days} day${days !== 1 ? 's' : ''} ago`;
+    const months = Math.floor(days / 30);
+    return `${months} month${months !== 1 ? 's' : ''} ago`;
 }
 
 function updateLocationMarker(lat, lng) {
