@@ -174,9 +174,9 @@ $actions = [
 
 // Emergency hotline
 $hotline = [
-    'phone' => '(034) 432-3871 to 73',
-    'tel' => '0344323871',
-    'note' => '(24/7 Roxas Emergency Dispatch)'
+    'phone' => '(090) 9863-9276 to 79',
+    'tel' => '09098639276',
+    'note' => '(24/7 Bacolod Emergency Dispatch)'
 ];
 
 // Fetch last 24 hours water level data for chart based on current location

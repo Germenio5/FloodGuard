@@ -3,7 +3,7 @@
  * Download Report as PDF
  * Generates and downloads a flood report in PDF format using FPDF library
  */
-
+date_default_timezone_set('Asia/Manila');
 session_start();
 
 // Check if user is logged in

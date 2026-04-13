@@ -3,7 +3,7 @@
  * Download Water Level Data as CSV
  * Generates and downloads water level history as CSV file
  */
-
+date_default_timezone_set('Asia/Manila');
 session_start();
 
 // Check if user is logged in

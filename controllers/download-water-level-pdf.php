@@ -3,7 +3,8 @@
  * Download Water Level Data as PDF
  * Generates a PDF report with water level data table and statistics
  */
-
+date_default_timezone_set('Asia/Manila');
+ob_start();
 session_start();
 
 // Check if user is logged in
@@ -139,7 +140,111 @@ foreach ($waterLevelData as $row) {
 // Reset text color
 $pdf->SetTextColor(0, 0, 0);
 
-// ===== PAGE 2: WATER LEVEL DATA STATISTICS =====
+// ===== PAGE 2: WATER LEVEL HISTORY CHART =====
+$pdf->AddPage();
+
+$pdf->SetFont('Arial', 'B', 16);
+$pdf->SetTextColor(69, 125, 138);
+$pdf->Cell(0, 10, 'Water Level History Chart', 0, 1, 'L');
+$pdf->SetTextColor(0, 0, 0);
+$pdf->Ln(5);
+
+usort($waterLevelData, function($a, $b) {
+    return strtotime($a['record_time']) - strtotime($b['record_time']);
+});
+
+$chartX = 20;
+$chartY = 30;
+$chartWidth = 170;
+$chartHeight = 100;
+
+$times = array_map(function($row) { return strtotime($row['record_time']); }, $waterLevelData);
+$heights = array_map(function($row) { return (float)$row['height']; }, $waterLevelData);
+$minTime = min($times);
+$maxTime = max($times);
+$minHeight = min($heights);
+$maxHeight = max($heights);
+
+if ($maxTime == $minTime) $maxTime = $minTime + 1;
+if ($maxHeight == $minHeight) $maxHeight = $minHeight + 1;
+
+$pdf->SetLineWidth(0.4);
+$pdf->Rect($chartX, $chartY, $chartWidth, $chartHeight);
+$pdf->SetLineWidth(0.2);
+
+$numYLabels = 5;
+$stepY = ($maxHeight - $minHeight) / ($numYLabels - 1);
+$intervalSeconds = 1 * 3600;
+$timeRange = $maxTime - $minTime;
+$numXLabels = floor($timeRange / $intervalSeconds) + 1;
+
+$pdf->SetDrawColor(153, 153, 153);
+
+for ($i = 0; $i < $numYLabels; $i++) {
+    $h = $minHeight + $i * $stepY;
+    $y = $chartY + $chartHeight - (($h - $minHeight) / ($maxHeight - $minHeight)) * $chartHeight;
+    $pdf->Line($chartX, $y, $chartX + $chartWidth, $y);
+}
+
+for ($i = 0; $i < $numXLabels; $i++) {
+    $t = $minTime + $i * $intervalSeconds;
+    if ($t > $maxTime) break;
+    $x = $chartX + (($t - $minTime) / ($maxTime - $minTime)) * $chartWidth;
+    $pdf->Line($x, $chartY, $x, $chartY + $chartHeight);
+}
+
+$pdf->SetDrawColor(69, 125, 138);
+
+$pdf->SetFont('Arial', '', 8);
+
+for ($i = 0; $i < $numYLabels; $i++) {
+    $h = $minHeight + $i * $stepY;
+    $y = $chartY + $chartHeight - (($h - $minHeight) / ($maxHeight - $minHeight)) * $chartHeight;
+    $pdf->Line($chartX, $y, $chartX - 2, $y);
+    $pdf->SetXY($chartX - 18, $y - 2);
+    $pdf->Cell(15, 4, number_format($h, 1), 0, 0, 'R');
+}
+
+for ($i = 0; $i < $numXLabels; $i++) {
+    $t = $minTime + $i * $intervalSeconds;
+    if ($t > $maxTime) break;
+    $x = $chartX + (($t - $minTime) / ($maxTime - $minTime)) * $chartWidth;
+    $pdf->Line($x, $chartY + $chartHeight, $x, $chartY + $chartHeight + 2);
+    $pdf->SetXY($x - 8, $chartY + $chartHeight + 4);
+    $pdf->Cell(16, 4, date('H:i', $t), 0, 0, 'C');
+}
+
+$pdf->SetXY($chartX + $chartWidth / 2 - 10, $chartY + $chartHeight + 10);
+$pdf->Cell(20, 4, 'Time', 0, 0, 'C');
+$pdf->SetXY($chartX - 20, $chartY + $chartHeight / 2 - 4);
+$pdf->Cell(15, 4, 'Height', 0, 0, 'C');
+$pdf->SetXY($chartX - 20, $chartY + $chartHeight / 2 + 0);
+$pdf->Cell(15, 4, '(m)', 0, 0, 'C');
+
+$pdf->SetDrawColor(69, 125, 138); 
+$pdf->SetFillColor(69, 125, 138); 
+$pdf->SetLineWidth(0.8);
+
+$prevX = null;
+$prevY = null;
+foreach ($waterLevelData as $row) {
+    $t = strtotime($row['record_time']);
+    $h = (float)$row['height'];
+    $x = $chartX + (($t - $minTime) / ($maxTime - $minTime)) * $chartWidth;
+    $y = $chartY + $chartHeight - (($h - $minHeight) / ($maxHeight - $minHeight)) * $chartHeight;
+    
+    $pdf->Rect($x-1, $y-1, 2, 2, 'F');
+    
+    if ($prevX !== null) {
+        $pdf->Line($prevX, $prevY, $x, $y);
+    }
+    $prevX = $x;
+    $prevY = $y;
+}
+
+$pdf->SetLineWidth(0.2);
+
+// ===== PAGE 3: WATER LEVEL DATA STATISTICS =====
 $pdf->AddPage();
 
 $pdf->SetFont('Arial', 'B', 16);

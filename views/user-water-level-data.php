@@ -113,7 +113,7 @@ include '../controllers/water-level-data-controller.php';
 
         <!-- Water Level Chart -->
         <div class="chart-container">
-            <h3>Water Level Trend</h3>
+            <h3>Water Level History</h3>
             <canvas id="waterLevelChart"></canvas>
         </div>
 
