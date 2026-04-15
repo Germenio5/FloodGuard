@@ -179,45 +179,66 @@ $hotline = [
     'note' => '(24/7 Bacolod Emergency Dispatch)'
 ];
 
-// Fetch last 24 hours water level data for chart based on current location
+// Handle chart period filter
+$chartPeriod = isset($_GET['chart_period']) ? $_GET['chart_period'] : 'daily';
+$validPeriods = ['daily', 'weekly', 'monthly'];
+if (!in_array($chartPeriod, $validPeriods)) {
+    $chartPeriod = 'daily';
+}
+
+// Fetch chart data based on current location and period
 $areaName = $waterLevel['bridge'] ?? 'Default Area';
 $areaLocation = $waterLevel['location'] ?? '';
-$last24hData = get_water_level_last_24h($conn, $areaName);
 
-// Prepare chart data from water level history table
-$chartLabels = [];
-$chartHeights = [];
+// Try to get chart data from the user dashboard chart table first
+$chartData = get_user_dashboard_chart_data($conn, $userId, $areaName, $chartPeriod);
 
-if (!empty($last24hData)) {
-    foreach ($last24hData as $record) {
-        // Format time as HH:MM for chart label
-        $chartLabels[] = date('H:i', strtotime($record['record_time']));
-        $chartHeights[] = (float)$record['height'];
+if (!$chartData) {
+    // If no cached data, generate it from water_level_history
+    $chartData = generate_chart_data_for_period($conn, $areaName, $chartPeriod);
+
+    // Cache the generated data
+    if (!empty($chartData['labels']) && !empty($chartData['heights'])) {
+        upsert_user_dashboard_chart_data($conn, $userId, $areaName, $chartPeriod, $chartData['labels'], $chartData['heights']);
     }
-} else {
-    // Sample data for demonstration if no database records exist
-    $sampleTimes = [
-        '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
-        '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
-        '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
-        '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
-    ];
-    $sampleHeights = [
-        4.2, 4.5, 4.3, 4.1, 3.9, 3.8,
-        4.0, 4.3, 4.6, 5.0, 5.3, 5.5,
-        5.4, 5.2, 5.1, 5.3, 5.5, 5.7,
-        5.8, 5.6, 5.4, 5.2, 4.8, 4.5
-    ];
-    $chartLabels = $sampleTimes;
-    $chartHeights = $sampleHeights;
-    error_log("No water level history data found for area: " . $areaName . ". Using sample data for display.");
+}
+
+// Fallback to sample data if no data available
+if (empty($chartData['labels']) || empty($chartData['heights'])) {
+    switch ($chartPeriod) {
+        case 'daily':
+            $sampleTimes = [
+                '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+                '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+                '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+                '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'
+            ];
+            $sampleHeights = [
+                4.2, 4.5, 4.3, 4.1, 3.9, 3.8,
+                4.0, 4.3, 4.6, 5.0, 5.3, 5.5,
+                5.4, 5.2, 5.1, 5.3, 5.5, 5.7,
+                5.8, 5.6, 5.4, 5.2, 4.8, 4.5
+            ];
+            break;
+        case 'weekly':
+            $sampleTimes = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'];
+            $sampleHeights = [4.2, 4.5, 4.3, 4.1, 3.9, 4.0, 4.3];
+            break;
+        case 'monthly':
+            $sampleTimes = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+            $sampleHeights = [4.2, 4.5, 4.3, 4.1];
+            break;
+    }
+    $chartData = ['labels' => $sampleTimes, 'heights' => $sampleHeights];
+    error_log("No water level history data found for area: " . $areaName . " and period: " . $chartPeriod . ". Using sample data for display.");
 }
 
 $chartDataJson = json_encode([
-    'labels' => !empty($chartLabels) ? $chartLabels : ['No Data'],
-    'heights' => !empty($chartHeights) ? $chartHeights : [0],
+    'labels' => $chartData['labels'],
+    'heights' => $chartData['heights'],
     'area' => $areaName,
-    'location' => $areaLocation
+    'location' => $areaLocation,
+    'period' => $chartPeriod
 ]);
 
 /**

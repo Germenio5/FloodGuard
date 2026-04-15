@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     callbacks: {
                         label: function(context) {
-                            return 'Height: ' + context.parsed.y + ' m';
+                            const value = Number(context.parsed.y);
+                            return 'Height: ' + (isNaN(value) ? context.parsed.y : value.toFixed(2)) + ' m';
                         }
                     }
                 }
@@ -83,7 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         },
                         color: '#666',
                         callback: function(value) {
-                            return value + ' m';
+                            const numericValue = Number(value);
+                            return (isNaN(numericValue) ? value : numericValue.toFixed(2)) + ' m';
                         }
                     },
                     grid: {

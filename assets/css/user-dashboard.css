@@ -275,7 +275,14 @@ main {
     position: relative;
 }
 
-.graph-box h3 {
+.graph-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.graph-title h3 {
     font-size: 18px;
     color: #457d8a;
     margin-bottom: 8px;
@@ -283,10 +290,55 @@ main {
     font-weight: 600;
 }
 
-.graph-box-info {
+.graph-title .graph-box-info {
     font-size: 13px;
     color: #666;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.graph-box .filter-box {
+    background: transparent;
+    border-radius: 8px;
+    padding: 0;
+    margin-bottom: 0;
+    box-shadow: none;
+}
+
+.graph-box .filter-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.graph-box .filter-box label {
+    font-size: 14px;
+    color: #64748b;
+    font-weight: 600;
+    white-space: nowrap;
+    margin-bottom: 0;
+}
+
+.graph-box .filter-box select {
+    padding: 8px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #1f2937;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    min-width: 140px;
+    transition: all 0.2s ease;
+}
+
+.graph-box .filter-box select:hover {
+    border-color: #9ca3af;
+}
+
+.graph-box .filter-box select:focus {
+    outline: none;
+    border-color: #377586;
+    box-shadow: 0 0 0 3px rgba(55, 117, 134, 0.1);
 }
 
 .graph-box canvas {
@@ -295,6 +347,8 @@ main {
     width: 100% !important;
     height: auto !important;
 }
+
+/* Action Row */
 
 /* Action Row */
 .action-row {

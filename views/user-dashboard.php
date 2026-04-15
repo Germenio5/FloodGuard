@@ -121,8 +121,29 @@ include '../controllers/user-dashboard-controller.php';
 
     <!-- GRAPH -->
     <div class="graph-box">
-        <h3>Water Level History - Last 24 Hours</h3>
-        <p class="graph-box-info"><?= htmlspecialchars($waterLevel['bridge']) ?> - <?= htmlspecialchars($waterLevel['location']) ?></p>
+        <div class="graph-header">
+            <div class="graph-title">
+                <h3>Water Level History - <?php
+                    $periodTitles = [
+                        'daily' => 'Last 24 Hours',
+                        'weekly' => 'Last 7 Days',
+                        'monthly' => 'Last 30 Days'
+                    ];
+                    echo $periodTitles[$_GET['chart_period'] ?? 'daily'] ?? 'Last 24 Hours';
+                ?></h3>
+                <p class="graph-box-info"><?= htmlspecialchars($waterLevel['bridge']) ?> - <?= htmlspecialchars($waterLevel['location']) ?></p>
+            </div>
+            <div class="filter-box">
+                <form method="GET" class="filter-form">
+                    <label for="chartPeriodFilter">Period:</label>
+                    <select id="chartPeriodFilter" name="chart_period" onchange="this.form.submit()">
+                        <option value="daily" <?= (($_GET['chart_period'] ?? 'daily') === 'daily') ? 'selected' : '' ?>>Daily</option>
+                        <option value="weekly" <?= (($_GET['chart_period'] ?? 'daily') === 'weekly') ? 'selected' : '' ?>>Weekly</option>
+                        <option value="monthly" <?= (($_GET['chart_period'] ?? 'daily') === 'monthly') ? 'selected' : '' ?>>Monthly</option>
+                    </select>
+                </form>
+            </div>
+        </div>
         <canvas id="waterLevelChart"></canvas>
     </div>
 

@@ -227,4 +227,137 @@ function get_water_levels_by_status($conn, $status) {
     return $levels;
 }
 
+/**
+ * Insert or update user dashboard chart data
+ *
+ * @param mysqli $conn Database connection
+ * @param int $userId User ID (optional, can be 0 for shared data)
+ * @param string $area Area name
+ * @param string $periodType Period type (daily, weekly, monthly)
+ * @param array $labels Chart labels array
+ * @param array $heights Chart heights array
+ * @return bool True if successful, false otherwise
+ */
+function upsert_user_dashboard_chart_data($conn, $userId, $area, $periodType, $labels, $heights) {
+    $userId = intval($userId);
+    $area = $conn->real_escape_string(trim($area));
+    $periodType = $conn->real_escape_string(trim($periodType));
+    $labelsJson = json_encode($labels);
+    $heightsJson = json_encode($heights);
+
+    // First try to update existing record (universal data, user_id can be 0 or any value)
+    $updateQuery = "UPDATE user_dashboard_chart_data
+                    SET chart_labels = '$labelsJson', chart_heights = '$heightsJson', updated_at = NOW()
+                    WHERE area = '$area' AND period_type = '$periodType'
+                    LIMIT 1";
+
+    if ($conn->query($updateQuery) === TRUE) {
+        if ($conn->affected_rows > 0) {
+            return true; // Updated existing record
+        }
+    }
+
+    // If no record was updated, insert new record
+    $insertQuery = "INSERT INTO user_dashboard_chart_data (user_id, area, period_type, chart_labels, chart_heights)
+                    VALUES ($userId, '$area', '$periodType', '$labelsJson', '$heightsJson')";
+
+    if ($conn->query($insertQuery) === TRUE) {
+        return true;
+    } else {
+        error_log("Database error in upsert_user_dashboard_chart_data: " . $conn->error);
+        return false;
+    }
+}
+
+/**
+ * Get user dashboard chart data
+ *
+ * @param mysqli $conn Database connection
+ * @param int $userId User ID (optional, not used for filtering)
+ * @param string $area Area name
+ * @param string $periodType Period type (daily, weekly, monthly)
+ * @return array|bool Chart data or false if not found
+ */
+function get_user_dashboard_chart_data($conn, $userId, $area, $periodType) {
+    $area = $conn->real_escape_string(trim($area));
+    $periodType = $conn->real_escape_string(trim($periodType));
+
+    $query = "SELECT chart_labels, chart_heights
+              FROM user_dashboard_chart_data
+              WHERE area = '$area' AND period_type = '$periodType'
+              ORDER BY updated_at DESC LIMIT 1";
+
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        return [
+            'labels' => json_decode($row['chart_labels'], true),
+            'heights' => json_decode($row['chart_heights'], true)
+        ];
+    }
+    return false;
+}
+
+/**
+ * Generate chart data for different periods from water_level_history
+ *
+ * @param mysqli $conn Database connection
+ * @param string $area Area name
+ * @param string $periodType Period type (daily, weekly, monthly)
+ * @return array Chart data with labels and heights
+ */
+function generate_chart_data_for_period($conn, $area, $periodType) {
+    $area = $conn->real_escape_string(trim($area));
+    $labels = [];
+    $heights = [];
+
+    switch ($periodType) {
+        case 'daily':
+            // Last 24 hours, hourly data
+            $query = "SELECT DATE_FORMAT(record_time, '%H:%i') as label, height
+                      FROM water_level_history
+                      WHERE area = '$area'
+                      AND record_time >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+                      ORDER BY record_time ASC";
+            break;
+
+        case 'weekly':
+            // Last 7 days, daily data
+            $query = "SELECT DATE_FORMAT(record_time, '%m/%d') as label, AVG(height) as height
+                      FROM water_level_history
+                      WHERE area = '$area'
+                      AND record_time >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+                      GROUP BY DATE(record_time)
+                      ORDER BY record_time ASC";
+            break;
+
+        case 'monthly':
+            // Last 30 days, weekly data (7-day intervals)
+            $query = "SELECT CONCAT('Week ', FLOOR(DATEDIFF(record_time, DATE_SUB(NOW(), INTERVAL 30 DAY)) / 7) + 1) as label,
+                             AVG(height) as height
+                      FROM water_level_history
+                      WHERE area = '$area'
+                      AND record_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+                      GROUP BY FLOOR(DATEDIFF(record_time, DATE_SUB(NOW(), INTERVAL 30 DAY)) / 7)
+                      ORDER BY MIN(record_time) ASC";
+            break;
+
+        default:
+            return ['labels' => [], 'heights' => []];
+    }
+
+    $result = $conn->query($query);
+
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $labels[] = $row['label'];
+            $heights[] = round(floatval($row['height']), 2);
+        }
+        $result->free();
+    }
+
+    return ['labels' => $labels, 'heights' => $heights];
+}
+
 ?>
