@@ -87,9 +87,6 @@ include '../controllers/admin-map-edit-controller.php';
     </div>
 
     <!-- Buttons -->
-    <div class="button-row">
-        <a href="<?= htmlspecialchars($buttons['water_level']) ?>" class="btn-white">Water Level Status</a>
-    </div>
 
 </div>
 </main>
