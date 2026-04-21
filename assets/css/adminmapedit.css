@@ -547,4 +547,15 @@ main {
         width: 100%;
         justify-content: center;
     }
+
+    /* Ensure map controls stay behind the sidebar when it opens */
+    .map-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Leaflet controls should have low z-index on mobile */
+    .leaflet-control {
+        z-index: 10 !important;
+    }
 }

@@ -336,50 +336,131 @@ textarea {
 @media (max-width: 768px) {
 
 .content-right {
-    padding: 40px 20px;
+    padding: 30px 15px;
 }
 
 .content-left {
-    padding: 20px 20px;
+    padding: 15px 15px;
 }
 
 .content-left h1 {
-    font-size: 20px;
+    font-size: 18px;
+    margin-bottom: 8px;
 }
 
 .content-left p {
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
-    /* Success container mobile styles - smaller elements */
-    .success-container {
-        min-height: 220px;
-        padding: 16px 6px;
-        margin-top: 8px;
-        border-radius: 6px;
-    }
-    .success-icon {
-        font-size: 32px;
-        margin-bottom: 8px;
-    }
-    .success-container h2 {
-        font-size: 16px;
-        margin-bottom: 6px;
-    }
-    .success-container p {
-        font-size: 11px;
-        margin-bottom: 10px;
-        max-width: 100%;
-    }
-    .success-button-group {
-        flex-direction: column;
-        gap: 4px;
-    }
-    .success-btn {
-        font-size: 11px;
-        padding: 6px 10px;
-        width: 100%;
-        border-radius: 4px;
-    }
+.content-right h1 {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 11px;
+    margin-bottom: 18px;
+}
+
+.form-group {
+    margin-bottom: 14px;
+}
+
+label {
+    font-size: 12px;
+    margin-bottom: 6px;
+}
+
+.text-input, textarea {
+    padding: 10px;
+    font-size: 13px;
+}
+
+textarea {
+    height: 80px;
+    min-height: 80px;
+}
+
+.badge-group {
+    gap: 8px;
+}
+
+.badge {
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+.upload-btn {
+    font-size: 12px;
+    padding: 8px 12px;
+}
+
+.submit-btn {
+    font-size: 14px;
+    padding: 10px 20px;
+}
+
+.checkbox-container {
+    font-size: 12px;
+    gap: 6px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+}
+
+.error-message {
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 12px;
+}
+
+.error-message strong {
+    margin-bottom: 3px;
+}
+
+.error-message p {
+    font-size: 12px;
+}
+
+/* Success container mobile styles - smaller elements */
+.success-container {
+    min-height: 280px;
+    padding: 20px 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.success-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+}
+
+.success-container h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.success-container p {
+    font-size: 12px;
+    margin-bottom: 15px;
+    max-width: 100%;
+    line-height: 1.5;
+}
+
+.success-button-group {
+    flex-direction: column;
+    gap: 8px;
+}
+
+.success-btn {
+    font-size: 13px;
+    padding: 9px 16px;
+    width: 100%;
+    border-radius: 4px;
+}
 
 }

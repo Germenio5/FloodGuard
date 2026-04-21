@@ -297,4 +297,35 @@ main {
 
     .btn-white,
     .btn-teal { width: 100%; text-align: center; }
+
+    /* Ensure map controls stay behind the sidebar when it opens */
+    .map-container {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Leaflet controls should have low z-index on mobile */
+    .leaflet-control {
+        z-index: 10 !important;
+    }
+
+    /* Legend styling for mobile */
+    .legend-area {
+        height: auto !important;
+        max-height: none;
+        padding: 20px;
+        margin-top: 15px;
+    }
+
+    .legend-item {
+        margin-bottom: 12px;
+    }
+
+    .page-top h1 {
+        font-size: 26px;
+    }
+
+    .page-top p {
+        font-size: 13px;
+    }
 }
