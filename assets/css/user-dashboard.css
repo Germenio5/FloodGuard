@@ -445,10 +445,18 @@ main {
 
 /* Responsive */
 @media (max-width: 768px) {
+    main {
+        padding: 20px;
+    }
+
     .top-section {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
+    }
+
+    .top-section h1 {
+        font-size: 20px;
     }
 
     .status-badge {
@@ -461,19 +469,136 @@ main {
         gap: 10px;
     }
 
+    .label-text {
+        font-size: 11px;
+    }
+
+    .status-left {
+        gap: 6px;
+    }
+
     .status-badge .edit-status-btn {
         width: 100%;
-        padding: 10px 16px;
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .water-card {
+        padding: 15px;
+        margin-bottom: 18px;
+    }
+
+    .card-header h2 {
+        font-size: 16px;
+    }
+
+    .card-header p {
+        font-size: 11px;
+    }
+
+    .level-stats {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin: 10px 0;
+    }
+
+    .stat-box {
+        padding: 8px;
+    }
+
+    .stat-label {
+        font-size: 9px;
+    }
+
+    .stat-value {
+        font-size: 13px;
+    }
+
+    .location-section h3 {
+        font-size: 14px;
+    }
+
+    .location-section > p {
+        font-size: 12px;
+    }
+
+    .label {
+        font-size: 12px;
     }
 
     .info-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 10px;
+        padding: 12px 0;
+        margin: 12px 0;
+    }
+
+    .info-item p {
+        font-size: 11px;
+    }
+
+    .info-item h4 {
+        font-size: 14px;
+    }
+
+    .alert-box {
+        padding: 12px;
+        margin-bottom: 18px;
+    }
+
+    .alert-header {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .alert-header span {
+        font-size: 12px;
+    }
+
+    .alert-header strong {
+        font-size: 14px;
+    }
+
+    .alert-box li {
+        font-size: 12px;
+    }
+
+    .report-btn {
+        padding: 8px 16px;
+        font-size: 12px;
+        width: 100%;
     }
 
     .graph-box {
-        padding: 15px;
-        margin-bottom: 20px;
+        padding: 12px;
+        margin-bottom: 18px;
+    }
+
+    .graph-header {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .graph-title h3 {
+        font-size: 14px;
+    }
+
+    .graph-title .graph-box-info {
+        font-size: 11px;
+    }
+
+    .graph-box .filter-form {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .graph-box .filter-box label {
+        font-size: 12px;
+    }
+
+    .graph-box .filter-box select {
+        min-width: 100%;
+        font-size: 12px;
     }
 
     .graph-box canvas {
@@ -482,10 +607,210 @@ main {
 
     .action-row {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .action-box {
+        padding: 12px;
+    }
+
+    .action-box h3 {
+        font-size: 14px;
+    }
+
+    .action-box p {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+
+    .action-box a {
+        font-size: 12px;
     }
 
     .hotline-box {
         flex-direction: column;
         text-align: center;
+        padding: 12px;
+    }
+
+    .big-icon {
+        font-size: 32px;
+    }
+
+    .hotline-box h3 {
+        font-size: 14px;
+    }
+
+    .hotline-box p {
+        font-size: 12px;
+    }
+
+    .phone {
+        font-size: 16px;
+    }
+
+    .small {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 480px) {
+    main {
+        padding: 12px;
+    }
+
+    .top-section h1 {
+        font-size: 18px;
+    }
+
+    .status-badge {
+        font-size: 13px;
+    }
+
+    .status-badge .edit-status-btn {
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+
+    .label-text {
+        font-size: 10px;
+    }
+
+    .status-left {
+        gap: 4px;
+    }
+
+    .water-card {
+        padding: 12px;
+    }
+
+    .card-header h2 {
+        font-size: 14px;
+    }
+
+    .card-header p {
+        font-size: 10px;
+    }
+
+    .level-stats {
+        gap: 6px;
+    }
+
+    .stat-box {
+        padding: 6px;
+    }
+
+    .stat-label {
+        font-size: 8px;
+    }
+
+    .stat-value {
+        font-size: 11px;
+    }
+
+    .location-section h3 {
+        font-size: 13px;
+    }
+
+    .location-section > p {
+        font-size: 11px;
+    }
+
+    .label {
+        font-size: 11px;
+    }
+
+    .info-item p {
+        font-size: 10px;
+    }
+
+    .info-item h4 {
+        font-size: 12px;
+    }
+
+    .alert-box {
+        padding: 10px;
+    }
+
+    .alert-header span {
+        font-size: 11px;
+    }
+
+    .alert-header strong {
+        font-size: 12px;
+    }
+
+    .alert-box li {
+        font-size: 11px;
+    }
+
+    .report-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    .graph-box {
+        padding: 10px;
+    }
+
+    .graph-title h3 {
+        font-size: 13px;
+    }
+
+    .graph-title .graph-box-info {
+        font-size: 10px;
+    }
+
+    .graph-box .filter-box label {
+        font-size: 11px;
+    }
+
+    .graph-box .filter-box select {
+        font-size: 11px;
+    }
+
+    .graph-box canvas {
+        max-height: 180px !important;
+    }
+
+    .action-box {
+        padding: 10px;
+    }
+
+    .action-box h3 {
+        font-size: 13px;
+    }
+
+    .action-box p {
+        font-size: 11px;
+    }
+
+    .action-box a {
+        font-size: 11px;
+    }
+
+    .hotline-box {
+        padding: 10px;
+    }
+
+    .big-icon {
+        font-size: 28px;
+    }
+
+    .hotline-box h3 {
+        font-size: 13px;
+    }
+
+    .hotline-box p {
+        font-size: 11px;
+    }
+
+    .phone {
+        font-size: 14px;
+    }
+
+    .small {
+        font-size: 10px;
     }
 }

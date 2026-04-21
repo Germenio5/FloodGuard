@@ -134,14 +134,12 @@ include '../controllers/user-dashboard-controller.php';
                 <p class="graph-box-info"><?= htmlspecialchars($waterLevel['bridge']) ?> - <?= htmlspecialchars($waterLevel['location']) ?></p>
             </div>
             <div class="filter-box">
-                <form method="GET" class="filter-form">
-                    <label for="chartPeriodFilter">Period:</label>
-                    <select id="chartPeriodFilter" name="chart_period" onchange="this.form.submit()">
-                        <option value="daily" <?= (($_GET['chart_period'] ?? 'daily') === 'daily') ? 'selected' : '' ?>>Daily</option>
-                        <option value="weekly" <?= (($_GET['chart_period'] ?? 'daily') === 'weekly') ? 'selected' : '' ?>>Weekly</option>
-                        <option value="monthly" <?= (($_GET['chart_period'] ?? 'daily') === 'monthly') ? 'selected' : '' ?>>Monthly</option>
-                    </select>
-                </form>
+                <label for="chartPeriodFilter">Period:</label>
+                <select id="chartPeriodFilter" name="chart_period">
+                    <option value="daily" <?= (($_GET['chart_period'] ?? 'daily') === 'daily') ? 'selected' : '' ?>>Daily</option>
+                    <option value="weekly" <?= (($_GET['chart_period'] ?? 'daily') === 'weekly') ? 'selected' : '' ?>>Weekly</option>
+                    <option value="monthly" <?= (($_GET['chart_period'] ?? 'daily') === 'monthly') ? 'selected' : '' ?>>Monthly</option>
+                </select>
             </div>
         </div>
         <canvas id="waterLevelChart"></canvas>
@@ -215,6 +213,7 @@ include '../controllers/user-dashboard-controller.php';
 <script src="../assets/js/status-modal.js"></script>
 <script id="chart-data" type="application/json"><?= $chartDataJson ?></script>
 <script src="../assets/js/user-dashboard-chart.js"></script>
+<script src="../assets/js/chart-period-filter.js"></script>
 
 </body>
 </html>

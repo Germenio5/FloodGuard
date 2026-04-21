@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ctx = document.getElementById('waterLevelChart').getContext('2d');
     const hasData = chartData.labels && chartData.labels.length > 0 && chartData.labels[0] !== 'No Data';
 
-    new Chart(ctx, {
+    const waterLevelChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.labels,
@@ -109,4 +109,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
+    
+    // Store chart instance globally for access by other scripts
+    window.waterLevelChartInstance = waterLevelChart;
+    document.getElementById('waterLevelChart').waterLevelChart = waterLevelChart;
 });
