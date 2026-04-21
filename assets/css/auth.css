@@ -226,6 +226,14 @@ h1 {
     .submit-btn {
         width: 100%;
     }
+
+    .error-box {
+        font-size: 12px;
+    }
+
+    .bottom-link {
+        font-size: 12px;
+    }
 }
 
 /* Modal Styles */

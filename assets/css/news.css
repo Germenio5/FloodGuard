@@ -377,6 +377,37 @@ body {
     .last-updated {
         text-align: left;
     }
+
+    /* Pagination responsive styling */
+    .table-footer {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .pagination {
+        justify-content: center;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .pagination-info {
+        text-align: center;
+        width: 100%;
+    }
+
+    .pagination-info p {
+        justify-content: center;
+        gap: 10px;
+        font-size: 11px;
+    }
+
+    .page-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+        min-width: 32px;
+    }
 }
 
 @media (max-width: 425px) {
@@ -395,6 +426,22 @@ body {
 
     .content h4 {
         font-size: 15px;
+    }
+
+    /* Pagination extra small screens */
+    .pagination {
+        gap: 3px;
+    }
+
+    .page-btn {
+        padding: 5px 8px;
+        font-size: 11px;
+        min-width: 28px;
+    }
+
+    .pagination-info p {
+        font-size: 10px;
+        gap: 8px;
     }
 
 }
