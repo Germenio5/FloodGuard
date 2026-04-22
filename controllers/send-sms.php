@@ -114,10 +114,12 @@ if ($response === false || $httpStatus < 200 || $httpStatus >= 300) {
     exit();
 }
 
-// Update report with sms_sent_at timestamp
-$updateStmt = $conn->prepare("UPDATE reports SET sms_sent_at = NOW() WHERE id = ?");
+// Update report with sms_sent_at timestamp, mark as responded, and store SMS as admin response (GMT+8)
+$conn->query("SET time_zone = '+08:00'");
+$smsMessage = $payload['message'];
+$updateStmt = $conn->prepare("UPDATE reports SET sms_sent_at = NOW(), is_responded = 1, admin_response = ?, admin_response_date = NOW() WHERE id = ?");
 if ($updateStmt) {
-    $updateStmt->bind_param('i', $reportId);
+    $updateStmt->bind_param('si', $smsMessage, $reportId);
     $updateStmt->execute();
     $updateStmt->close();
 }

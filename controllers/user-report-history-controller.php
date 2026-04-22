@@ -72,9 +72,12 @@ if (isset($_GET['success'])) {
     }
 }
 
-// Function to format date
+// Function to format date in GMT+8 timezone
 function formatDate($date) {
-    return date('M d, Y h:i A', strtotime($date));
+    $gmt8 = new DateTimeZone('Asia/Manila');
+    $dt = new DateTime($date, new DateTimeZone('UTC'));
+    $dt->setTimezone($gmt8);
+    return $dt->format('M d, Y h:i A');
 }
 
 // Function to get badge class based on response status

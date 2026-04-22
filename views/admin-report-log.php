@@ -105,7 +105,14 @@ include '../controllers/admin-report-log-controller.php';
                         <?php endif; ?>
                     </td>
 
-                    <td><?= htmlspecialchars(date('Y-m-d H:i', strtotime($r["last_updated"]))) ?></td>
+                    <td>
+                        <?php 
+                            $gmt8 = new DateTimeZone('Asia/Manila');
+                            $dt = new DateTime($r['last_updated'], new DateTimeZone('UTC'));
+                            $dt->setTimezone($gmt8);
+                            echo htmlspecialchars($dt->format('Y-m-d H:i'));
+                        ?>
+                    </td>
 
                     <td>
                         <div style="display: flex; gap: 8px; align-items: center; flex-wrap: nowrap;">

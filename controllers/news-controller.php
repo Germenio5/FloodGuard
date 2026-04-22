@@ -97,7 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (strtolower($status) === 'alert') {
             $sms_result = sendFloodAlertWithDescription($description, $area, $status, $conn);
             
-            // Record the SMS sent in the flood_alert_sms_log table
+            // Record the SMS sent in the flood_alert_sms_log table (GMT+8)
+            $conn->query("SET time_zone = '+08:00'");
             $logQuery = "INSERT INTO flood_alert_sms_log (
                 report_id, area_location, alert_status, alert_description, 
                 total_recipients, successful_sms, failed_sms, sent_at
@@ -145,9 +146,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $dangerCount = 0;
 $alertCount  = 0;
 
+$gmt8 = new DateTimeZone('Asia/Manila');
+$now = new DateTime('now', $gmt8);
 $lastUpdated = [
-    'date' => date('F j, Y'),
-    'time' => date('g:i A')
+    'date' => $now->format('F j, Y'),
+    'time' => $now->format('g:i A')
 ];
 
 // Load additional events from reports table using model
